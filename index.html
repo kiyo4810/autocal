@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>自動計算フォーム</title>
     <style>
+        /* 見た目の設定 */
         body { font-family: sans-serif; margin: 20px; }
         .container { max-width: 300px; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
         label { display: block; margin-top: 10px; font-size: 0.9rem; }
@@ -30,25 +31,23 @@
 
     <script>
         function calculate() {
-            // ① 入力された「値（数字）」を取得して箱に入れる
+            // 1. 値を取得
             const price = document.getElementById('price').value;
             const quantity = document.getElementById('quantity').value;
             
-            // ② かけ算をして合計を出す
+            // 2. 計算
             const total = price * quantity;
             
-            // ③ 表示させる「場所（HTMLのパーツ）」を一度変数に保存する
+            // 3. 表示場所を捕まえる
             const totalElement = document.getElementById('total');
             
-            // ④ その場所の「中身（innerText）」を書き換える
+            // 4. 数字を表示
             totalElement.innerText = total.toLocaleString();
 
-            // ⑤ 「もし〜なら」の条件で「見た目（style）」を書き換える
+            // 5. 条件で色を変える
             if (total >= 10000) {
-                // 10,000円以上のときは赤
                 totalElement.style.color = "red";
             } else {
-                // 10,000円未満なら元の青に戻す
                 totalElement.style.color = "blue";
             }
         }
