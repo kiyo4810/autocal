@@ -22,14 +22,29 @@
         <p>合計: <span id="total" class="result">0</span> 円</p>
     </div>
 
-    <script>
-        function calculate() {
-            const price = document.getElementById('price').value;
-            const quantity = document.getElementById('quantity').value;
-            const total = price * quantity;
-            document.getElementById('total').innerText = total.toLocaleString();
-        }
-    </script>
+function calculate() {
+    // 1. 入力された値を取得する
+    const price = document.getElementById('price').value;
+    const quantity = document.getElementById('quantity').value;
+    
+    // 2. 計算する
+    const total = price * quantity;
+    
+    // 3. 表示場所（ターゲット）を一度変数に保存する（こうすると後の操作が楽！）
+    const totalElement = document.getElementById('total');
+    
+    // 4. 数値を画面に表示する
+    totalElement.innerText = total.toLocaleString();
+
+    // 5. 【追加】条件によってスタイル（色）を変える
+    if (total >= 10000) {
+        // 10,000円以上のとき、文字の色を赤にする
+        totalElement.style.color = "red";
+    } else {
+        // それ以外（10,000円未満）のときは、元の青色に戻す
+        totalElement.style.color = "blue";
+    }
+}
 </body>
 </html>
 
