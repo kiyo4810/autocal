@@ -65,4 +65,37 @@
                 
                 document.getElementById(priceId).value = currentPrice;
                 document.getElementById(displayId).innerText = `$${currentPrice.toFixed(2)}`;
-                document.getElementById(updateId).innerText = `最終取得: ${
+                document.getElementById(updateId).innerText = `最終取得: ${new Date().toLocaleTimeString()}`;
+                calculate();
+            } catch (error) {
+                document.getElementById(updateId).innerText = '自動取得失敗。手動入力してください。';
+                document.getElementById(priceId).readOnly = false;
+            }
+        }
+
+        function calculate() {
+            const vtiPrice = parseFloat(document.getElementById('vti-price').value) || 0;
+            const vtiQty = parseFloat(document.getElementById('vti-qty').value) || 0;
+            const vtPrice = parseFloat(document.getElementById('vt-price').value) || 0;
+            const vtQty = parseFloat(document.getElementById('vt-qty').value) || 0;
+
+            const vtiSub = vtiPrice * vtiQty;
+            const vtSub = vtPrice * vtQty;
+
+            document.getElementById('vti-subtotal').innerText = vtiSub.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('vt-subtotal').innerText = vtSub.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            const total = vtiSub + vtSub;
+            document.getElementById('total-val').innerText = total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        fetchPrice('VTI', 'vti-price', 'vti-update', 'vti-price-display');
+        fetchPrice('VT', 'vt-price', 'vt-update', 'vt-price-display');
+
+        setInterval(() => {
+            fetchPrice('VTI', 'vti-price', 'vti-update', 'vti-price-display');
+            fetchPrice('VT', 'vt-price', 'vt-update', 'vt-price-display');
+        }, 300000);
+    </script>
+</body>
+</html>
