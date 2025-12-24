@@ -7,7 +7,7 @@
     <style>
         body { font-family: sans-serif; margin: 20px; background-color: #f0f4f8; color: #333; }
         .container { max-width: 400px; padding: 25px; border-radius: 15px; background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto; }
-        h3 { margin-top: 0; text-align: center; color: #1a365d; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        h3 { margin-top: 0; text-align: center; color: #1a365d; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-size: 18px; }
         .stock-box { background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
         .stock-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; color: #2d3748; display: flex; justify-content: space-between; }
         label { display: block; margin-bottom: 5px; font-size: 13px; color: #718096; }
@@ -15,9 +15,16 @@
         input[readonly] { background-color: #edf2f7; color: #4a5568; }
         .subtotal-area { text-align: right; font-weight: bold; color: #2d3748; font-size: 15px; padding-top: 5px; border-top: 1px dashed #cbd5e0; }
         .price-info { font-size: 11px; color: #a0aec0; margin: 5px 0 0 0; text-align: right; }
+        
+        /* 合計エリアの調整 */
         .result-area { background: #1a365d; padding: 20px; border-radius: 10px; text-align: center; color: white; margin-top: 20px; }
-        .result-label { font-size: 14px; opacity: 0.8; margin-bottom: 5px; }
-        .result-value { font-weight: bold; font-size: 32px; color: #63b3ed; }
+        .result-label { font-size: 14px; opacity: 0.8; margin-bottom: 8px; }
+        .result-row { display: flex; justify-content: center; align-items: baseline; margin-bottom: 5px; }
+        .result-value { font-weight: bold; font-size: 28px; color: #63b3ed; }
+        .result-value.jpy { color: #fbd38d; font-size: 24px; } /* 円表示は少し色とサイズを変える */
+        .unit { margin-left: 5px; font-size: 14px; opacity: 0.9; }
+        
+        .rate-info { font-size: 11px; color: #cbd5e0; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; }
         .nav-link { display: block; text-align: center; margin-top: 20px; font-size: 14px; color: #3182ce; text-decoration: none; }
     </style>
 </head>
@@ -47,7 +54,13 @@
         
         <div class="result-area">
             <div class="result-label">総合計評価額</div>
-            <span id="total-val" class="result-value">0.00</span><span style="margin-left:5px; font-size:18px;">USD</span>
+            <div class="result-row">
+                <span id="total-val" class="result-value">0.00</span><span class="unit">USD</span>
+            </div>
+            <div class="result-row">
+                <span id="total-jpy" class="result-value jpy">0</span><span class="unit">JPY</span>
+            </div>
+            <div id="rate-display" class="rate-info">為替レート取得中...</div>
         </div>
 
         <a href="index.html" class="nav-link">← 単純計算機に戻る</a>
@@ -55,6 +68,7 @@
 
     <script>
         const proxy = "https://corsproxy.io/?";
+        let usdJpyRate = 0;
 
         async function fetchPrice(symbol, priceId, updateId, displayId) {
             const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`;
@@ -73,6 +87,19 @@
             }
         }
 
+        async function fetchExRate() {
+            const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/JPY=X`;
+            try {
+                const response = await fetch(proxy + encodeURIComponent(targetUrl));
+                const data = await response.json();
+                usdJpyRate = data.chart.result[0].meta.regularMarketPrice;
+                document.getElementById('rate-display').innerText = `現在レート: 1ドル = ${usdJpyRate.toFixed(2)}円`;
+                calculate();
+            } catch (error) {
+                document.getElementById('rate-display').innerText = '為替レートの取得に失敗しました';
+            }
+        }
+
         function calculate() {
             const vtiPrice = parseFloat(document.getElementById('vti-price').value) || 0;
             const vtiQty = parseFloat(document.getElementById('vti-qty').value) || 0;
@@ -85,16 +112,26 @@
             document.getElementById('vti-subtotal').innerText = vtiSub.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
             document.getElementById('vt-subtotal').innerText = vtSub.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
-            const total = vtiSub + vtSub;
-            document.getElementById('total-val').innerText = total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            const totalUsd = vtiSub + vtSub;
+            document.getElementById('total-val').innerText = totalUsd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            // 日本円の計算
+            if (usdJpyRate > 0) {
+                const totalJpy = Math.round(totalUsd * usdJpyRate);
+                document.getElementById('total-jpy').innerText = totalJpy.toLocaleString();
+            }
         }
 
+        // 初回取得
         fetchPrice('VTI', 'vti-price', 'vti-update', 'vti-price-display');
         fetchPrice('VT', 'vt-price', 'vt-update', 'vt-price-display');
+        fetchExRate();
 
+        // 5分ごとに更新
         setInterval(() => {
             fetchPrice('VTI', 'vti-price', 'vti-update', 'vti-price-display');
             fetchPrice('VT', 'vt-price', 'vt-update', 'vt-price-display');
+            fetchExRate();
         }, 300000);
     </script>
 </body>
