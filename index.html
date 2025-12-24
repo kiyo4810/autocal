@@ -6,10 +6,11 @@
     <style>
         body { font-family: sans-serif; margin: 20px; }
         .container { max-width: 300px; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        label { display: block; margin-top: 10px; font-size: 0.9rem; }
-        input { width: 100%; margin-bottom: 10px; padding: 8px; box-sizing: border-box; }
+        label { display: block; margin-top: 10px; font-size: 0.8rem; color: #666; }
+        input { width: 100%; margin-bottom: 10px; padding: 10px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
         .result-area { margin-top: 20px; padding-top: 10px; border-top: 2px solid #eee; }
         .result { font-weight: bold; color: blue; font-size: 1.2rem; }
+        .hint { font-size: 0.7rem; color: #999; margin-top: -8px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -17,11 +18,12 @@
     <div class="container">
         <h3>合計金額計算機</h3>
         
-        <label>単価 (1,000円単位)</label>
-        <input type="text" id="price" placeholder="1,000" oninput="formatAndCalculate()">
+        <label>単価 (入力後、外をクリックで1000倍)</label>
+        <input type="text" id="price" placeholder="例: 3" onchange="processPrice()">
+        <p class="hint">※3と打てば3,000になります</p>
         
         <label>個数</label>
-        <input type="number" id="quantity" value="1" oninput="formatAndCalculate()">
+        <input type="number" id="quantity" value="1" oninput="calculate()">
         
         <div class="result-area">
             <p>合計: <span id="total" class="result">0</span> 円</p>
@@ -29,31 +31,34 @@
     </div>
 
     <script>
-        function formatAndCalculate() {
+        // 単価の入力欄が確定したとき（フォーカスが外れた時）の処理
+        function processPrice() {
             const priceInput = document.getElementById('price');
-            const quantityInput = document.getElementById('quantity');
+            let val = priceInput.value.replace(/[^0-9]/g, ''); // 数字以外を削除
+
+            if (val !== "") {
+                // 入力された数字を1000倍にする
+                const multipliedPrice = Number(val) * 1000;
+                // カンマ区切りにして入力欄に戻す
+                priceInput.value = multipliedPrice.toLocaleString();
+            }
+            
+            // 1000倍にした後に合計を計算する
+            calculate();
+        }
+
+        // 合計金額を計算して表示する処理
+        function calculate() {
+            const priceVal = document.getElementById('price').value.replace(/,/g, '');
+            const quantityVal = document.getElementById('quantity').value;
             const totalElement = document.getElementById('total');
 
-            // 1. 入力された値からカンマを除去して「純粋な数字」にする
-            let rawPrice = priceInput.value.replace(/,/g, '');
-            
-            // 2. 数字以外を削除（1,000円単位にするための補助）
-            rawPrice = rawPrice.replace(/[^0-9]/g, '');
+            const total = Number(priceVal) * Number(quantityVal);
 
-            // 3. 単価の入力欄を「カンマ区切り」に書き換える（入力した瞬間に反映）
-            if (rawPrice !== "") {
-                priceInput.value = Number(rawPrice).toLocaleString();
-            }
-
-            // 4. 計算（単価 × 個数）
-            const priceNum = Number(rawPrice);
-            const quantityNum = Number(quantityInput.value);
-            const total = priceNum * quantityNum;
-
-            // 5. 合計を表示
+            // 画面に表示
             totalElement.innerText = total.toLocaleString();
 
-            // 6. 10,000円以上の判定
+            // 10,000円以上の判定（色変え）
             if (total >= 10000) {
                 totalElement.style.color = "red";
             } else {
