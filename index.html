@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>自動計算フォーム</title>
     <style>
-        /* 見た目の設定 */
         body { font-family: sans-serif; margin: 20px; }
         .container { max-width: 300px; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
         label { display: block; margin-top: 10px; font-size: 0.9rem; }
@@ -18,11 +17,11 @@
     <div class="container">
         <h3>合計金額計算機</h3>
         
-        <label>単価 (円)</label>
-        <input type="number" id="price" placeholder="100" oninput="calculate()">
+        <label>単価 (1,000円単位)</label>
+        <input type="text" id="price" placeholder="1,000" oninput="formatAndCalculate()">
         
         <label>個数</label>
-        <input type="number" id="quantity" placeholder="1" oninput="calculate()">
+        <input type="number" id="quantity" value="1" oninput="formatAndCalculate()">
         
         <div class="result-area">
             <p>合計: <span id="total" class="result">0</span> 円</p>
@@ -30,21 +29,31 @@
     </div>
 
     <script>
-        function calculate() {
-            // 1. 値を取得
-            const price = document.getElementById('price').value;
-            const quantity = document.getElementById('quantity').value;
-            
-            // 2. 計算
-            const total = price * quantity;
-            
-            // 3. 表示場所を捕まえる
+        function formatAndCalculate() {
+            const priceInput = document.getElementById('price');
+            const quantityInput = document.getElementById('quantity');
             const totalElement = document.getElementById('total');
+
+            // 1. 入力された値からカンマを除去して「純粋な数字」にする
+            let rawPrice = priceInput.value.replace(/,/g, '');
             
-            // 4. 数字を表示
+            // 2. 数字以外を削除（1,000円単位にするための補助）
+            rawPrice = rawPrice.replace(/[^0-9]/g, '');
+
+            // 3. 単価の入力欄を「カンマ区切り」に書き換える（入力した瞬間に反映）
+            if (rawPrice !== "") {
+                priceInput.value = Number(rawPrice).toLocaleString();
+            }
+
+            // 4. 計算（単価 × 個数）
+            const priceNum = Number(rawPrice);
+            const quantityNum = Number(quantityInput.value);
+            const total = priceNum * quantityNum;
+
+            // 5. 合計を表示
             totalElement.innerText = total.toLocaleString();
 
-            // 5. 条件で色を変える
+            // 6. 10,000円以上の判定
             if (total >= 10000) {
                 totalElement.style.color = "red";
             } else {
