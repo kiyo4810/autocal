@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>米国株・全世界株 資産計算機</title>
+    <title>ETF 資産計算機（小計・合計付）</title>
     <style>
         body { font-family: sans-serif; margin: 20px; background-color: #f0f4f8; color: #333; }
         .container { max-width: 400px; padding: 25px; border-radius: 15px; background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto; }
@@ -11,84 +11,19 @@
         .stock-box { background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
         .stock-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; color: #2d3748; display: flex; justify-content: space-between; }
         label { display: block; margin-bottom: 5px; font-size: 13px; color: #718096; }
-        input { width: 100%; margin-bottom: 10px; padding: 10px; box-sizing: border-box; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 16px; }
+        input { width: 100%; margin-bottom: 8px; padding: 10px; box-sizing: border-box; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 16px; }
         input[readonly] { background-color: #edf2f7; color: #4a5568; cursor: not-allowed; }
+        .subtotal-box { text-align: right; font-size: 14px; color: #4a5568; font-weight: bold; margin-bottom: 5px; }
         .price-info { font-size: 11px; color: #a0aec0; margin-bottom: 0; text-align: right; }
-        .result-area { background: #3182ce; padding: 20px; border-radius: 10px; text-align: center; color: white; margin-top: 20px; }
-        .result { font-weight: bold; font-size: 28px; }
+        .result-area { background: #2c3e50; padding: 20px; border-radius: 10px; text-align: center; color: white; margin-top: 20px; }
+        .result { font-weight: bold; font-size: 30px; color: #3498db; }
         .unit { font-size: 18px; margin-left: 5px; }
-        .nav-link { display: block; text-align: center; margin-top: 20px; font-size: 14px; color: #3182ce; text-decoration: none; font-weight: bold; }
+        .nav-link { display: block; text-align: center; margin-top: 20px; font-size: 14px; color: #3182ce; text-decoration: none; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h3>ETF 資産状況</h3>
+        <h3>ポートフォリオ計算機</h3>
         
         <div class="stock-box">
-            <div class="stock-title"><span>VTI</span><span id="vti-price-display" style="font-size: 14px; color: #4a5568;">取得中...</span></div>
-            <label>現在価格 (USD)</label>
-            <input type="number" id="vti-price" readonly step="0.01">
-            <label>保有株数</label>
-            <input type="number" id="vti-qty" value="0" min="0" oninput="calculate()">
-            <p id="vti-update" class="price-info">読み込み中...</p>
-        </div>
-
-        <div class="stock-box">
-            <div class="stock-title"><span>VT</span><span id="vt-price-display" style="font-size: 14px; color: #4a5568;">取得中...</span></div>
-            <label>現在価格 (USD)</label>
-            <input type="number" id="vt-price" readonly step="0.01">
-            <label>保有株数</label>
-            <input type="number" id="vt-qty" value="0" min="0" oninput="calculate()">
-            <p id="vt-update" class="price-info">読み込み中...</p>
-        </div>
-        
-        <div class="result-area">
-            <p style="margin:0; font-size: 14px; opacity: 0.9;">合計評価額 (USD)</p>
-            <span id="total-val" class="result">0.00</span><span class="unit">USD</span>
-        </div>
-
-        <a href="index.html" class="nav-link">← 単純計算機に戻る</a>
-    </div>
-
-    <script>
-        const proxy = "https://corsproxy.io/?";
-
-        async function fetchPrice(symbol, priceId, updateId, displayId) {
-            const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`;
-            try {
-                const response = await fetch(proxy + encodeURIComponent(targetUrl));
-                const data = await response.json();
-                const currentPrice = data.chart.result[0].meta.regularMarketPrice;
-                
-                document.getElementById(priceId).value = currentPrice;
-                document.getElementById(displayId).innerText = `$${currentPrice.toFixed(2)}`;
-                document.getElementById(updateId).innerText = `最終取得: ${new Date().toLocaleTimeString()}`;
-                calculate();
-            } catch (error) {
-                document.getElementById(updateId).innerText = '取得失敗。入力可能にします。';
-                document.getElementById(priceId).readOnly = false;
-            }
-        }
-
-        function calculate() {
-            const vtiPrice = parseFloat(document.getElementById('vti-price').value) || 0;
-            const vtiQty = parseFloat(document.getElementById('vti-qty').value) || 0;
-            const vtPrice = parseFloat(document.getElementById('vt-price').value) || 0;
-            const vtQty = parseFloat(document.getElementById('vt-qty').value) || 0;
-
-            const total = (vtiPrice * vtiQty) + (vtPrice * vtQty);
-            document.getElementById('total-val').innerText = total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        }
-
-        // 初回取得
-        fetchPrice('VTI', 'vti-price', 'vti-update', 'vti-price-display');
-        fetchPrice('VT', 'vt-price', 'vt-update', 'vt-price-display');
-
-        // 5分ごとに更新
-        setInterval(() => {
-            fetchPrice('VTI', 'vti-price', 'vti-update', 'vti-price-display');
-            fetchPrice('VT', 'vt-price', 'vt-update', 'vt-price-display');
-        }, 300000);
-    </script>
-</body>
-</html>
+            <div class="stock-title"><span>VTI</span><span id="vti-price-display" style="font-size: 14px;
