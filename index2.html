@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>収支シミュレーター</title>
+    <style>
+        body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; padding: 20px; background-color: #f8f9fa; }
+        h2 { color: #333; border-left: 5px solid #007bff; padding-left: 10px; }
+        .table-container { overflow-x: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        table { border-collapse: collapse; min-width: 800px; width: 100%; }
+        th, td { border: 1px solid #dee2e6; padding: 12px; text-align: center; }
+        th { background-color: #e9ecef; color: #495057; font-size: 0.9em; }
+        .category-header { background-color: #f1f3f5; font-weight: bold; text-align: left; }
+        .plus { color: #28a745; font-weight: bold; }
+        .minus { color: #dc3545; font-weight: bold; }
+        input { width: 90%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px; text-align: right; font-size: 1em; }
+        input:focus { outline: none; border-color: #80bdff; box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); }
+        .result-row { background-color: #fff9db; font-weight: bold; }
+        .balance-row { background-color: #e7f5ff; font-weight: bold; }
+        .unit { font-size: 0.8em; color: #666; margin-left: 2px; }
+    </style>
+</head>
+<body>
+
+<h2>月次収支シミュレーション</h2>
+<p>※数値を入力すると、自動的に合計と残高が計算されます。</p>
+
+<div class="table-container">
+    <table id="simTable">
+        <thead>
+            <tr>
+                <th style="width: 150px;">項目</th>
+                <th>1ヶ月目</th>
+                <th>2ヶ月目</th>
+                <th>3ヶ月目</th>
+                <th>4ヶ月目</th>
+                <th>5ヶ月目</th>
+                <th>6ヶ月目</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="category-header"><td colspan="7">【プラス要因】</td></tr>
+            <tr>
+                <td>初期所持金</td>
+                <td><input type="number" class="val" data-row="initial" data-col="0" value="1000000"></td>
+                <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            </tr>
+            <tr>
+                <td>家賃収入</td>
+                <td><input type="number" class="val" data-row="rent" data-col="0" value="80000"></td>
+                <td><input type="number" class="val" data-row="rent" data-col="1" value="80000"></td>
+                <td><input type="number" class="val" data-row="rent" data-col="2" value="80000"></td>
+                <td><input type="number" class="val" data-row="rent" data-col="3" value="80000"></td>
+                <td><input type="number" class="val" data-row="rent" data-col="4" value="80000"></td>
+                <td><input type="number" class="val" data-row="rent" data-col="5" value="80000"></td>
+            </tr>
+
+            <tr class="category-header"><td colspan="7">【マイナス要因】</td></tr>
+            <tr>
+                <td>ローン支払</td>
+                <td><input type="number" class="val" data-row="loan" data-col="0" value="50000"></td>
+                <td><input type="number" class="val" data-row="loan" data-col="1" value="50000"></td>
+                <td><input type="number" class="val" data-row="loan" data-col="2" value="50000"></td>
+                <td><input type="number" class="val" data-row="loan" data-col="3" value="50000"></td>
+                <td><input type="number" class="val" data-row="loan" data-col="4" value="50000"></td>
+                <td><input type="number" class="val" data-row="loan" data-col="5" value="50000"></td>
+            </tr>
+            <tr>
+                <td>管理費</td>
+                <td><input type="number" class="val" data-row="mng" data-col="0" value="10000"></td>
+                <td><input type="number" class="val" data-row="mng" data-col="1" value="10000"></td>
+                <td><input type="number" class="val" data-row="mng" data-col="2" value="10000"></td>
+                <td><input type="number" class="val" data-row="mng" data-col="3" value="10000"></td>
+                <td><input type="number" class="val" data-row="mng" data-col="4" value="10000"></td>
+                <td><input type="number" class="val" data-row="mng" data-col="5" value="10000"></td>
+            </tr>
+            <tr>
+                <td>その他費用</td>
+                <td><input type="number" class="val" data-row="etc" data-col="0" value="5000"></td>
+                <td><input type="number" class="val" data-row="etc" data-col="1" value="5000"></td>
+                <td><input type="number" class="val" data-row="etc" data-col="2" value="5000"></td>
+                <td><input type="number" class="val" data-row="etc" data-col="3" value="5000"></td>
+                <td><input type="number" class="val" data-row="etc" data-col="4" value="5000"></td>
+                <td><input type="number" class="val" data-row="etc" data-col="5" value="5000"></td>
+            </tr>
+
+            <tr class="result-row">
+                <td>月間収支合計</td>
+                <td id="monthly-0">0</td><td id="monthly-1">0</td><td id="monthly-2">0</td>
+                <td id="monthly-3">0</td><td id="monthly-4">0</td><td id="monthly-5">0</td>
+            </tr>
+            <tr class="balance-row">
+                <td>累計残高</td>
+                <td id="balance-0">0</td><td id="balance-1">0</td><td id="balance-2">0</td>
+                <td id="balance-3">0</td><td id="balance-4">0</td><td id="balance-5">0</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function calculate() {
+        let prevBalance = 0;
+        const numMonths = 6;
+
+        for (let col = 0; col < numMonths; col++) {
+            // 各項目の値を取得（空欄なら0）
+            const rent = parseFloat(document.querySelector(`[data-row="rent"][data-col="${col}"]`).value) || 0;
+            const loan = parseFloat(document.querySelector(`[data-row="loan"][data-col="${col}"]`).value) || 0;
+            const mng = parseFloat(document.querySelector(`[data-row="mng"][data-col="${col}"]`).value) || 0;
+            const etc = parseFloat(document.querySelector(`[data-row="etc"][data-col="${col}"]`).value) || 0;
+            
+            // 初月のみ初期所持金を加算
+            let initial = 0;
+            if (col === 0) {
+                initial = parseFloat(document.querySelector(`[data-row="initial"][data-col="0"]`).value) || 0;
+            }
+
+            // 月間収支の計算 (収入 - 支出)
+            const monthlyTotal = rent - (loan + mng + etc);
+            
+            // 表示の更新
+            const monthlyEl = document.getElementById(`monthly-${col}`);
+            monthlyEl.innerText = monthlyTotal.toLocaleString();
+            
+            // マイナスなら赤色にする
+            monthlyEl.className = monthlyTotal >= 0 ? 'plus' : 'minus';
+
+            // 累計残高の計算 (前月残高 + 今月収支 + 初月なら初期費用)
+            const currentBalance = prevBalance + monthlyTotal + initial;
+            const balanceEl = document.getElementById(`balance-${col}`);
+            balanceEl.innerText = currentBalance.toLocaleString() + " 円";
+            
+            // 次の月の計算用に残高を保持
+            prevBalance = currentBalance;
+        }
+    }
+
+    // 全てのinput要素にイベントリスナーを設定
+    document.querySelectorAll('.val').forEach(input => {
+        input.addEventListener('input', calculate);
+    });
+
+    // 初期計算の実行
+    calculate();
+</script>
+
+</body>
+</html>
