@@ -114,7 +114,7 @@
         <label>背景画像を選択</label>
         <input type="file" id="bgInput" class="file-input" accept="image/*" onchange="changeBackground()">
 
-        <button id="patternBtn" class="btn" onclick="togglePattern()">繰り返し表示 OFF</button>
+        <button id="patternBtn" class="btn" onclick="togglePattern()">繰り返し表示 ON</button>
 
         <div class="result-area">
             <span id="total" class="result">0</span><span style="margin-left:5px">円</span>
@@ -171,12 +171,12 @@
             if (isPatternMode) {
                 document.body.style.backgroundRepeat = "repeat";
                 document.body.style.backgroundSize = "150px";
-                btn.innerText = "繰り返し表示 ON";
+                btn.innerText = "繰り返し表示 OFF";
                 btn.classList.add('btn-pattern-active');
             } else {
                 document.body.style.backgroundRepeat = "no-repeat";
                 document.body.style.backgroundSize = "contain"; /* 指示通り画像全体を収める設定 */
-                btn.innerText = "繰り返し表示 OFF";
+                btn.innerText = "繰り返し表示 ON";
                 btn.classList.remove('btn-pattern-active');
             }
         }
