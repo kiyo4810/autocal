@@ -6,12 +6,12 @@
     <title>背景カスタマイズ計算機</title>
     <style>
         body {
-            /* 初期背景画像 */
+            /* 初期背景画像と繰り返し設定をデフォルトONに */
             background-image: url('images/2026nenga.png');
-            background-color: #ffffff; /* 余白を白にする */
-            background-size: contain;  /* 横幅（または縦幅）に合わせて画像を収める */
+            background-color: #ffffff;
+            background-repeat: repeat;   /* 初期値：繰り返し */
+            background-size: 150px;      /* 初期値：サイズ固定 */
             background-position: center;
-            background-repeat: no-repeat;
             background-attachment: fixed;
             transition: background-image 0.5s ease;
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -22,9 +22,6 @@
             min-height: 100vh;
             margin: 0;
         }
-
-        /* PCやタブレットなど、画面が横に長い場合はCover（画面いっぱい）にするなど
-           好みに合わせて調整可能ですが、今回は指示通り「contain」を基本にします */
 
         #site-nav {
             text-align: center;
@@ -87,6 +84,7 @@
             font-weight: bold; cursor: pointer; transition: all 0.3s ease;
         }
         .btn:hover { background-color: #0056b3; }
+        /* 繰り返しON状態のボタン色 */
         .btn-pattern-active { background-color: #28a745; }
 
         .result-area { margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 12px; text-align: center; }
@@ -114,7 +112,7 @@
         <label>背景画像を選択</label>
         <input type="file" id="bgInput" class="file-input" accept="image/*" onchange="changeBackground()">
 
-        <button id="patternBtn" class="btn" onclick="togglePattern()">繰り返し表示 ON</button>
+        <button id="patternBtn" class="btn btn-pattern-active" onclick="togglePattern()">繰り返し表示 OFF</button>
 
         <div class="result-area">
             <span id="total" class="result">0</span><span style="margin-left:5px">円</span>
@@ -132,7 +130,8 @@
             });
         });
 
-        let isPatternMode = false;
+        // 初期状態を繰り返しON（true）に設定
+        let isPatternMode = true;
 
         function processPrice() {
             const priceInput = document.getElementById('price');
@@ -159,6 +158,8 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     document.body.style.backgroundImage = `url('${e.target.result}')`;
+                    // 画像挿入後も現在のモード設定を維持する
+                    applyBackgroundStyle();
                 };
                 reader.readAsDataURL(file);
             }
@@ -166,17 +167,21 @@
 
         function togglePattern() {
             isPatternMode = !isPatternMode;
-            const btn = document.getElementById('patternBtn');
+            applyBackgroundStyle();
+        }
 
+        // 背景のスタイル（繰り返しON/OFF）を適用する共通関数
+        function applyBackgroundStyle() {
+            const btn = document.getElementById('patternBtn');
             if (isPatternMode) {
                 document.body.style.backgroundRepeat = "repeat";
                 document.body.style.backgroundSize = "150px";
-                btn.innerText = "繰り返し表示 OFF";
+                btn.innerText = "繰り返し表示 OFF"; // クリックするとOFFになるという意味
                 btn.classList.add('btn-pattern-active');
             } else {
                 document.body.style.backgroundRepeat = "no-repeat";
-                document.body.style.backgroundSize = "contain"; /* 指示通り画像全体を収める設定 */
-                btn.innerText = "繰り返し表示 ON";
+                document.body.style.backgroundSize = "contain";
+                btn.innerText = "繰り返し表示 ON"; // クリックするとONになるという意味
                 btn.classList.remove('btn-pattern-active');
             }
         }
