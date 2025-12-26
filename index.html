@@ -6,13 +6,13 @@
     <title>背景カスタマイズ計算機</title>
     <style>
         body {
-            /* 初期背景画像を設定 */
+            /* 初期背景画像 */
             background-image: url('images/2026nenga.png');
             background-color: #f5f7fa;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed; /* 背景を固定 */
+            background-attachment: fixed;
             transition: background-image 0.5s ease;
             font-family: 'Helvetica Neue', Arial, sans-serif;
             display: flex;
@@ -23,7 +23,6 @@
             margin: 0;
         }
 
-        /* ナビゲーションのデザイン */
         #site-nav {
             text-align: center;
             padding: 10px;
@@ -34,6 +33,7 @@
             display: flex;
             gap: 5px;
             z-index: 100;
+            /* ナビも幅に合わせて調整したい場合は here */
         }
 
         .nav-link {
@@ -47,24 +47,28 @@
             transition: all 0.3s ease;
         }
 
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 1);
-            transform: translateY(-1px);
-        }
-
         .nav-link.active {
             background-color: #4385f4;
             color: white !important;
         }
 
+        /* --- コンテナの幅設定 --- */
         .container {
             background-color: rgba(255, 255, 255, 0.95);
-            width: 100%;
-            max-width: 350px;
+            width: 70%;       /* スマホ（デフォルト）で画面の70%に設定 */
+            max-width: 350px;  /* 大きくなりすぎない上限 */
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             z-index: 10;
+            box-sizing: border-box; /* パディングを含めて幅を計算 */
+        }
+
+        /* PCなど画面が広い時用の調整（任意） */
+        @media (min-width: 600px) {
+            .container {
+                width: 350px; /* PCでは固定幅の方が見やすい */
+            }
         }
 
         h3 { margin-top: 0; color: #333; text-align: center; margin-bottom: 20px; }
@@ -75,7 +79,7 @@
             border: 2px solid #eee; border-radius: 8px; font-size: 1rem; outline: none;
         }
 
-        .file-input { margin-bottom: 15px; font-size: 0.8rem; }
+        .file-input { width: 100%; margin-bottom: 15px; font-size: 0.8rem; }
 
         .btn {
             width: 100%; padding: 12px; margin-top: 5px; border: none;
@@ -110,7 +114,7 @@
         <label>背景画像を選択</label>
         <input type="file" id="bgInput" class="file-input" accept="image/*" onchange="changeBackground()">
 
-        <button id="patternBtn" class="btn" onclick="togglePattern()">繰り返し表示 ON</button>
+        <button id="patternBtn" class="btn" onclick="togglePattern()">繰り返し表示 OFF</button>
 
         <div class="result-area">
             <span id="total" class="result">0</span><span style="margin-left:5px">円</span>
@@ -166,7 +170,7 @@
 
             if (isPatternMode) {
                 document.body.style.backgroundRepeat = "repeat";
-                document.body.style.backgroundSize = "150px"; /* 繰り返し時は少し大きく */
+                document.body.style.backgroundSize = "150px";
                 btn.innerText = "繰り返し表示 OFF";
                 btn.classList.add('btn-pattern-active');
             } else {
