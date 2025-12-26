@@ -3,32 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>モダン計算フォーム</title>
+    <title>背景変更付き計算フォーム</title>
     <style>
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            /* 背景画像の設定はJavaScriptで行うため、ここではデフォルトを設定 */
+            background-color: #f5f7fa; /* デフォルトの背景色 */
+            background-size: cover; /* 背景画像を画面全体に広げる */
+            background-position: center center; /* 背景画像を中央に配置 */
+            background-repeat: no-repeat; /* 背景画像を繰り返さない */
+            transition: background-image 0.5s ease; /* 背景画像の変更を滑らかに */
             font-family: 'Helvetica Neue', Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            overflow: hidden; /* 背景がはみ出ないように */
         }
+
         .container {
-            background-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.9); /* 少し透明にして背景画像が見えるように */
             width: 100%;
             max-width: 350px;
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            position: relative; /* 子要素の配置用 */
+            z-index: 10; /* 背景画像より手前に表示 */
         }
-        h3 { margin-top: 0; color: #333; text-align: center; margin-bottom: 25px; }
-        label { display: block; margin-top: 15px; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 5px; }
-        input {
+
+        h3 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"] { /* inputタグのタイプを限定してスタイルを適用 */
             width: 100%; padding: 12px; margin-bottom: 5px; box-sizing: border-box;
             border: 2px solid #eee; border-radius: 8px; font-size: 1rem; outline: none;
         }
-        input:focus { border-color: #007bff; box-shadow: 0 0 8px rgba(0, 123, 255, 0.2); }
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #007bff; box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        }
+
+        /* ファイル選択ボタンのスタイル */
+        input[type="file"] {
+            width: 100%;
+            padding: 8px; /* 通常のinputより少し小さめ */
+            margin-top: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+        input[type="file"]::file-selector-button { /* ファイル選択ボタン自体のスタイル */
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        input[type="file"]::file-selector-button:hover {
+            background-color: #0056b3;
+        }
+
+
         .hint { font-size: 0.75rem; color: #aaa; margin-bottom: 15px; }
         .result-area { margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 12px; text-align: center; }
         .result-label { display: block; font-size: 0.9rem; color: #666; margin-bottom: 5px; }
@@ -47,6 +101,10 @@
         <label>個数</label>
         <input type="number" id="quantity" value="1" oninput="calculate()">
         
+        <label>背景画像を変更</label>
+        <input type="file" id="backgroundImageInput" accept="image/*" onchange="changeBackground()">
+        <p class="hint">※画像を選択すると背景に反映されます</p>
+
         <div class="result-area">
             <span class="result-label">お支払い合計</span>
             <span id="total" class="result">0</span><span style="margin-left:5px">円</span>
@@ -57,15 +115,12 @@
         // 1. 単価が入力され、確定した時の処理
         function processPrice() {
             const priceInput = document.getElementById('price');
-            // 数字以外（カンマなど）を一旦消す
             let val = priceInput.value.replace(/[^0-9]/g, '');
 
             if (val !== "") {
-                // 1000倍して、カンマ付きの文字にして戻す
                 const multipliedPrice = Number(val) * 1000;
                 priceInput.value = multipliedPrice.toLocaleString();
             }
-            // 合計計算を呼び出す
             calculate();
         }
 
@@ -75,23 +130,40 @@
             const quantityInput = document.getElementById('quantity');
             const totalElement = document.getElementById('total');
 
-            // カンマを除去して数値に変換
             const priceNum = Number(priceInput.value.replace(/,/g, ''));
             const quantityNum = Number(quantityInput.value);
 
-            // 計算
             const total = priceNum * quantityNum;
 
-            // 画面に表示
             totalElement.innerText = total.toLocaleString();
 
-            // 色の切り替え
             if (total >= 10000) {
                 totalElement.style.color = "#e74c3c"; // 赤
             } else {
                 totalElement.style.color = "#007bff"; // 青
             }
         }
+
+        // 3. 背景画像を切り替える処理 (新しい関数)
+        function changeBackground() {
+            const input = document.getElementById('backgroundImageInput');
+            
+            // ファイルが選択されたかチェック
+            if (input.files && input.files[0]) {
+                const reader = new FileReader(); // ファイルを読み込むためのオブジェクト
+
+                reader.onload = function(e) {
+                    // 読み込みが完了したら、その画像を背景に設定
+                    document.body.style.backgroundImage = `url('${e.target.result}')`;
+                };
+
+                // ファイルをURLとして読み込む
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // 最初の計算を実行して初期値を表示
+        document.addEventListener('DOMContentLoaded', calculate);
     </script>
 
 </body>
