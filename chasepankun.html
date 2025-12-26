@@ -2,88 +2,144 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>背景カスタマイズ計算機</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>パンくんを追え</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            user-select: none;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
         body {
-            background-color: #f5f7fa;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            transition: background-image 0.5s ease;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
             display: flex;
             flex-direction: column; /* 縦に並べる */
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
         }
 
-        /* 添付画像のようなナビゲーションのデザイン */
+        /* --- 共通ナビゲーションスタイル --- */
         #site-nav {
             text-align: center;
             padding: 10px;
-            margin-bottom: 20px; /* 計算機との間隔 */
-            background-color: rgba(255, 255, 255, 0.8); /* 半透明の白 */
-            border-radius: 50px; /* 両端を丸く */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             display: flex;
             gap: 5px;
+            z-index: 100; /* 最前面に */
         }
 
         .nav-link {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 8px 16px;
             text-decoration: none;
             color: #555;
             border-radius: 25px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: bold;
             transition: all 0.3s ease;
         }
 
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 1);
-            transform: translateY(-1px);
-        }
-
-        /* 画像のような青色の選択状態 */
         .nav-link.active {
-            background-color: #4385f4; /* 鮮やかな青 */
+            background-color: #4385f4;
             color: white !important;
         }
-
-        .container {
-            background-color: rgba(255, 255, 255, 0.95);
-            width: 100%;
-            max-width: 350px;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-
-        h3 { margin-top: 0; color: #333; text-align: center; margin-bottom: 20px; }
-        label { display: block; margin-top: 15px; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 5px; }
+        /* ------------------------------ */
         
-        input[type="text"], input[type="number"] {
-            width: 100%; padding: 12px; margin-bottom: 5px; box-sizing: border-box;
-            border: 2px solid #eee; border-radius: 8px; font-size: 1rem; outline: none;
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: auto;
+            max-height: 90vh;
+            padding: 5px;
+            gap: 8px;
+            overflow-y: auto;
         }
-
-        .file-input { margin-bottom: 15px; font-size: 0.8rem; }
-
-        .btn {
-            width: 100%; padding: 12px; margin-top: 5px; border: none;
-            border-radius: 8px; background-color: #007bff; color: white;
-            font-weight: bold; cursor: pointer; transition: all 0.3s ease;
+        
+        h1 {
+            color: white;
+            font-size: clamp(18px, 5vw, 36px);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+            margin-bottom: 5px;
         }
-        .btn:hover { background-color: #0056b3; }
-        .btn-pattern-active { background-color: #28a745; }
+        
+        .title-area {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 15px;
+            width: 100%;
+        }
+        
+        .image-container img {
+            max-width: 90vw;
+            max-height: 80px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .game-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-height: calc(100vh - 250px);
+        }
+        
+        #gameCanvas {
+            border: 3px solid white;
+            background-color: #0a0a32;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 95vw;
+            touch-action: none;
+        }
+        
+        .volume-control {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 10px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .volume-slider { width: 80px; }
+        .volume-value { color: white; font-size: 10px; }
 
-        .result-area { margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 12px; text-align: center; }
-        .result { font-weight: 900; color: #007bff; font-size: 1.8rem; }
+        .instructions {
+            color: white;
+            font-size: 11px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -96,26 +152,28 @@
     </nav>
 
     <div class="container">
-        <h3>💰 合計金額計算機</h3>
-        
-        <label>単価 (×1000円)</label>
-        <input type="text" id="price" placeholder="例: 3" onchange="processPrice()">
-        
-        <label>個数</label>
-        <input type="number" id="quantity" value="1" oninput="calculate()">
-        
-        <label>背景画像を選択</label>
-        <input type="file" id="bgInput" class="file-input" accept="image/*" onchange="changeBackground()">
-
-        <button id="patternBtn" class="btn" onclick="togglePattern()">繰り返し表示 OFF</button>
-
-        <div class="result-area">
-            <span id="total" class="result">0</span><span style="margin-left:5px">円</span>
+        <h1>パンくんを追え</h1>
+        <div class="title-area">
+            <div class="image-container">
+                <img src="images/kiyo.png" alt="きよのイラスト">
+            </div>
+            <div class="volume-control">
+                <div class="volume-icon">🔊</div>
+                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="70">
+                <div class="volume-value"><span id="volumeValue">70</span>%</div>
+            </div>
+        </div>
+        <div class="game-wrapper">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+        <div class="instructions">
+            <p>動いているパンくんをクリックしてスコアを上げましょう!</p>
+            <p>クリックするたびにパンくんはスピードが上がるよ</p>
         </div>
     </div>
 
     <script>
-        // ページ読み込み時にアクティブなリンクを判定
+        // アクティブなリンクを判定
         window.addEventListener('DOMContentLoaded', () => {
             const currentFile = window.location.pathname.split("/").pop() || "index.html";
             const links = document.querySelectorAll('.nav-link');
@@ -126,54 +184,139 @@
             });
         });
 
-        let isPatternMode = false;
+        // --- ゲームのロジック ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeValue = document.getElementById('volumeValue');
 
-        function processPrice() {
-            const priceInput = document.getElementById('price');
-            let val = priceInput.value.replace(/[^0-9]/g, '');
-            if (val !== "") {
-                priceInput.value = (Number(val) * 1000).toLocaleString();
+        const GAME_WIDTH = 600;
+        const GAME_HEIGHT = 400;
+
+        let score = 0;
+        let spriteX = GAME_WIDTH / 2;
+        let spriteY = GAME_HEIGHT / 2;
+        let spriteSpeed = [2, 2];
+        let spriteRadius = 25;
+        let spriteImage = null;
+        let scaleX = 1;
+        let scaleY = 1;
+        let volume = 70;
+
+        let audioContext = null;
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
-            calculate();
+            return audioContext;
         }
 
-        function calculate() {
-            const priceVal = document.getElementById('price').value.replace(/,/g, '');
-            const quantityVal = document.getElementById('quantity').value;
-            const total = Number(priceVal) * Number(quantityVal);
-            const totalElement = document.getElementById('total');
-            totalElement.innerText = total.toLocaleString();
-            totalElement.style.color = total >= 10000 ? "#e74c3c" : "#007bff";
+        function playSuccessSound() {
+            try {
+                const ctxAudio = initAudio();
+                const now = ctxAudio.currentTime;
+                const gainNode = ctxAudio.createGain();
+                gainNode.gain.value = (volume / 100) * 0.3;
+                gainNode.connect(ctxAudio.destination);
+                const osc = ctxAudio.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+                osc.connect(gainNode);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } catch (e) { console.log(e); }
         }
 
-        function changeBackground() {
-            const fileInput = document.getElementById('bgInput');
-            const file = fileInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.body.style.backgroundImage = `url('${e.target.result}')`;
-                };
-                reader.readAsDataURL(file);
+        const img = new Image();
+        img.src = 'images/pan.png';
+        img.onload = () => { spriteImage = img; };
+
+        volumeSlider.addEventListener('input', (e) => {
+            volume = parseInt(e.target.value);
+            volumeValue.textContent = volume;
+            volumeSlider.style.background = `linear-gradient(to right, #667eea 0%, #667eea ${volume}%, #ccc ${volume}%, #ccc 100%)`;
+        });
+
+        function resizeCanvas() {
+            const containerWidth = Math.min(window.innerWidth - 20, GAME_WIDTH);
+            const containerHeight = Math.min(window.innerHeight - 300, GAME_HEIGHT);
+            const aspectRatio = GAME_WIDTH / GAME_HEIGHT;
+            let canvasWidth = containerWidth;
+            let canvasHeight = containerWidth / aspectRatio;
+            if (canvasHeight > containerHeight) {
+                canvasHeight = containerHeight;
+                canvasWidth = canvasHeight * aspectRatio;
             }
+            canvas.width = Math.max(canvasWidth, 250);
+            canvas.height = Math.max(canvasHeight, 166);
+            scaleX = canvas.width / GAME_WIDTH;
+            scaleY = canvas.height / GAME_HEIGHT;
         }
 
-        function togglePattern() {
-            isPatternMode = !isPatternMode;
-            const btn = document.getElementById('patternBtn');
+        function draw() {
+            ctx.fillStyle = '#0a0a32';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            const fontSize = Math.max(16, canvas.width / 20);
+            ctx.font = `bold ${fontSize}px Arial`;
+            ctx.fillText(`Score: ${score}`, 15, fontSize + 10);
 
-            if (isPatternMode) {
-                document.body.style.backgroundRepeat = "repeat";
-                document.body.style.backgroundSize = "100px";
-                btn.innerText = "繰り返し表示 ON";
-                btn.classList.add('btn-pattern-active');
+            const drawX = spriteX * scaleX;
+            const drawY = spriteY * scaleY;
+            const spriteSize = 100 * Math.min(scaleX, scaleY);
+
+            if (spriteImage) {
+                ctx.drawImage(spriteImage, drawX - spriteSize / 2, drawY - spriteSize / 2, spriteSize, spriteSize);
             } else {
-                document.body.style.backgroundRepeat = "no-repeat";
-                document.body.style.backgroundSize = "cover";
-                btn.innerText = "繰り返し表示 OFF";
-                btn.classList.remove('btn-pattern-active');
+                ctx.fillStyle = 'yellow';
+                ctx.beginPath();
+                ctx.arc(drawX, drawY, spriteRadius * Math.min(scaleX, scaleY), 0, Math.PI * 2);
+                ctx.fill();
             }
         }
+
+        function update() {
+            spriteX += spriteSpeed[0];
+            spriteY += spriteSpeed[1];
+            if (spriteX < 50 || spriteX > GAME_WIDTH - 50) spriteSpeed[0] *= -1;
+            if (spriteY < 50 || spriteY > GAME_HEIGHT - 50) spriteSpeed[1] *= -1;
+        }
+
+        function handleClick(event) {
+            const rect = canvas.getBoundingClientRect();
+            let clientX = (event.touches ? event.touches[0].clientX : event.clientX);
+            let clientY = (event.touches ? event.touches[0].clientY : event.clientY);
+            if(event.changedTouches) {
+                clientX = event.changedTouches[0].clientX;
+                clientY = event.changedTouches[0].clientY;
+            }
+            const clickX = (clientX - rect.left) / scaleX;
+            const clickY = (clientY - rect.top) / scaleY;
+            const dist = Math.sqrt(Math.pow(clickX - spriteX, 2) + Math.pow(clickY - spriteY, 2));
+
+            if (dist < 60) {
+                score += 1;
+                spriteX = Math.random() * (GAME_WIDTH - 100) + 50;
+                spriteY = Math.random() * (GAME_HEIGHT - 100) + 50;
+                spriteSpeed[0] *= 1.05;
+                spriteSpeed[1] *= 1.05;
+                playSuccessSound();
+            }
+        }
+
+        canvas.addEventListener('mousedown', handleClick);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handleClick(e); }, {passive: false});
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        gameLoop();
     </script>
 </body>
 </html>
