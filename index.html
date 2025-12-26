@@ -6,30 +6,34 @@
     <title>背景カスタマイズ計算機</title>
     <style>
         body {
+            /* 初期背景画像を設定 */
+            background-image: url('images/pan.png');
             background-color: #f5f7fa;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            background-attachment: fixed; /* 背景を固定 */
             transition: background-image 0.5s ease;
             font-family: 'Helvetica Neue', Arial, sans-serif;
             display: flex;
-            flex-direction: column; /* 縦に並べる */
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
         }
 
-        /* 添付画像のようなナビゲーションのデザイン */
+        /* ナビゲーションのデザイン */
         #site-nav {
             text-align: center;
             padding: 10px;
-            margin-bottom: 20px; /* 計算機との間隔 */
-            background-color: rgba(255, 255, 255, 0.8); /* 半透明の白 */
-            border-radius: 50px; /* 両端を丸く */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             display: flex;
             gap: 5px;
+            z-index: 100;
         }
 
         .nav-link {
@@ -48,9 +52,8 @@
             transform: translateY(-1px);
         }
 
-        /* 画像のような青色の選択状態 */
         .nav-link.active {
-            background-color: #4385f4; /* 鮮やかな青 */
+            background-color: #4385f4;
             color: white !important;
         }
 
@@ -115,7 +118,6 @@
     </div>
 
     <script>
-        // ページ読み込み時にアクティブなリンクを判定
         window.addEventListener('DOMContentLoaded', () => {
             const currentFile = window.location.pathname.split("/").pop() || "index.html";
             const links = document.querySelectorAll('.nav-link');
@@ -164,7 +166,7 @@
 
             if (isPatternMode) {
                 document.body.style.backgroundRepeat = "repeat";
-                document.body.style.backgroundSize = "100px";
+                document.body.style.backgroundSize = "150px"; /* 繰り返し時は少し大きく */
                 btn.innerText = "繰り返し表示 ON";
                 btn.classList.add('btn-pattern-active');
             } else {
