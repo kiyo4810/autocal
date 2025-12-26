@@ -3,89 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>背景変更付き計算フォーム</title>
+    <title>背景カスタマイズ計算機</title>
     <style>
         body {
-            /* 背景画像の設定はJavaScriptで行うため、ここではデフォルトを設定 */
-            background-color: #f5f7fa; /* デフォルトの背景色 */
-            background-size: cover; /* 背景画像を画面全体に広げる */
-            background-position: center center; /* 背景画像を中央に配置 */
-            background-repeat: no-repeat; /* 背景画像を繰り返さない */
-            transition: background-image 0.5s ease; /* 背景画像の変更を滑らかに */
+            background-color: #f5f7fa;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: background-image 0.5s ease;
             font-family: 'Helvetica Neue', Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden; /* 背景がはみ出ないように */
         }
 
         .container {
-            background-color: rgba(255, 255, 255, 0.9); /* 少し透明にして背景画像が見えるように */
+            background-color: rgba(255, 255, 255, 0.95);
             width: 100%;
             max-width: 350px;
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            position: relative; /* 子要素の配置用 */
-            z-index: 10; /* 背景画像より手前に表示 */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 10;
         }
 
-        h3 {
-            margin-top: 0;
-            color: #333;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: #555;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"],
-        input[type="number"] { /* inputタグのタイプを限定してスタイルを適用 */
+        h3 { margin-top: 0; color: #333; text-align: center; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 5px; }
+        
+        input[type="text"], input[type="number"] {
             width: 100%; padding: 12px; margin-bottom: 5px; box-sizing: border-box;
             border: 2px solid #eee; border-radius: 8px; font-size: 1rem; outline: none;
         }
-        input[type="text"]:focus,
-        input[type="number"]:focus {
-            border-color: #007bff; box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+
+        /* ファイル選択ボタンの見た目 */
+        .file-input {
+            margin-bottom: 15px;
+            font-size: 0.8rem;
         }
 
-        /* ファイル選択ボタンのスタイル */
-        input[type="file"] {
+        /* 繰り返し切り替えボタン */
+        .btn {
             width: 100%;
-            padding: 8px; /* 通常のinputより少し小さめ */
-            margin-top: 15px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #f0f0f0;
-            cursor: pointer;
-        }
-        input[type="file"]::file-selector-button { /* ファイル選択ボタン自体のスタイル */
-            padding: 8px 12px;
+            padding: 12px;
+            margin-top: 5px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             background-color: #007bff;
             color: white;
+            font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: all 0.3s ease;
         }
-        input[type="file"]::file-selector-button:hover {
-            background-color: #0056b3;
+        .btn:hover { background-color: #0056b3; }
+        
+        /* パターンモード時のボタン色（緑） */
+        .btn-pattern-active {
+            background-color: #28a745;
         }
 
-
-        .hint { font-size: 0.75rem; color: #aaa; margin-bottom: 15px; }
         .result-area { margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 12px; text-align: center; }
-        .result-label { display: block; font-size: 0.9rem; color: #666; margin-bottom: 5px; }
         .result { font-weight: 900; color: #007bff; font-size: 1.8rem; }
     </style>
 </head>
@@ -94,77 +72,75 @@
     <div class="container">
         <h3>💰 合計金額計算機</h3>
         
-        <label>単価 (入力後、外をクリックで1000倍)</label>
+        <label>単価 (×1000円)</label>
         <input type="text" id="price" placeholder="例: 3" onchange="processPrice()">
-        <p class="hint">※3と打てば3,000になります</p>
         
         <label>個数</label>
         <input type="number" id="quantity" value="1" oninput="calculate()">
         
-        <label>背景画像を変更</label>
-        <input type="file" id="backgroundImageInput" accept="image/*" onchange="changeBackground()">
-        <p class="hint">※画像を選択すると背景に反映されます</p>
+        <label>背景画像を選択</label>
+        <input type="file" id="bgInput" class="file-input" accept="image/*" onchange="changeBackground()">
+
+        <button id="patternBtn" class="btn" onclick="togglePattern()">繰り返し表示 OFF</button>
 
         <div class="result-area">
-            <span class="result-label">お支払い合計</span>
             <span id="total" class="result">0</span><span style="margin-left:5px">円</span>
         </div>
     </div>
 
     <script>
-        // 1. 単価が入力され、確定した時の処理
+        let isPatternMode = false;
+
         function processPrice() {
             const priceInput = document.getElementById('price');
             let val = priceInput.value.replace(/[^0-9]/g, '');
-
             if (val !== "") {
-                const multipliedPrice = Number(val) * 1000;
-                priceInput.value = multipliedPrice.toLocaleString();
+                priceInput.value = (Number(val) * 1000).toLocaleString();
             }
             calculate();
         }
 
-        // 2. 合計を計算して表示する処理
         function calculate() {
-            const priceInput = document.getElementById('price');
-            const quantityInput = document.getElementById('quantity');
+            const priceVal = document.getElementById('price').value.replace(/,/g, '');
+            const quantityVal = document.getElementById('quantity').value;
+            const total = Number(priceVal) * Number(quantityVal);
             const totalElement = document.getElementById('total');
-
-            const priceNum = Number(priceInput.value.replace(/,/g, ''));
-            const quantityNum = Number(quantityInput.value);
-
-            const total = priceNum * quantityNum;
-
             totalElement.innerText = total.toLocaleString();
-
-            if (total >= 10000) {
-                totalElement.style.color = "#e74c3c"; // 赤
-            } else {
-                totalElement.style.color = "#007bff"; // 青
-            }
+            totalElement.style.color = total >= 10000 ? "#e74c3c" : "#007bff";
         }
 
-        // 3. 背景画像を切り替える処理 (新しい関数)
+        // 画像アップロードの処理
         function changeBackground() {
-            const input = document.getElementById('backgroundImageInput');
-            
-            // ファイルが選択されたかチェック
-            if (input.files && input.files[0]) {
-                const reader = new FileReader(); // ファイルを読み込むためのオブジェクト
-
-                reader.onload = function(e) {
-                    // 読み込みが完了したら、その画像を背景に設定
+            const fileInput = document.getElementById('bgInput');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
                     document.body.style.backgroundImage = `url('${e.target.result}')`;
                 };
-
-                // ファイルをURLとして読み込む
-                reader.readAsDataURL(input.files[0]);
+                reader.readAsDataURL(file);
             }
         }
 
-        // 最初の計算を実行して初期値を表示
-        document.addEventListener('DOMContentLoaded', calculate);
-    </script>
+        // 繰り返しの切り替え処理
+        function togglePattern() {
+            isPatternMode = !isPatternMode;
+            const btn = document.getElementById('patternBtn');
 
+            if (isPatternMode) {
+                // 繰り返しON
+                document.body.style.backgroundRepeat = "repeat";
+                document.body.style.backgroundSize = "100px"; // 小さくして並べる
+                btn.innerText = "繰り返し表示 ON";
+                btn.classList.add('btn-pattern-active');
+            } else {
+                // 繰り返しOFF（全画面）
+                document.body.style.backgroundRepeat = "no-repeat";
+                document.body.style.backgroundSize = "cover"; // 全面に広げる
+                btn.innerText = "繰り返し表示 OFF";
+                btn.classList.remove('btn-pattern-active');
+            }
+        }
+    </script>
 </body>
 </html>
