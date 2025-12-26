@@ -8,8 +8,8 @@
         body {
             /* 初期背景画像 */
             background-image: url('images/2026nenga.png');
-            background-color: #f5f7fa;
-            background-size: cover;
+            background-color: #ffffff; /* 余白を白にする */
+            background-size: contain;  /* 横幅（または縦幅）に合わせて画像を収める */
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -23,6 +23,9 @@
             margin: 0;
         }
 
+        /* PCやタブレットなど、画面が横に長い場合はCover（画面いっぱい）にするなど
+           好みに合わせて調整可能ですが、今回は指示通り「contain」を基本にします */
+
         #site-nav {
             text-align: center;
             padding: 10px;
@@ -33,7 +36,6 @@
             display: flex;
             gap: 5px;
             z-index: 100;
-            /* ナビも幅に合わせて調整したい場合は here */
         }
 
         .nav-link {
@@ -52,22 +54,20 @@
             color: white !important;
         }
 
-        /* --- コンテナの幅設定 --- */
         .container {
             background-color: rgba(255, 255, 255, 0.95);
-            width: 70%;       /* スマホ（デフォルト）で画面の70%に設定 */
-            max-width: 350px;  /* 大きくなりすぎない上限 */
+            width: 70%;
+            max-width: 350px;
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             z-index: 10;
-            box-sizing: border-box; /* パディングを含めて幅を計算 */
+            box-sizing: border-box;
         }
 
-        /* PCなど画面が広い時用の調整（任意） */
         @media (min-width: 600px) {
             .container {
-                width: 350px; /* PCでは固定幅の方が見やすい */
+                width: 350px;
             }
         }
 
@@ -171,12 +171,12 @@
             if (isPatternMode) {
                 document.body.style.backgroundRepeat = "repeat";
                 document.body.style.backgroundSize = "150px";
-                btn.innerText = "繰り返し表示 OFF";
+                btn.innerText = "繰り返し表示 ON";
                 btn.classList.add('btn-pattern-active');
             } else {
                 document.body.style.backgroundRepeat = "no-repeat";
-                document.body.style.backgroundSize = "cover";
-                btn.innerText = "繰り返し表示 ON";
+                document.body.style.backgroundSize = "contain"; /* 指示通り画像全体を収める設定 */
+                btn.innerText = "繰り返し表示 OFF";
                 btn.classList.remove('btn-pattern-active');
             }
         }
