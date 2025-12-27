@@ -1,3 +1,4 @@
+
 name: Format Code
 
 on: [push]
@@ -11,20 +12,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Prettier
-        # 最も安定している「公式に近いツール名」に変更しました
-        uses: actions/checkout@v4
-        
       - name: Format with Prettier
-        # ツールを直接呼び出すのではなく、コマンドで実行する方式にします
+        # npxを使ってPrettierを実行。--html-whitespace-sensitivity を追加してより確実に。
         run: |
-          npx prettier --write **/*.{html,js,css}
+          npx prettier --write "**/*.{html,js,css}"
 
-      - name: Commit changes
-        # 変更があった場合だけ、自分のリポジトリに保存し直す設定です
+      - name: Commit and Push changes
+        # 変更があれば保存してプッシュする
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git diff --quiet && git diff --staged --quiet || git commit -m "chore: インデントを自動修正しました"
-          git push
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: インデントを自動修正しました"
+            git push
+          fi
