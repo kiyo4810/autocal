@@ -173,150 +173,211 @@
     </div>
 
     <script>
-        // アクティブなリンクを判定
-        window.addEventListener('DOMContentLoaded', () => {
-            const currentFile = window.location.pathname.split("/").pop() || "index.html";
-            const links = document.querySelectorAll('.nav-link');
-            links.forEach(link => {
-                if (link.getAttribute('href') === currentFile) {
-                    link.classList.add('active');
-                }
-            });
+    // --- ページ全体の仕組み ---
+
+    // ページ（HTML）の読み込みが完了した瞬間に実行する
+    window.addEventListener('DOMContentLoaded', () => {
+        // 現在のURLからファイル名（index.htmlなど）を抜き出し、無ければindex.htmlとする
+        const currentFile = window.location.pathname.split("/").pop() || "index.html";
+        // 画面内のナビゲーションリンク（.nav-link）をすべて取得する
+        const links = document.querySelectorAll('.nav-link');
+        
+        // リンクを一つずつチェックする
+        links.forEach(link => {
+            // もしリンクの移動先と、いま開いているファイル名が同じなら
+            if (link.getAttribute('href') === currentFile) {
+                // そのリンクに「active」という目印（クラス）をつけて色を変える準備をする
+                link.classList.add('active');
+            }
         });
+    });
 
-        // --- ゲームのロジック ---
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const volumeValue = document.getElementById('volumeValue');
+    // --- ゲームのロジック（基本設定） ---
 
-        const GAME_WIDTH = 600;
-        const GAME_HEIGHT = 400;
+    // 絵を描くためのキャンバス（画用紙）を取得
+    const canvas = document.getElementById('gameCanvas');
+    // 画用紙に描くためのペン（コンテキスト）を取得
+    const ctx = canvas.getContext('2d');
+    // 音量を調整するスライダーを取得
+    const volumeSlider = document.getElementById('volumeSlider');
+    // 音量の数字を表示する場所を取得
+    const volumeValue = document.getElementById('volumeValue');
 
-        let score = 0;
-        let spriteX = GAME_WIDTH / 2;
-        let spriteY = GAME_HEIGHT / 2;
-        let spriteSpeed = [2, 2];
-        let spriteRadius = 25;
-        let spriteImage = null;
-        let scaleX = 1;
-        let scaleY = 1;
-        let volume = 70;
+    // ゲーム内の仮想的な画面サイズ（基準となる大きさ）
+    const GAME_WIDTH = 600;
+    const GAME_HEIGHT = 400;
 
-        let audioContext = null;
-        function initAudio() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            return audioContext;
+    // ゲームで使うデータの初期値
+    let score = 0; // スコア
+    let spriteX = GAME_WIDTH / 2; // キャラクターの横位置（最初は真ん中）
+    let spriteY = GAME_HEIGHT / 2; // キャラクターの縦位置（最初は真ん中）
+    let spriteSpeed = [2, 2]; // 移動速度 [横に2, 縦に2]
+    let spriteRadius = 25; // キャラクターの当たり判定の大きさ
+    let spriteImage = null; // キャラクターの画像を入れる箱
+    let scaleX = 1; // 実際の画面サイズに合わせるための横の倍率
+    let scaleY = 1; // 実際の画面サイズに合わせるための縦の倍率
+    let volume = 70; // 効果音の大きさ（0〜100）
+
+    // --- 音を鳴らす仕組み ---
+
+    let audioContext = null; // 音を出すための大元のシステム
+    function initAudio() {
+        // まだシステムが準備できていなければ作成する（ブラウザ制限対策）
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
         }
+        return audioContext;
+    }
 
-        function playSuccessSound() {
-            try {
-                const ctxAudio = initAudio();
-                const now = ctxAudio.currentTime;
-                const gainNode = ctxAudio.createGain();
-                gainNode.gain.value = (volume / 100) * 0.3;
-                gainNode.connect(ctxAudio.destination);
-                const osc = ctxAudio.createOscillator();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, now);
-                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
-                osc.connect(gainNode);
-                osc.start(now);
-                osc.stop(now + 0.1);
-            } catch (e) { console.log(e); }
+    // 成功したとき（クリック時）に高い音を鳴らす
+    function playSuccessSound() {
+        try {
+            const ctxAudio = initAudio(); // システム起動
+            const now = ctxAudio.currentTime; // 今の時間
+            const gainNode = ctxAudio.createGain(); // ボリュームつまみ作成
+            gainNode.gain.value = (volume / 100) * 0.3; // スライダーの値を反映
+            gainNode.connect(ctxAudio.destination); // つまみをスピーカーに接続
+            
+            const osc = ctxAudio.createOscillator(); // 電子音の発振器を作成
+            osc.type = 'sine'; // 柔らかな音の種類に設定
+            osc.frequency.setValueAtTime(800, now); // 最初の音の高さ(800Hz)
+            osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1); // 0.1秒で音を高くする（ピコッ！）
+            osc.connect(gainNode); // 発振器をつまみに接続
+            osc.start(now); // 音を出す
+            osc.stop(now + 0.1); // 0.1秒後に止める
+        } catch (e) { console.log(e); } // エラーが起きてもゲームを止めない
+    }
+
+    // --- 画像の読み込み ---
+
+    const img = new Image(); // 新しい画像の箱を作る
+    img.src = 'images/pan.png'; // 読み込む画像のパスを指定
+    img.onload = () => { spriteImage = img; }; // 読み込みが終わったら変数に保存
+
+    // --- ユーザーの操作への反応 ---
+
+    // 音量スライダーが動かされたとき
+    volumeSlider.addEventListener('input', (e) => {
+        volume = parseInt(e.target.value); // 新しい音量を取得
+        volumeValue.textContent = volume; // 画面上の数字を書き換える
+        // スライダーの溝の色を動的に変える
+        volumeSlider.style.background = `linear-gradient(to right, #667eea 0%, #667eea ${volume}%, #ccc ${volume}%, #ccc 100%)`;
+    });
+
+    // 画面のサイズが変わったときにキャンバスの大きさを調整する
+    function resizeCanvas() {
+        const containerWidth = Math.min(window.innerWidth - 20, GAME_WIDTH); // 画面幅に合わせつつ最大値を守る
+        const containerHeight = Math.min(window.innerHeight - 300, GAME_HEIGHT); // 高さも調整
+        const aspectRatio = GAME_WIDTH / GAME_HEIGHT; // 元の縦横比
+        
+        let canvasWidth = containerWidth;
+        let canvasHeight = containerWidth / aspectRatio;
+        
+        // 高さがはみ出す場合は調整
+        if (canvasHeight > containerHeight) {
+            canvasHeight = containerHeight;
+            canvasWidth = canvasHeight * aspectRatio;
         }
+        
+        canvas.width = Math.max(canvasWidth, 250); // 最低サイズを確保
+        canvas.height = Math.max(canvasHeight, 166);
+        
+        // 基準サイズ(600x400)に対して、今の画面が何倍の大きさかを計算（クリック判定用）
+        scaleX = canvas.width / GAME_WIDTH;
+        scaleY = canvas.height / GAME_HEIGHT;
+    }
 
-        const img = new Image();
-        img.src = 'images/pan.png';
-        img.onload = () => { spriteImage = img; };
+    // --- 描画と計算（メインエンジン） ---
 
-        volumeSlider.addEventListener('input', (e) => {
-            volume = parseInt(e.target.value);
-            volumeValue.textContent = volume;
-            volumeSlider.style.background = `linear-gradient(to right, #667eea 0%, #667eea ${volume}%, #ccc ${volume}%, #ccc 100%)`;
-        });
+    // 画面を描く処理
+    function draw() {
+        ctx.fillStyle = '#0a0a32'; // 背景の色（紺色）
+        ctx.fillRect(0, 0, canvas.width, canvas.height); // 画面全体を塗りつぶし（リセット）
+        
+        ctx.fillStyle = 'white'; // 文字の色
+        const fontSize = Math.max(16, canvas.width / 20); // 画面の大きさに合わせて文字サイズを変える
+        ctx.font = `bold ${fontSize}px Arial`; // フォント設定
+        ctx.fillText(`Score: ${score}`, 15, fontSize + 10); // スコアを表示
 
-        function resizeCanvas() {
-            const containerWidth = Math.min(window.innerWidth - 20, GAME_WIDTH);
-            const containerHeight = Math.min(window.innerHeight - 300, GAME_HEIGHT);
-            const aspectRatio = GAME_WIDTH / GAME_HEIGHT;
-            let canvasWidth = containerWidth;
-            let canvasHeight = containerWidth / aspectRatio;
-            if (canvasHeight > containerHeight) {
-                canvasHeight = containerHeight;
-                canvasWidth = canvasHeight * aspectRatio;
-            }
-            canvas.width = Math.max(canvasWidth, 250);
-            canvas.height = Math.max(canvasHeight, 166);
-            scaleX = canvas.width / GAME_WIDTH;
-            scaleY = canvas.height / GAME_HEIGHT;
+        const drawX = spriteX * scaleX; // 実際の描画位置を計算（横）
+        const drawY = spriteY * scaleY; // 実際の描画位置を計算（縦）
+        const spriteSize = 100 * Math.min(scaleX, scaleY); // キャラクターの大きさを調整
+
+        if (spriteImage) {
+            // 画像があれば画像を描く
+            ctx.drawImage(spriteImage, drawX - spriteSize / 2, drawY - spriteSize / 2, spriteSize, spriteSize);
+        } else {
+            // 画像がなければ黄色い円を描く（予備）
+            ctx.fillStyle = 'yellow';
+            ctx.beginPath();
+            ctx.arc(drawX, drawY, spriteRadius * Math.min(scaleX, scaleY), 0, Math.PI * 2);
+            ctx.fill();
         }
+    }
 
-        function draw() {
-            ctx.fillStyle = '#0a0a32';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'white';
-            const fontSize = Math.max(16, canvas.width / 20);
-            ctx.font = `bold ${fontSize}px Arial`;
-            ctx.fillText(`Score: ${score}`, 15, fontSize + 10);
+    // キャラクターの位置を更新する処理
+    function update() {
+        spriteX += spriteSpeed[0]; // 横に動かす
+        spriteY += spriteSpeed[1]; // 縦に動かす
+        
+        // 左右の壁に当たったら跳ね返る
+        if (spriteX < 50 || spriteX > GAME_WIDTH - 50) spriteSpeed[0] *= -1;
+        // 上下の壁に当たったら跳ね返る
+        if (spriteY < 50 || spriteY > GAME_HEIGHT - 50) spriteSpeed[1] *= -1;
+    }
 
-            const drawX = spriteX * scaleX;
-            const drawY = spriteY * scaleY;
-            const spriteSize = 100 * Math.min(scaleX, scaleY);
+    // --- クリック・タッチされたときの判定 ---
 
-            if (spriteImage) {
-                ctx.drawImage(spriteImage, drawX - spriteSize / 2, drawY - spriteSize / 2, spriteSize, spriteSize);
-            } else {
-                ctx.fillStyle = 'yellow';
-                ctx.beginPath();
-                ctx.arc(drawX, drawY, spriteRadius * Math.min(scaleX, scaleY), 0, Math.PI * 2);
-                ctx.fill();
-            }
+    function handleClick(event) {
+        const rect = canvas.getBoundingClientRect(); // キャンバスの画面上の位置を取得
+        
+        // マウスか指か、どちらで触れたかによって座標の取り方を変える
+        let clientX = (event.touches ? event.touches[0].clientX : event.clientX);
+        let clientY = (event.touches ? event.touches[0].clientY : event.clientY);
+        
+        // 指が離れた瞬間のための座標取得
+        if(event.changedTouches) {
+            clientX = event.changedTouches[0].clientX;
+            clientY = event.changedTouches[0].clientY;
         }
+        
+        // クリックされた位置が「ゲーム内の基準サイズ」でどこかを計算
+        const clickX = (clientX - rect.left) / scaleX;
+        const clickY = (clientY - rect.top) / scaleY;
+        
+        // キャラクターの中心とクリック位置の距離を計算（三平方の定理）
+        const dist = Math.sqrt(Math.pow(clickX - spriteX, 2) + Math.pow(clickY - spriteY, 2));
 
-        function update() {
-            spriteX += spriteSpeed[0];
-            spriteY += spriteSpeed[1];
-            if (spriteX < 50 || spriteX > GAME_WIDTH - 50) spriteSpeed[0] *= -1;
-            if (spriteY < 50 || spriteY > GAME_HEIGHT - 50) spriteSpeed[1] *= -1;
+        // 距離が60以下なら「当たった」とみなす
+        if (dist < 60) {
+            score += 1; // スコアアップ
+            // キャラクターを別の場所に飛ばす（ワープ）
+            spriteX = Math.random() * (GAME_WIDTH - 100) + 50;
+            spriteY = Math.random() * (GAME_HEIGHT - 100) + 50;
+            // スピードを5%アップさせる
+            spriteSpeed[0] *= 1.05;
+            spriteSpeed[1] *= 1.05;
+            playSuccessSound(); // 音を鳴らす
         }
+    }
 
-        function handleClick(event) {
-            const rect = canvas.getBoundingClientRect();
-            let clientX = (event.touches ? event.touches[0].clientX : event.clientX);
-            let clientY = (event.touches ? event.touches[0].clientY : event.clientY);
-            if(event.changedTouches) {
-                clientX = event.changedTouches[0].clientX;
-                clientY = event.changedTouches[0].clientY;
-            }
-            const clickX = (clientX - rect.left) / scaleX;
-            const clickY = (clientY - rect.top) / scaleY;
-            const dist = Math.sqrt(Math.pow(clickX - spriteX, 2) + Math.pow(clickY - spriteY, 2));
+    // マウスを押したとき
+    canvas.addEventListener('mousedown', handleClick);
+    // 指で触れたとき（画面のスクロールなどを防ぐ設定付き）
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handleClick(e); }, {passive: false});
 
-            if (dist < 60) {
-                score += 1;
-                spriteX = Math.random() * (GAME_WIDTH - 100) + 50;
-                spriteY = Math.random() * (GAME_HEIGHT - 100) + 50;
-                spriteSpeed[0] *= 1.05;
-                spriteSpeed[1] *= 1.05;
-                playSuccessSound();
-            }
-        }
+    // --- ゲームの開始 ---
 
-        canvas.addEventListener('mousedown', handleClick);
-        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handleClick(e); }, {passive: false});
+    // 動き続けるループ処理
+    function gameLoop() {
+        update(); // 計算する
+        draw(); // 描く
+        requestAnimationFrame(gameLoop); // 次のコマもお願いする
+    }
 
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
-
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        gameLoop();
-    </script>
+    resizeCanvas(); // 最初に一度サイズを整える
+    window.addEventListener('resize', resizeCanvas); // 画面サイズ変更時にも整える
+    gameLoop(); // ループスタート！
+</script>
 </body>
 </html>
