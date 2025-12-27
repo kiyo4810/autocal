@@ -1,0 +1,19 @@
+name: Format Code # この仕組みの名前
+
+on: [push] # コードが「保存（プッシュ）」されたら発動！
+
+jobs:
+  format:
+    runs-on: ubuntu-latest # GitHubのサーバー上で実行
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # 自分のコードを読み込む
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Run Prettier
+        uses: creyS/prettier_action@v4.3 # 整形ツールを実行
+        with:
+          # ここに整形したいファイルの拡張子を書く（HTML, JS, CSSなど）
+          prettier_options: --write **/*.{html,js,css}
+          commit_message: "chore: インデントを自動修正しました" # 自動保存時のコメント
