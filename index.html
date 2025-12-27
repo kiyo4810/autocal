@@ -1,190 +1,254 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>背景カスタマイズ計算機</title>
     <style>
-        body {
-            /* 初期背景画像と繰り返し設定をデフォルトONに */
-            background-image: url('images/akipassport.png');
-            background-color: #ffffff;
-            background-repeat: repeat;   /* 初期値：繰り返し */
-            background-size: 150px;      /* 初期値：サイズ固定 */
-            background-position: center;
-            background-attachment: fixed;
-            transition: background-image 0.5s ease;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
+      body {
+        /* 初期背景画像と繰り返し設定をデフォルトONに */
+        background-image: url("images/akipassport.png");
+        background-color: #ffffff;
+        background-repeat: repeat; /* 初期値：繰り返し */
+        background-size: 150px; /* 初期値：サイズ固定 */
+        background-position: center;
+        background-attachment: fixed;
+        transition: background-image 0.5s ease;
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
 
-        #site-nav {
-            text-align: center;
-            padding: 10px;
-            margin-bottom: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            gap: 5px;
-            z-index: 100;
-        }
+      #site-nav {
+        text-align: center;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 5px;
+        z-index: 100;
+      }
 
-        .nav-link {
-            display: inline-block;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: #555;
-            border-radius: 25px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
+      .nav-link {
+        display: inline-block;
+        padding: 10px 20px;
+        text-decoration: none;
+        color: #555;
+        border-radius: 25px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+      }
 
-        .nav-link.active {
-            background-color: #4385f4;
-            color: white !important;
-        }
+      .nav-link.active {
+        background-color: #4385f4;
+        color: white !important;
+      }
 
+      .container {
+        background-color: rgba(255, 255, 255, 0.7);
+        width: 70%;
+        max-width: 350px;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+        box-sizing: border-box;
+      }
+
+      @media (min-width: 600px) {
         .container {
-            background-color: rgba(255, 255, 255, 0.7);
-            width: 70%;
-            max-width: 350px;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-            box-sizing: border-box;
+          width: 350px;
         }
+      }
 
-        @media (min-width: 600px) {
-            .container {
-                width: 350px;
-            }
-        }
+      h3 {
+        margin-top: 0;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-top: 15px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 5px;
+      }
 
-        h3 { margin-top: 0; color: #333; text-align: center; margin-bottom: 20px; }
-        label { display: block; margin-top: 15px; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 5px; }
-        
-        input[type="text"], input[type="number"] {
-            width: 100%; padding: 12px; margin-bottom: 5px; box-sizing: border-box;
-            border: 2px solid #eee; border-radius: 8px; font-size: 1rem; outline: none;
-        }
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 5px;
+        box-sizing: border-box;
+        border: 2px solid #eee;
+        border-radius: 8px;
+        font-size: 1rem;
+        outline: none;
+      }
 
-        .file-input { width: 100%; margin-bottom: 15px; font-size: 0.8rem; }
+      .file-input {
+        width: 100%;
+        margin-bottom: 15px;
+        font-size: 0.8rem;
+      }
 
-        .btn {
-            width: 100%; padding: 12px; margin-top: 5px; border: none;
-            border-radius: 8px; background-color: #007bff; color: white;
-            font-weight: bold; cursor: pointer; transition: all 0.3s ease;
-        }
-        .btn:hover { background-color: #0056b3; }
-        /* 繰り返しON状態のボタン色 */
-        .btn-pattern-active { background-color: #28a745; }
+      .btn {
+        width: 100%;
+        padding: 12px;
+        margin-top: 5px;
+        border: none;
+        border-radius: 8px;
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn:hover {
+        background-color: #0056b3;
+      }
+      /* 繰り返しON状態のボタン色 */
+      .btn-pattern-active {
+        background-color: #28a745;
+      }
 
-        .result-area { margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 12px; text-align: center; }
-        .result { font-weight: 900; color: #007bff; font-size: 1.8rem; }
+      .result-area {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        text-align: center;
+      }
+      .result {
+        font-weight: 900;
+        color: #007bff;
+        font-size: 1.8rem;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <nav id="site-nav">
-        <a href="index.html" class="nav-link">メイン計算機</a>
-        <a href="chasepankun.html" class="nav-link">パンくんを追え</a>
-        <a href="index1.html" class="nav-link">Ver.1</a>
-        <a href="index2.html" class="nav-link">Ver.2</a>
+      <a href="index.html" class="nav-link">メイン計算機</a>
+      <a href="chasepankun.html" class="nav-link">パンくんを追え</a>
+      <a href="index1.html" class="nav-link">Ver.1</a>
+      <a href="index2.html" class="nav-link">Ver.2</a>
     </nav>
 
     <div class="container">
-        <h3>💰 背景チェンジ計算機</h3>
-        
-        <label>単価 (×1000円)</label>
-        <input type="text" id="price" placeholder="例: 3" onchange="processPrice()">
-        
-        <label>個数</label>
-        <input type="number" id="quantity" value="1" oninput="calculate()">
-        
-        <label>背景画像を選択</label>
-        <input type="file" id="bgInput" class="file-input" accept="image/*" onchange="changeBackground()">
+      <h3>💰 背景チェンジ計算機</h3>
 
-        <button id="patternBtn" class="btn btn-pattern-active" onclick="togglePattern()">繰り返し表示 OFF</button>
+      <label>単価 (×1000円)</label>
+      <input
+        type="text"
+        id="price"
+        placeholder="例: 3"
+        onchange="processPrice()"
+      />
 
-        <div class="result-area">
-            <span id="total" class="result">0</span><span style="margin-left:5px">円</span>
-        </div>
+      <label>個数</label>
+      <input type="number" id="quantity" value="1" oninput="calculate()" />
+
+      <label>背景画像を選択</label>
+      <input
+        type="file"
+        id="bgInput"
+        class="file-input"
+        accept="image/*"
+        onchange="changeBackground()"
+      />
+
+      <button
+        id="patternBtn"
+        class="btn btn-pattern-active"
+        onclick="togglePattern()"
+      >
+        繰り返し表示 OFF
+      </button>
+
+      <div class="result-area">
+        <span id="total" class="result">0</span
+        ><span style="margin-left: 5px">円</span>
+      </div>
     </div>
 
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const currentFile = window.location.pathname.split("/").pop() || "index.html";
-            const links = document.querySelectorAll('.nav-link');
-            links.forEach(link => {
-                if (link.getAttribute('href') === currentFile) {
-                    link.classList.add('active');
-                }
-            });
+      window.addEventListener("DOMContentLoaded", () => {
+        const currentFile =
+          window.location.pathname.split("/").pop() || "index.html";
+        const links = document.querySelectorAll(".nav-link");
+        links.forEach((link) => {
+          if (link.getAttribute("href") === currentFile) {
+            link.classList.add("active");
+          }
         });
+      });
 
-        // 初期状態を繰り返しON（true）に設定
-        let isPatternMode = true;
+      // 初期状態を繰り返しON（true）に設定
+      let isPatternMode = true;
 
-        function processPrice() {
-            const priceInput = document.getElementById('price');
-            let val = priceInput.value.replace(/[^0-9]/g, '');
-            if (val !== "") {
-                priceInput.value = (Number(val) * 1000).toLocaleString();
-            }
-            calculate();
+      function processPrice() {
+        const priceInput = document.getElementById("price");
+        let val = priceInput.value.replace(/[^0-9]/g, "");
+        if (val !== "") {
+          priceInput.value = (Number(val) * 1000).toLocaleString();
         }
+        calculate();
+      }
 
-        function calculate() {
-            const priceVal = document.getElementById('price').value.replace(/,/g, '');
-            const quantityVal = document.getElementById('quantity').value;
-            const total = Number(priceVal) * Number(quantityVal);
-            const totalElement = document.getElementById('total');
-            totalElement.innerText = total.toLocaleString();
-            totalElement.style.color = total >= 10000 ? "#e74c3c" : "#007bff";
-        }
+      function calculate() {
+        const priceVal = document
+          .getElementById("price")
+          .value.replace(/,/g, "");
+        const quantityVal = document.getElementById("quantity").value;
+        const total = Number(priceVal) * Number(quantityVal);
+        const totalElement = document.getElementById("total");
+        totalElement.innerText = total.toLocaleString();
+        totalElement.style.color = total >= 10000 ? "#e74c3c" : "#007bff";
+      }
 
-        function changeBackground() {
-            const fileInput = document.getElementById('bgInput');
-            const file = fileInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.body.style.backgroundImage = `url('${e.target.result}')`;
-                    // 画像挿入後も現在のモード設定を維持する
-                    applyBackgroundStyle();
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function togglePattern() {
-            isPatternMode = !isPatternMode;
+      function changeBackground() {
+        const fileInput = document.getElementById("bgInput");
+        const file = fileInput.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            document.body.style.backgroundImage = `url('${e.target.result}')`;
+            // 画像挿入後も現在のモード設定を維持する
             applyBackgroundStyle();
+          };
+          reader.readAsDataURL(file);
         }
+      }
 
-        // 背景のスタイル（繰り返しON/OFF）を適用する共通関数
-        function applyBackgroundStyle() {
-            const btn = document.getElementById('patternBtn');
-            if (isPatternMode) {
-                document.body.style.backgroundRepeat = "repeat";
-                document.body.style.backgroundSize = "150px";
-                btn.innerText = "繰り返し表示 OFF"; // クリックするとOFFになるという意味
-                btn.classList.add('btn-pattern-active');
-            } else {
-                document.body.style.backgroundRepeat = "no-repeat";
-                document.body.style.backgroundSize = "contain";
-                btn.innerText = "繰り返し表示 ON"; // クリックするとONになるという意味
-                btn.classList.remove('btn-pattern-active');
-            }
+      function togglePattern() {
+        isPatternMode = !isPatternMode;
+        applyBackgroundStyle();
+      }
+
+      // 背景のスタイル（繰り返しON/OFF）を適用する共通関数
+      function applyBackgroundStyle() {
+        const btn = document.getElementById("patternBtn");
+        if (isPatternMode) {
+          document.body.style.backgroundRepeat = "repeat";
+          document.body.style.backgroundSize = "150px";
+          btn.innerText = "繰り返し表示 OFF"; // クリックするとOFFになるという意味
+          btn.classList.add("btn-pattern-active");
+        } else {
+          document.body.style.backgroundRepeat = "no-repeat";
+          document.body.style.backgroundSize = "contain";
+          btn.innerText = "繰り返し表示 ON"; // クリックするとONになるという意味
+          btn.classList.remove("btn-pattern-active");
         }
+      }
     </script>
-</body>
+  </body>
 </html>

@@ -1,188 +1,337 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>全米ETF VTI(S&P500)、VT(オルカン)自動計算機</title>
     <style>
-        body { font-family: sans-serif; margin: 20px; background-color: #f0f4f8; color: #333; }
-        .container { max-width: 400px; padding: 25px; border-radius: 15px; background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto; }
-        h3 { margin-top: 0; text-align: center; color: #1a365d; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-size: 18px; }
-        .stock-box { background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
-        .stock-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; color: #2d3748; display: flex; justify-content: space-between; }
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #718096; }
-        input { width: 100%; margin-bottom: 8px; padding: 10px; box-sizing: border-box; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 16px; }
-        input[readonly] { background-color: #edf2f7; color: #4a5568; }
-        .subtotal-area { text-align: right; font-weight: bold; color: #2d3748; font-size: 15px; padding-top: 5px; border-top: 1px dashed #cbd5e0; }
-        .price-info { font-size: 11px; color: #a0aec0; margin: 5px 0 0 0; text-align: right; }
-        
-        /* 合計エリアの調整 */
-        .result-area { background: #1a365d; padding: 20px; border-radius: 10px; text-align: center; color: white; margin-top: 20px; }
-        .result-label { font-size: 14px; opacity: 0.8; margin-bottom: 8px; }
-        .result-row { display: flex; justify-content: center; align-items: baseline; margin-bottom: 5px; }
-        .result-value { font-weight: bold; font-size: 28px; color: #63b3ed; }
-        .result-value.jpy { color: #fbd38d; font-size: 24px; } /* 円表示は少し色とサイズを変える */
-        .unit { margin-left: 5px; font-size: 14px; opacity: 0.9; }
-        
-        .rate-info { font-size: 11px; color: #cbd5e0; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; }
-        .nav-link { display: block; text-align: center; margin-top: 20px; font-size: 14px; color: #3182ce; text-decoration: none; }
+      body {
+        font-family: sans-serif;
+        margin: 20px;
+        background-color: #f0f4f8;
+        color: #333;
+      }
+      .container {
+        max-width: 400px;
+        padding: 25px;
+        border-radius: 15px;
+        background: white;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        margin: auto;
+      }
+      h3 {
+        margin-top: 0;
+        text-align: center;
+        color: #1a365d;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 10px;
+        font-size: 18px;
+      }
+      .stock-box {
+        background: #f8fafc;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #e2e8f0;
+      }
+      .stock-title {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #2d3748;
+        display: flex;
+        justify-content: space-between;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 13px;
+        color: #718096;
+      }
+      input {
+        width: 100%;
+        margin-bottom: 8px;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 1px solid #cbd5e0;
+        border-radius: 6px;
+        font-size: 16px;
+      }
+      input[readonly] {
+        background-color: #edf2f7;
+        color: #4a5568;
+      }
+      .subtotal-area {
+        text-align: right;
+        font-weight: bold;
+        color: #2d3748;
+        font-size: 15px;
+        padding-top: 5px;
+        border-top: 1px dashed #cbd5e0;
+      }
+      .price-info {
+        font-size: 11px;
+        color: #a0aec0;
+        margin: 5px 0 0 0;
+        text-align: right;
+      }
+
+      /* 合計エリアの調整 */
+      .result-area {
+        background: #1a365d;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        color: white;
+        margin-top: 20px;
+      }
+      .result-label {
+        font-size: 14px;
+        opacity: 0.8;
+        margin-bottom: 8px;
+      }
+      .result-row {
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        margin-bottom: 5px;
+      }
+      .result-value {
+        font-weight: bold;
+        font-size: 28px;
+        color: #63b3ed;
+      }
+      .result-value.jpy {
+        color: #fbd38d;
+        font-size: 24px;
+      } /* 円表示は少し色とサイズを変える */
+      .unit {
+        margin-left: 5px;
+        font-size: 14px;
+        opacity: 0.9;
+      }
+
+      .rate-info {
+        font-size: 11px;
+        color: #cbd5e0;
+        margin-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 8px;
+      }
+      .nav-link {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #3182ce;
+        text-decoration: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <nav id="site-nav">
-    <style>
+      <style>
         #site-nav {
-            text-align: center;
-            padding: 15px 0;
-            margin-bottom: 20px;
+          text-align: center;
+          padding: 15px 0;
+          margin-bottom: 20px;
         }
         .nav-link {
-            display: inline-block;
-            margin: 0 5px;
-            padding: 10px 18px;
-            background: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            color: #555;
-            border-radius: 25px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
+          display: inline-block;
+          margin: 0 5px;
+          padding: 10px 18px;
+          background: rgba(255, 255, 255, 0.7);
+          text-decoration: none;
+          color: #555;
+          border-radius: 25px;
+          font-size: 0.85rem;
+          font-weight: bold;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s ease;
+          border: 1px solid transparent;
         }
         .nav-link:hover {
-            transform: translateY(-2px);
-            background: #fff;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+          transform: translateY(-2px);
+          background: #fff;
+          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
         /* 今いるページのボタンを自動で目立たせるスタイル */
         .nav-link.active {
-            background: #007bff;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+          background: #007bff;
+          color: white;
+          box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
         }
-    </style>
+      </style>
 
-    <a href="index.html" class="nav-link">メイン計算機</a>
-    <a href="chasepankun.html" class="nav-link">パンくんを追え</a>
-    <a href="index1.html" class="nav-link">Ver.1</a>
-    <a href="index2.html" class="nav-link">Ver.2</a>
+      <a href="index.html" class="nav-link">メイン計算機</a>
+      <a href="chasepankun.html" class="nav-link">パンくんを追え</a>
+      <a href="index1.html" class="nav-link">Ver.1</a>
+      <a href="index2.html" class="nav-link">Ver.2</a>
 
-    <script>
+      <script>
         // 今見ているURLをチェックして、一致するリンクに "active" クラスをつける魔法
-        const currentFile = window.location.pathname.split("/").pop() || "index.html";
-        const links = document.querySelectorAll('.nav-link');
-        links.forEach(link => {
-            if (link.getAttribute('href') === currentFile) {
-                link.classList.add('active');
-            }
+        const currentFile =
+          window.location.pathname.split("/").pop() || "index.html";
+        const links = document.querySelectorAll(".nav-link");
+        links.forEach((link) => {
+          if (link.getAttribute("href") === currentFile) {
+            link.classList.add("active");
+          }
         });
-    </script>
-</nav>
+      </script>
+    </nav>
     <div class="container">
-        <h3>全米ETF VTI(S&P500)、VT(オルカン)自動計算機</h3>
-        
-        <div class="stock-box">
-            <div class="stock-title"><span>VTI</span><span id="vti-price-display" style="font-size: 14px; color: #4a5568;">取得中...</span></div>
-            <label>現在価格 (USD)</label>
-            <input type="number" id="vti-price" readonly step="0.01">
-            <label>保有株数</label>
-            <input type="number" id="vti-qty" value="0" min="0" oninput="calculate()">
-            <div class="subtotal-area">小計: <span id="vti-subtotal">0.00</span> USD</div>
-            <p id="vti-update" class="price-info">読込中...</p>
-        </div>
+      <h3>全米ETF VTI(S&P500)、VT(オルカン)自動計算機</h3>
 
-        <div class="stock-box">
-            <div class="stock-title"><span>VT</span><span id="vt-price-display" style="font-size: 14px; color: #4a5568;">取得中...</span></div>
-            <label>現在価格 (USD)</label>
-            <input type="number" id="vt-price" readonly step="0.01">
-            <label>保有株数</label>
-            <input type="number" id="vt-qty" value="0" min="0" oninput="calculate()">
-            <div class="subtotal-area">小計: <span id="vt-subtotal">0.00</span> USD</div>
-            <p id="vt-update" class="price-info">読込中...</p>
+      <div class="stock-box">
+        <div class="stock-title">
+          <span>VTI</span
+          ><span id="vti-price-display" style="font-size: 14px; color: #4a5568"
+            >取得中...</span
+          >
         </div>
-        
-        <div class="result-area">
-            <div class="result-label">総合計評価額</div>
-            <div class="result-row">
-                <span id="total-val" class="result-value">0.00</span><span class="unit">USD</span>
-            </div>
-            <div class="result-row">
-                <span id="total-jpy" class="result-value jpy">0</span><span class="unit">JPY</span>
-            </div>
-            <div id="rate-display" class="rate-info">為替レート取得中...</div>
+        <label>現在価格 (USD)</label>
+        <input type="number" id="vti-price" readonly step="0.01" />
+        <label>保有株数</label>
+        <input
+          type="number"
+          id="vti-qty"
+          value="0"
+          min="0"
+          oninput="calculate()"
+        />
+        <div class="subtotal-area">
+          小計: <span id="vti-subtotal">0.00</span> USD
         </div>
+        <p id="vti-update" class="price-info">読込中...</p>
+      </div>
 
-        <a href="index.html" class="nav-link">← 単純計算機に戻る</a>
+      <div class="stock-box">
+        <div class="stock-title">
+          <span>VT</span
+          ><span id="vt-price-display" style="font-size: 14px; color: #4a5568"
+            >取得中...</span
+          >
+        </div>
+        <label>現在価格 (USD)</label>
+        <input type="number" id="vt-price" readonly step="0.01" />
+        <label>保有株数</label>
+        <input
+          type="number"
+          id="vt-qty"
+          value="0"
+          min="0"
+          oninput="calculate()"
+        />
+        <div class="subtotal-area">
+          小計: <span id="vt-subtotal">0.00</span> USD
+        </div>
+        <p id="vt-update" class="price-info">読込中...</p>
+      </div>
+
+      <div class="result-area">
+        <div class="result-label">総合計評価額</div>
+        <div class="result-row">
+          <span id="total-val" class="result-value">0.00</span
+          ><span class="unit">USD</span>
+        </div>
+        <div class="result-row">
+          <span id="total-jpy" class="result-value jpy">0</span
+          ><span class="unit">JPY</span>
+        </div>
+        <div id="rate-display" class="rate-info">為替レート取得中...</div>
+      </div>
+
+      <a href="index.html" class="nav-link">← 単純計算機に戻る</a>
     </div>
 
     <script>
-        const proxy = "https://corsproxy.io/?";
-        let usdJpyRate = 0;
+      const proxy = "https://corsproxy.io/?";
+      let usdJpyRate = 0;
 
-        async function fetchPrice(symbol, priceId, updateId, displayId) {
-            const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`;
-            try {
-                const response = await fetch(proxy + encodeURIComponent(targetUrl));
-                const data = await response.json();
-                const currentPrice = data.chart.result[0].meta.regularMarketPrice;
-                
-                document.getElementById(priceId).value = currentPrice;
-                document.getElementById(displayId).innerText = `$${currentPrice.toFixed(2)}`;
-                document.getElementById(updateId).innerText = `最終取得: ${new Date().toLocaleTimeString()}`;
-                calculate();
-            } catch (error) {
-                document.getElementById(updateId).innerText = '自動取得失敗。手動入力してください。';
-                document.getElementById(priceId).readOnly = false;
-            }
+      async function fetchPrice(symbol, priceId, updateId, displayId) {
+        const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`;
+        try {
+          const response = await fetch(proxy + encodeURIComponent(targetUrl));
+          const data = await response.json();
+          const currentPrice = data.chart.result[0].meta.regularMarketPrice;
+
+          document.getElementById(priceId).value = currentPrice;
+          document.getElementById(displayId).innerText =
+            `$${currentPrice.toFixed(2)}`;
+          document.getElementById(updateId).innerText =
+            `最終取得: ${new Date().toLocaleTimeString()}`;
+          calculate();
+        } catch (error) {
+          document.getElementById(updateId).innerText =
+            "自動取得失敗。手動入力してください。";
+          document.getElementById(priceId).readOnly = false;
         }
+      }
 
-        async function fetchExRate() {
-            const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/JPY=X`;
-            try {
-                const response = await fetch(proxy + encodeURIComponent(targetUrl));
-                const data = await response.json();
-                usdJpyRate = data.chart.result[0].meta.regularMarketPrice;
-                document.getElementById('rate-display').innerText = `現在レート: 1ドル = ${usdJpyRate.toFixed(2)}円`;
-                calculate();
-            } catch (error) {
-                document.getElementById('rate-display').innerText = '為替レートの取得に失敗しました';
-            }
+      async function fetchExRate() {
+        const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/JPY=X`;
+        try {
+          const response = await fetch(proxy + encodeURIComponent(targetUrl));
+          const data = await response.json();
+          usdJpyRate = data.chart.result[0].meta.regularMarketPrice;
+          document.getElementById("rate-display").innerText =
+            `現在レート: 1ドル = ${usdJpyRate.toFixed(2)}円`;
+          calculate();
+        } catch (error) {
+          document.getElementById("rate-display").innerText =
+            "為替レートの取得に失敗しました";
         }
+      }
 
-        function calculate() {
-            const vtiPrice = parseFloat(document.getElementById('vti-price').value) || 0;
-            const vtiQty = parseFloat(document.getElementById('vti-qty').value) || 0;
-            const vtPrice = parseFloat(document.getElementById('vt-price').value) || 0;
-            const vtQty = parseFloat(document.getElementById('vt-qty').value) || 0;
+      function calculate() {
+        const vtiPrice =
+          parseFloat(document.getElementById("vti-price").value) || 0;
+        const vtiQty =
+          parseFloat(document.getElementById("vti-qty").value) || 0;
+        const vtPrice =
+          parseFloat(document.getElementById("vt-price").value) || 0;
+        const vtQty = parseFloat(document.getElementById("vt-qty").value) || 0;
 
-            const vtiSub = vtiPrice * vtiQty;
-            const vtSub = vtPrice * vtQty;
+        const vtiSub = vtiPrice * vtiQty;
+        const vtSub = vtPrice * vtQty;
 
-            document.getElementById('vti-subtotal').innerText = vtiSub.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            document.getElementById('vt-subtotal').innerText = vtSub.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById("vti-subtotal").innerText =
+          vtiSub.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
+        document.getElementById("vt-subtotal").innerText = vtSub.toLocaleString(
+          undefined,
+          { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+        );
 
-            const totalUsd = vtiSub + vtSub;
-            document.getElementById('total-val').innerText = totalUsd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        const totalUsd = vtiSub + vtSub;
+        document.getElementById("total-val").innerText =
+          totalUsd.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
 
-            // 日本円の計算
-            if (usdJpyRate > 0) {
-                const totalJpy = Math.round(totalUsd * usdJpyRate);
-                document.getElementById('total-jpy').innerText = totalJpy.toLocaleString();
-            }
+        // 日本円の計算
+        if (usdJpyRate > 0) {
+          const totalJpy = Math.round(totalUsd * usdJpyRate);
+          document.getElementById("total-jpy").innerText =
+            totalJpy.toLocaleString();
         }
+      }
 
-        // 初回取得
-        fetchPrice('VTI', 'vti-price', 'vti-update', 'vti-price-display');
-        fetchPrice('VT', 'vt-price', 'vt-update', 'vt-price-display');
+      // 初回取得
+      fetchPrice("VTI", "vti-price", "vti-update", "vti-price-display");
+      fetchPrice("VT", "vt-price", "vt-update", "vt-price-display");
+      fetchExRate();
+
+      // 5分ごとに更新
+      setInterval(() => {
+        fetchPrice("VTI", "vti-price", "vti-update", "vti-price-display");
+        fetchPrice("VT", "vt-price", "vt-update", "vt-price-display");
         fetchExRate();
-
-        // 5分ごとに更新
-        setInterval(() => {
-            fetchPrice('VTI', 'vti-price', 'vti-update', 'vti-price-display');
-            fetchPrice('VT', 'vt-price', 'vt-update', 'vt-price-display');
-            fetchExRate();
-        }, 300000);
+      }, 300000);
     </script>
-</body>
+  </body>
 </html>
