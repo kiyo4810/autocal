@@ -249,4 +249,29 @@
             document.body.style.backgroundImage = `url('${e.target.result}')`;
             applyStyle();
           };
-          reader.readAsData
+          reader.readAsDataURL(file);
+        }
+      }
+
+      function togglePattern() {
+        isPatternMode = !isPatternMode;
+        applyStyle();
+      }
+
+      function applyStyle() {
+        const btn = document.getElementById("patternBtn");
+        if (isPatternMode) {
+          document.body.style.backgroundRepeat = "repeat";
+          document.body.style.backgroundSize = "150px";
+          btn.innerText = "繰り返し表示 OFF";
+          btn.classList.add("btn-pattern-active");
+        } else {
+          document.body.style.backgroundRepeat = "no-repeat";
+          document.body.style.backgroundSize = "contain";
+          btn.innerText = "繰り返し表示 ON";
+          btn.classList.remove("btn-pattern-active");
+        }
+      }
+    </script>
+  </body>
+</html>
