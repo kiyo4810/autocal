@@ -1,19 +1,20 @@
-name: Format Code # この仕組みの名前
+name: Format Code
 
-on: [push] # コードが「保存（プッシュ）」されたら発動！
+on: [push]
 
 jobs:
   format:
-    runs-on: ubuntu-latest # GitHubのサーバー上で実行
+    runs-on: ubuntu-latest
+    permissions: # 権限をコード内でも明示的に指定します
+      contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # 自分のコードを読み込む
+        uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          fetch-depth: 0 # すべての履歴を取得
 
       - name: Run Prettier
-        uses: creysos/prettier_action@v4.3 # ★「s」を追加しました
+        uses: creyso/prettier_action@main # バージョン番号ではなく main という最新版を指定
         with:
-          # 整形したいファイルの拡張子を指定
           prettier_options: --write **/*.{html,js,css}
-          commit_message: "chore: インデントを自動修正しました" # 自動保存時のコメント
+          commit_message: "chore: インデントを自動修正しました"
