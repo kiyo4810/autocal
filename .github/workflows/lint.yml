@@ -12,7 +12,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Run Prettier
-        uses: creyso/prettier_action@v4.3 # ★ここを creyso に修正しました
+        uses: creysos/prettier_action@v4.3 # ★「s」を追加しました
         with:
           # 整形したいファイルの拡張子を指定
           prettier_options: --write **/*.{html,js,css}
