@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>背景カスタマイズ計算機</title>
+    <title>ゴマちゃん背景・猫の声計算機</title>
+    <link rel="icon" href="images/goma.png" type="image/png" />
     <style>
       body {
-        /* 初期背景画像と繰り返し設定をデフォルトONに */
         background-image: url("images/akipassport.png");
         background-color: #ffffff;
-        background-repeat: repeat; /* 初期値：繰り返し */
-        background-size: 150px; /* 初期値：サイズ固定 */
+        background-repeat: repeat;
+        background-size: 150px;
         background-position: center;
         background-attachment: fixed;
         transition: background-image 0.5s ease;
@@ -52,87 +52,72 @@
       }
 
       .container {
-        background-color: rgba(255, 255, 255, 0.7);
-        width: 70%;
-        max-width: 350px;
-        padding: 30px;
-        border-radius: 16px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        background-color: rgba(255, 255, 255, 0.85);
+        width: 90%;
+        max-width: 380px;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
         z-index: 10;
-        box-sizing: border-box;
       }
 
-      @media (min-width: 600px) {
-        .container {
-          width: 350px;
-        }
-      }
-
-      h3 {
-        margin-top: 0;
-        color: #333;
-        text-align: center;
-        margin-bottom: 20px;
-      }
-      label {
-        display: block;
-        margin-top: 15px;
-        font-size: 0.85rem;
-        font-weight: bold;
-        color: #555;
-        margin-bottom: 5px;
-      }
-
-      input[type="text"],
-      input[type="number"] {
+      #display {
         width: 100%;
-        padding: 12px;
-        margin-bottom: 5px;
-        box-sizing: border-box;
-        border: 2px solid #eee;
-        border-radius: 8px;
-        font-size: 1rem;
-        outline: none;
-      }
-
-      .file-input {
-        width: 100%;
+        padding: 15px;
         margin-bottom: 15px;
-        font-size: 0.8rem;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        font-size: 2rem;
+        text-align: right;
+        background: #fdfdfd;
+        color: #333;
+      }
+
+      .calc-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
       }
 
       .btn {
-        width: 100%;
-        padding: 12px;
-        margin-top: 5px;
+        padding: 15px 5px;
         border: none;
-        border-radius: 8px;
-        background-color: #007bff;
-        color: white;
+        border-radius: 12px;
+        font-size: 1.2rem;
         font-weight: bold;
         cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      .btn:hover {
-        background-color: #0056b3;
-      }
-      /* 繰り返しON状態のボタン色 */
-      .btn-pattern-active {
-        background-color: #28a745;
+        transition: transform 0.1s, background 0.2s;
+        box-shadow: 0 3px 0 #bbb;
       }
 
-      .result-area {
-        margin-top: 30px;
-        padding: 20px;
-        background-color: #f8f9fa;
-        border-radius: 12px;
-        text-align: center;
+      .btn:active {
+        transform: translateY(3px);
+        box-shadow: none;
       }
-      .result {
-        font-weight: 900;
-        color: #007bff;
-        font-size: 1.8rem;
+
+      /* ボタンの色分け */
+      .btn-num { background: white; color: #333; }
+      .btn-op { background: #f39c12; color: white; }
+      .btn-clear { background: #e74c3c; color: white; }
+      .btn-equal { background: #4385f4; color: white; grid-row: span 2; }
+      .btn-pattern-active { background-color: #28a745 !important; }
+
+      .settings-area {
+        border-top: 1px solid #ccc;
+        padding-top: 15px;
       }
+
+      label {
+        display: block;
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+        color: #666;
+        font-weight: bold;
+      }
+
+      .file-input { margin-bottom: 10px; font-size: 0.8rem; width: 100%; }
+      .pattern-toggle-btn { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; }
     </style>
   </head>
   <body>
@@ -144,137 +129,143 @@
     </nav>
 
     <div class="container">
-      <h3>💰 背景チェンジ計算機</h3>
+      <h3 style="text-align: center; margin-bottom: 15px;">💰 多機能計算機</h3>
 
-      <label>単価 (×1000円)</label>
-      <input
-        type="text"
-        id="price"
-        placeholder="例: 3"
-        onchange="processPrice()"
-      />
+      <input type="text" id="display" value="0" readonly />
 
-      <label>個数</label>
-      <input type="number" id="quantity" value="1" oninput="calculate()" />
+      <div class="calc-grid">
+        <button class="btn btn-clear" onclick="clearDisplay()">C</button>
+        <button class="btn btn-op" onclick="inputOp('/')">÷</button>
+        <button class="btn btn-op" onclick="inputOp('*')">×</button>
+        <button class="btn btn-clear" onclick="deleteLast()">⌫</button>
 
-      <label>背景画像を選択</label>
-      <input
-        type="file"
-        id="bgInput"
-        class="file-input"
-        accept="image/*"
-        onchange="changeBackground()"
-      />
+        <button class="btn btn-num" onclick="inputNum('7')">7</button>
+        <button class="btn btn-num" onclick="inputNum('8')">8</button>
+        <button class="btn btn-num" onclick="inputNum('9')">9</button>
+        <button class="btn btn-op" onclick="inputOp('-')">-</button>
 
-      <button
-        id="patternBtn"
-        class="btn btn-pattern-active"
-        onclick="togglePattern()"
-      >
-        繰り返し表示 OFF
-      </button>
+        <button class="btn btn-num" onclick="inputNum('4')">4</button>
+        <button class="btn btn-num" onclick="inputNum('5')">5</button>
+        <button class="btn btn-num" onclick="inputNum('6')">6</button>
+        <button class="btn btn-op" onclick="inputOp('+')">+</button>
 
-      <div class="result-area">
-        <span id="total" class="result">0</span
-        ><span style="margin-left: 5px">円</span>
+        <button class="btn btn-num" onclick="inputNum('1')">1</button>
+        <button class="btn btn-num" onclick="inputNum('2')">2</button>
+        <button class="btn btn-num" onclick="inputNum('3')">3</button>
+        <button class="btn btn-equal" onclick="calculateResult()">=</button>
+
+        <button class="btn btn-num" style="grid-column: span 2;" onclick="inputNum('0')">0</button>
+        <button class="btn btn-num" onclick="inputNum('.')">.</button>
+      </div>
+
+      <div class="settings-area">
+        <label>背景画像を変更</label>
+        <input type="file" id="bgInput" class="file-input" accept="image/*" onchange="changeBackground()" />
+        <button id="patternBtn" class="pattern-toggle-btn btn-pattern-active" onclick="togglePattern()">繰り返し表示 OFF</button>
       </div>
     </div>
 
     <script>
-      // --- 1. ページを開いた時の初期設定 ---
+      // --- 初期設定とナビ ---
       window.addEventListener("DOMContentLoaded", () => {
-        // 現在開いているファイル名（例：index.html）を取得します
-        const currentFile =
-          window.location.pathname.split("/").pop() || "index.html";
-        // メニューのリンク（.nav-link）をすべて集めます
-        const links = document.querySelectorAll(".nav-link");
-
-        links.forEach((link) => {
-          // もしリンク先の名前が、今開いているファイルと同じなら
-          if (link.getAttribute("href") === currentFile) {
-            // そのメニューに「active（今ここだよ！）」という印をつけます
-            link.classList.add("active");
-          }
+        const currentFile = window.location.pathname.split("/").pop() || "index.html";
+        document.querySelectorAll(".nav-link").forEach(link => {
+          if (link.getAttribute("href") === currentFile) link.classList.add("active");
         });
       });
 
-      // 背景を「繰り返し表示」するかどうかの状態を保存するスイッチ（初期値はON）
+      // --- 音声の準備 ---
+      const catSound = new Audio("images/cat.mp3");
+      const specialSound = new Audio("images/special.mp3");
+
+      function playSound(isSpecial) {
+        const sound = isSpecial ? specialSound : catSound;
+        sound.currentTime = 0;
+        sound.play().catch(e => console.log("音声ファイルを images フォルダに入れてください"));
+      }
+
+      // --- 計算機ロジック ---
+      let currentDisplay = "0";
+      const displayEl = document.getElementById("display");
+
+      function updateDisplay() {
+        displayEl.value = currentDisplay;
+      }
+
+      function inputNum(num) {
+        if (currentDisplay === "0") currentDisplay = num;
+        else currentDisplay += num;
+        updateDisplay();
+      }
+
+      function inputOp(op) {
+        const last = currentDisplay.slice(-1);
+        if (["+","-","*","/"].includes(last)) {
+          currentDisplay = currentDisplay.slice(0, -1) + op;
+        } else {
+          currentDisplay += op;
+        }
+        updateDisplay();
+      }
+
+      function clearDisplay() {
+        currentDisplay = "0";
+        updateDisplay();
+      }
+
+      function deleteLast() {
+        currentDisplay = currentDisplay.slice(0, -1) || "0";
+        updateDisplay();
+      }
+
+      function calculateResult() {
+        try {
+          const result = eval(currentDisplay);
+          currentDisplay = String(result);
+          updateDisplay();
+
+          // 10の倍数判定（整数かつ10で割り切れる場合）
+          const isTenMultiple = (result !== 0 && result % 10 === 0);
+          playSound(isTenMultiple);
+
+        } catch (e) {
+          currentDisplay = "Error";
+          updateDisplay();
+        }
+      }
+
+      // --- 背景変更ロジック ---
       let isPatternMode = true;
 
-      // --- 2. 単価を入力した時の処理 ---
-      function processPrice() {
-        const priceInput = document.getElementById("price");
-        // 入力された文字から数字以外（円など）を削除して数字だけにします
-        let val = priceInput.value.replace(/[^0-9]/g, "");
-
-        if (val !== "") {
-          // 数字に1000を掛けて、カンマ区切りの見やすい形式にして入力欄に戻します
-          priceInput.value = (Number(val) * 1000).toLocaleString();
-        }
-        // 金額が変わったので合計を再計算します
-        calculate();
-      }
-
-      // --- 3. 合計金額を計算する処理 ---
-      function calculate() {
-        // 入力欄のカンマを消して、計算できる「純粋な数字」を取り出します
-        const priceVal = document
-          .getElementById("price")
-          .value.replace(/,/g, "");
-        // 個数の欄の数字を取得します
-        const quantityVal = document.getElementById("quantity").value;
-        // 「単価 × 個数」を計算します
-        const total = Number(priceVal) * Number(quantityVal);
-
-        const totalElement = document.getElementById("total");
-        // 合計金額をカンマ区切りにして画面に表示します
-        totalElement.innerText = total.toLocaleString();
-        // 1万円以上なら赤色、それ以外なら青色に文字色を変えます
-        totalElement.style.color = total >= 10000 ? "#e74c3c" : "#007bff";
-      }
-
-      // --- 4. 背景画像を変える処理 ---
       function changeBackground() {
-        const fileInput = document.getElementById("bgInput");
-        const file = fileInput.files[0]; // 選択された1枚目の画像ファイルを取り出す
-
+        const file = document.getElementById("bgInput").files[0];
         if (file) {
-          const reader = new FileReader(); // ファイルを読み込むための準備
+          const reader = new FileReader();
           reader.onload = (e) => {
-            // 読み込みが終わったら、ページ全体の背景にその画像をセットします
             document.body.style.backgroundImage = `url('${e.target.result}')`;
-            // 現在の「繰り返しON/OFF」の状態を新しい画像にも適用します
-            applyBackgroundStyle();
+            applyStyle();
           };
-          // 画像をデータとして読み込み開始
           reader.readAsDataURL(file);
         }
       }
 
-      // --- 5. 繰り返しボタンを押した時の処理 ---
       function togglePattern() {
-        // スイッチを切り替えます（ONならOFFに、OFFならONに）
         isPatternMode = !isPatternMode;
-        // 画面の見た目にスイッチの状態を反映させます
-        applyBackgroundStyle();
+        applyStyle();
       }
 
-      // --- 6. 背景の見た目を実際に変更する処理 ---
-      function applyBackgroundStyle() {
+      function applyStyle() {
         const btn = document.getElementById("patternBtn");
-
         if (isPatternMode) {
-          // 【繰り返しONの場合】画像を150pxのサイズで並べて表示します
           document.body.style.backgroundRepeat = "repeat";
           document.body.style.backgroundSize = "150px";
-          btn.innerText = "繰り返し表示 OFF"; // ボタンの文字を次にすることに変更
-          btn.classList.add("btn-pattern-active"); // ボタンを緑色にします
+          btn.innerText = "繰り返し表示 OFF";
+          btn.classList.add("btn-pattern-active");
         } else {
-          // 【繰り返しOFFの場合】画像を画面に収まるように1枚だけ表示します
           document.body.style.backgroundRepeat = "no-repeat";
           document.body.style.backgroundSize = "contain";
-          btn.innerText = "繰り返し表示 ON"; // ボタンの文字を次にすることに変更
-          btn.classList.remove("btn-pattern-active"); // ボタンを青色に戻します
+          btn.innerText = "繰り返し表示 ON";
+          btn.classList.remove("btn-pattern-active");
         }
       }
     </script>
