@@ -180,100 +180,103 @@
       </div>
     </div>
 
- <script>
-  // --- 1. ページを開いた時の初期設定 ---
-  window.addEventListener("DOMContentLoaded", () => {
-    // 現在開いているファイル名（例：index.html）を取得します
-    const currentFile = window.location.pathname.split("/").pop() || "index.html";
-    // メニューのリンク（.nav-link）をすべて集めます
-    const links = document.querySelectorAll(".nav-link");
-    
-    links.forEach((link) => {
-      // もしリンク先の名前が、今開いているファイルと同じなら
-      if (link.getAttribute("href") === currentFile) {
-        // そのメニューに「active（今ここだよ！）」という印をつけます
-        link.classList.add("active");
+    <script>
+      // --- 1. ページを開いた時の初期設定 ---
+      window.addEventListener("DOMContentLoaded", () => {
+        // 現在開いているファイル名（例：index.html）を取得します
+        const currentFile =
+          window.location.pathname.split("/").pop() || "index.html";
+        // メニューのリンク（.nav-link）をすべて集めます
+        const links = document.querySelectorAll(".nav-link");
+
+        links.forEach((link) => {
+          // もしリンク先の名前が、今開いているファイルと同じなら
+          if (link.getAttribute("href") === currentFile) {
+            // そのメニューに「active（今ここだよ！）」という印をつけます
+            link.classList.add("active");
+          }
+        });
+      });
+
+      // 背景を「繰り返し表示」するかどうかの状態を保存するスイッチ（初期値はON）
+      let isPatternMode = true;
+
+      // --- 2. 単価を入力した時の処理 ---
+      function processPrice() {
+        const priceInput = document.getElementById("price");
+        // 入力された文字から数字以外（円など）を削除して数字だけにします
+        let val = priceInput.value.replace(/[^0-9]/g, "");
+
+        if (val !== "") {
+          // 数字に1000を掛けて、カンマ区切りの見やすい形式にして入力欄に戻します
+          priceInput.value = (Number(val) * 1000).toLocaleString();
+        }
+        // 金額が変わったので合計を再計算します
+        calculate();
       }
-    });
-  });
 
-  // 背景を「繰り返し表示」するかどうかの状態を保存するスイッチ（初期値はON）
-  let isPatternMode = true;
+      // --- 3. 合計金額を計算する処理 ---
+      function calculate() {
+        // 入力欄のカンマを消して、計算できる「純粋な数字」を取り出します
+        const priceVal = document
+          .getElementById("price")
+          .value.replace(/,/g, "");
+        // 個数の欄の数字を取得します
+        const quantityVal = document.getElementById("quantity").value;
+        // 「単価 × 個数」を計算します
+        const total = Number(priceVal) * Number(quantityVal);
 
-  // --- 2. 単価を入力した時の処理 ---
-  function processPrice() {
-    const priceInput = document.getElementById("price");
-    // 入力された文字から数字以外（円など）を削除して数字だけにします
-    let val = priceInput.value.replace(/[^0-9]/g, "");
-    
-    if (val !== "") {
-      // 数字に1000を掛けて、カンマ区切りの見やすい形式にして入力欄に戻します
-      priceInput.value = (Number(val) * 1000).toLocaleString();
-    }
-    // 金額が変わったので合計を再計算します
-    calculate();
-  }
+        const totalElement = document.getElementById("total");
+        // 合計金額をカンマ区切りにして画面に表示します
+        totalElement.innerText = total.toLocaleString();
+        // 1万円以上なら赤色、それ以外なら青色に文字色を変えます
+        totalElement.style.color = total >= 10000 ? "#e74c3c" : "#007bff";
+      }
 
-  // --- 3. 合計金額を計算する処理 ---
-  function calculate() {
-    // 入力欄のカンマを消して、計算できる「純粋な数字」を取り出します
-    const priceVal = document.getElementById("price").value.replace(/,/g, "");
-    // 個数の欄の数字を取得します
-    const quantityVal = document.getElementById("quantity").value;
-    // 「単価 × 個数」を計算します
-    const total = Number(priceVal) * Number(quantityVal);
-    
-    const totalElement = document.getElementById("total");
-    // 合計金額をカンマ区切りにして画面に表示します
-    totalElement.innerText = total.toLocaleString();
-    // 1万円以上なら赤色、それ以外なら青色に文字色を変えます
-    totalElement.style.color = total >= 10000 ? "#e74c3c" : "#007bff";
-  }
+      // --- 4. 背景画像を変える処理 ---
+      function changeBackground() {
+        const fileInput = document.getElementById("bgInput");
+        const file = fileInput.files[0]; // 選択された1枚目の画像ファイルを取り出す
 
-  // --- 4. 背景画像を変える処理 ---
-  function changeBackground() {
-    const fileInput = document.getElementById("bgInput");
-    const file = fileInput.files[0]; // 選択された1枚目の画像ファイルを取り出す
-    
-    if (file) {
-      const reader = new FileReader(); // ファイルを読み込むための準備
-      reader.onload = (e) => {
-        // 読み込みが終わったら、ページ全体の背景にその画像をセットします
-        document.body.style.backgroundImage = `url('${e.target.result}')`;
-        // 現在の「繰り返しON/OFF」の状態を新しい画像にも適用します
+        if (file) {
+          const reader = new FileReader(); // ファイルを読み込むための準備
+          reader.onload = (e) => {
+            // 読み込みが終わったら、ページ全体の背景にその画像をセットします
+            document.body.style.backgroundImage = `url('${e.target.result}')`;
+            // 現在の「繰り返しON/OFF」の状態を新しい画像にも適用します
+            applyBackgroundStyle();
+          };
+          // 画像をデータとして読み込み開始
+          reader.readAsDataURL(file);
+        }
+      }
+
+      // --- 5. 繰り返しボタンを押した時の処理 ---
+      function togglePattern() {
+        // スイッチを切り替えます（ONならOFFに、OFFならONに）
+        isPatternMode = !isPatternMode;
+        // 画面の見た目にスイッチの状態を反映させます
         applyBackgroundStyle();
-      };
-      // 画像をデータとして読み込み開始
-      reader.readAsDataURL(file);
-    }
-  }
+      }
 
-  // --- 5. 繰り返しボタンを押した時の処理 ---
-  function togglePattern() {
-    // スイッチを切り替えます（ONならOFFに、OFFならONに）
-    isPatternMode = !isPatternMode;
-    // 画面の見た目にスイッチの状態を反映させます
-    applyBackgroundStyle();
-  }
+      // --- 6. 背景の見た目を実際に変更する処理 ---
+      function applyBackgroundStyle() {
+        const btn = document.getElementById("patternBtn");
 
-  // --- 6. 背景の見た目を実際に変更する処理 ---
-  function applyBackgroundStyle() {
-    const btn = document.getElementById("patternBtn");
-    
-    if (isPatternMode) {
-      // 【繰り返しONの場合】画像を150pxのサイズで並べて表示します
-      document.body.style.backgroundRepeat = "repeat";
-      document.body.style.backgroundSize = "150px";
-      btn.innerText = "繰り返し表示 OFF"; // ボタンの文字を次にすることに変更
-      btn.classList.add("btn-pattern-active"); // ボタンを緑色にします
-    } else {
-      // 【繰り返しOFFの場合】画像を画面に収まるように1枚だけ表示します
-      document.body.style.backgroundRepeat = "no-repeat";
-      document.body.style.backgroundSize = "contain";
-      btn.innerText = "繰り返し表示 ON"; // ボタンの文字を次にすることに変更
-      btn.classList.remove("btn-pattern-active"); // ボタンを青色に戻します
-    }
-  }
-</script>
+        if (isPatternMode) {
+          // 【繰り返しONの場合】画像を150pxのサイズで並べて表示します
+          document.body.style.backgroundRepeat = "repeat";
+          document.body.style.backgroundSize = "150px";
+          btn.innerText = "繰り返し表示 OFF"; // ボタンの文字を次にすることに変更
+          btn.classList.add("btn-pattern-active"); // ボタンを緑色にします
+        } else {
+          // 【繰り返しOFFの場合】画像を画面に収まるように1枚だけ表示します
+          document.body.style.backgroundRepeat = "no-repeat";
+          document.body.style.backgroundSize = "contain";
+          btn.innerText = "繰り返し表示 ON"; // ボタンの文字を次にすることに変更
+          btn.classList.remove("btn-pattern-active"); // ボタンを青色に戻します
+        }
+      }
+    </script>
   </body>
 </html>
