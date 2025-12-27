@@ -87,9 +87,7 @@
         font-size: 1.2rem;
         font-weight: bold;
         cursor: pointer;
-        transition:
-          transform 0.1s,
-          background 0.2s;
+        transition: transform 0.1s, background 0.2s;
         box-shadow: 0 3px 0 #bbb;
       }
 
@@ -98,27 +96,11 @@
         box-shadow: none;
       }
 
-      /* ボタンの色分け */
-      .btn-num {
-        background: white;
-        color: #333;
-      }
-      .btn-op {
-        background: #f39c12;
-        color: white;
-      }
-      .btn-clear {
-        background: #e74c3c;
-        color: white;
-      }
-      .btn-equal {
-        background: #4385f4;
-        color: white;
-        grid-row: span 2;
-      }
-      .btn-pattern-active {
-        background-color: #28a745 !important;
-      }
+      .btn-num { background: white; color: #333; }
+      .btn-op { background: #f39c12; color: white; }
+      .btn-clear { background: #e74c3c; color: white; }
+      .btn-equal { background: #4385f4; color: white; grid-row: span 2; }
+      .btn-pattern-active { background-color: #28a745 !important; }
 
       .settings-area {
         border-top: 1px solid #ccc;
@@ -133,20 +115,8 @@
         font-weight: bold;
       }
 
-      .file-input {
-        margin-bottom: 10px;
-        font-size: 0.8rem;
-        width: 100%;
-      }
-      .pattern-toggle-btn {
-        width: 100%;
-        padding: 10px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-      }
+      .file-input { margin-bottom: 10px; font-size: 0.8rem; width: 100%; }
+      .pattern-toggle-btn { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; }
     </style>
   </head>
   <body>
@@ -158,8 +128,7 @@
     </nav>
 
     <div class="container">
-      <h3 style="text-align: center; margin-bottom: 15px">💰 多機能計算機</h3>
-
+      <h3 style="text-align: center; margin-bottom: 15px;">💰 猫の声計算機</h3>
       <input type="text" id="display" value="0" readonly />
 
       <div class="calc-grid">
@@ -183,58 +152,38 @@
         <button class="btn btn-num" onclick="inputNum('3')">3</button>
         <button class="btn btn-equal" onclick="calculateResult()">=</button>
 
-        <button
-          class="btn btn-num"
-          style="grid-column: span 2"
-          onclick="inputNum('0')"
-        >
-          0
-        </button>
+        <button class="btn btn-num" style="grid-column: span 2;" onclick="inputNum('0')">0</button>
         <button class="btn btn-num" onclick="inputNum('.')">.</button>
       </div>
 
       <div class="settings-area">
         <label>背景画像を変更</label>
-        <input
-          type="file"
-          id="bgInput"
-          class="file-input"
-          accept="image/*"
-          onchange="changeBackground()"
-        />
-        <button
-          id="patternBtn"
-          class="pattern-toggle-btn btn-pattern-active"
-          onclick="togglePattern()"
-        >
-          繰り返し表示 OFF
-        </button>
+        <input type="file" id="bgInput" class="file-input" accept="image/*" onchange="changeBackground()" />
+        <button id="patternBtn" class="pattern-toggle-btn btn-pattern-active" onclick="togglePattern()">繰り返し表示 OFF</button>
       </div>
     </div>
 
     <script>
-      // --- 初期設定とナビ ---
+      // --- ナビゲーション設定 ---
       window.addEventListener("DOMContentLoaded", () => {
-        const currentFile =
-          window.location.pathname.split("/").pop() || "index.html";
-        document.querySelectorAll(".nav-link").forEach((link) => {
-          if (link.getAttribute("href") === currentFile)
-            link.classList.add("active");
+        const currentFile = window.location.pathname.split("/").pop() || "index.html";
+        document.querySelectorAll(".nav-link").forEach(link => {
+          if (link.getAttribute("href") === currentFile) link.classList.add("active");
         });
       });
 
-      // --- 音声の準備 ---
+      // --- 音声再生の仕組み ---
       const catSound = new Audio("images/cat.mp3");
       const specialSound = new Audio("images/special.mp3");
 
-      function playSound(isSpecial) {
-        const sound = isSpecial ? specialSound : catSound;
-        sound.currentTime = 0;
-        sound
-          .play()
-          .catch((e) =>
-            console.log("音声ファイルを images フォルダに入れてください"),
-          );
+      function playCat() {
+        catSound.currentTime = 0;
+        catSound.play().catch(e => console.log("cat.mp3が見つかりません"));
+      }
+
+      function playSpecial() {
+        specialSound.currentTime = 0;
+        specialSound.play().catch(e => console.log("special.mp3が見つかりません"));
       }
 
       // --- 計算機ロジック ---
@@ -245,50 +194,53 @@
         displayEl.value = currentDisplay;
       }
 
+      // 数字・記号・クリアなどはすべて通常の猫の声
       function inputNum(num) {
         if (currentDisplay === "0") currentDisplay = num;
         else currentDisplay += num;
         updateDisplay();
+        playCat(); // ← 通常音
       }
 
       function inputOp(op) {
         const last = currentDisplay.slice(-1);
-        if (["+", "-", "*", "/"].includes(last)) {
+        if (["+","-","*","/"].includes(last)) {
           currentDisplay = currentDisplay.slice(0, -1) + op;
         } else {
           currentDisplay += op;
         }
         updateDisplay();
+        playCat(); // ← 通常音
       }
 
       function clearDisplay() {
         currentDisplay = "0";
         updateDisplay();
+        playCat(); // ← 通常音
       }
 
       function deleteLast() {
         currentDisplay = currentDisplay.slice(0, -1) || "0";
         updateDisplay();
+        playCat(); // ← 通常音
       }
 
+      // イコールボタンだけ特別な音
       function calculateResult() {
         try {
           const result = eval(currentDisplay);
           currentDisplay = String(result);
           updateDisplay();
-
-          // 10の倍数判定（整数かつ10で割り切れる場合）
-          const isTenMultiple = result !== 0 && result % 10 === 0;
-          playSound(isTenMultiple);
+          playSpecial(); // ← 特別音！
         } catch (e) {
           currentDisplay = "Error";
           updateDisplay();
+          playCat();
         }
       }
 
       // --- 背景変更ロジック ---
       let isPatternMode = true;
-
       function changeBackground() {
         const file = document.getElementById("bgInput").files[0];
         if (file) {
@@ -297,29 +249,4 @@
             document.body.style.backgroundImage = `url('${e.target.result}')`;
             applyStyle();
           };
-          reader.readAsDataURL(file);
-        }
-      }
-
-      function togglePattern() {
-        isPatternMode = !isPatternMode;
-        applyStyle();
-      }
-
-      function applyStyle() {
-        const btn = document.getElementById("patternBtn");
-        if (isPatternMode) {
-          document.body.style.backgroundRepeat = "repeat";
-          document.body.style.backgroundSize = "150px";
-          btn.innerText = "繰り返し表示 OFF";
-          btn.classList.add("btn-pattern-active");
-        } else {
-          document.body.style.backgroundRepeat = "no-repeat";
-          document.body.style.backgroundSize = "contain";
-          btn.innerText = "繰り返し表示 ON";
-          btn.classList.remove("btn-pattern-active");
-        }
-      }
-    </script>
-  </body>
-</html>
+          reader.readAsData
