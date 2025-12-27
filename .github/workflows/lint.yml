@@ -12,8 +12,8 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Run Prettier
-        uses: creyS/prettier_action@v4.3 # 整形ツールを実行
+        uses: creyso/prettier_action@v4.3 # ★ここを creyso に修正しました
         with:
-          # ここに整形したいファイルの拡張子を書く（HTML, JS, CSSなど）
+          # 整形したいファイルの拡張子を指定
           prettier_options: --write **/*.{html,js,css}
           commit_message: "chore: インデントを自動修正しました" # 自動保存時のコメント
