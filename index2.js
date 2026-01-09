@@ -71,6 +71,7 @@ document.querySelectorAll('.val').forEach((input) => {
 
 console.log('index2.js 修正完了');
 console.log('index2.js 修正完了２');
+console.log('index2.js 修正完了３');
 
 // 初期計算の実行
 calculate();
