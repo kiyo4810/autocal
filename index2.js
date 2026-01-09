@@ -7,22 +7,22 @@ function calculate() {
         const rent =
             parseFloat(
                 document.querySelector(`[data-row="rent"][data-col="${col}"]`)
-                    .value
+                    .value,
             ) || 0;
         const loan =
             parseFloat(
                 document.querySelector(`[data-row="loan"][data-col="${col}"]`)
-                    .value
+                    .value,
             ) || 0;
         const mng =
             parseFloat(
                 document.querySelector(`[data-row="mng"][data-col="${col}"]`)
-                    .value
+                    .value,
             ) || 0;
         const etc =
             parseFloat(
                 document.querySelector(`[data-row="etc"][data-col="${col}"]`)
-                    .value
+                    .value,
             ) || 0;
 
         // 初月のみ初期所持金を加算
@@ -31,7 +31,7 @@ function calculate() {
             initial =
                 parseFloat(
                     document.querySelector(`[data-row="initial"][data-col="0"]`)
-                        .value
+                        .value,
                 ) || 0;
         }
 
