@@ -58,5 +58,7 @@ console.log("index2.jsに分離成功");
 console.log("index2.jsに分離成功２");
 console.log("index2.jsに分離成功３");
 console.log("index2.jsに分離成功４");
+console.log("index2.jsに分離成功５");
+
 // 初期計算の実行
 calculate();
