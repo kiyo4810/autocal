@@ -4,30 +4,15 @@ function calculate() {
 
   for (let col = 0; col < numMonths; col++) {
     // 各項目の値を取得（空欄なら0）
-    const rent =
-      parseFloat(
-        document.querySelector(`[data-row="rent"][data-col="${col}"]`).value,
-      ) || 0;
-    const loan =
-      parseFloat(
-        document.querySelector(`[data-row="loan"][data-col="${col}"]`).value,
-      ) || 0;
-    const mng =
-      parseFloat(
-        document.querySelector(`[data-row="mng"][data-col="${col}"]`).value,
-      ) || 0;
-    const etc =
-      parseFloat(
-        document.querySelector(`[data-row="etc"][data-col="${col}"]`).value,
-      ) || 0;
+    const rent = parseFloat(document.querySelector(`[data-row="rent"][data-col="${col}"]`).value) || 0;
+    const loan = parseFloat(document.querySelector(`[data-row="loan"][data-col="${col}"]`).value) || 0;
+    const mng = parseFloat(document.querySelector(`[data-row="mng"][data-col="${col}"]`).value) || 0;
+    const etc = parseFloat(document.querySelector(`[data-row="etc"][data-col="${col}"]`).value) || 0;
 
     // 初月のみ初期所持金を加算
     let initial = 0;
     if (col === 0) {
-      initial =
-        parseFloat(
-          document.querySelector(`[data-row="initial"][data-col="0"]`).value,
-        ) || 0;
+      initial = parseFloat(document.querySelector(`[data-row="initial"][data-col="0"]`).value) || 0;
     }
 
     // 月間収支の計算 (収入 - 支出)
@@ -57,6 +42,6 @@ document.querySelectorAll(".val").forEach((input) => {
 console.log("index2.jsに分離成功");
 console.log("index2.jsに分離成功２");
 console.log("index2.jsに分離成功３");
-
+console.log("index2.jsに分離成功４");
 // 初期計算の実行
 calculate();
