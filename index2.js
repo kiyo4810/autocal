@@ -1,3 +1,12 @@
+               // 今見ているURLをチェックして、一致するリンクに "active" クラスをつける魔法
+                const currentFile =
+                    window.location.pathname.split('/').pop() || 'index.html';
+                const links = document.querySelectorAll('.nav-link');
+                links.forEach((link) => {
+                    if (link.getAttribute('href') === currentFile) {
+                        link.classList.add('active');
+                    }
+                });
 function calculate() {
     let prevBalance = 0;
     const numMonths = 6;
