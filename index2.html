@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
@@ -6,9 +6,7 @@
     <title>収支シミュレーター</title>
     <style>
       body {
-        font-family:
-          "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans",
-          Meiryo, sans-serif;
+        font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
         padding: 20px;
         background-color: #f8f9fa;
       }
@@ -123,8 +121,7 @@
 
       <script>
         // 今見ているURLをチェックして、一致するリンクに "active" クラスをつける魔法
-        const currentFile =
-          window.location.pathname.split("/").pop() || "index.html";
+        const currentFile = window.location.pathname.split("/").pop() || "index.html";
         const links = document.querySelectorAll(".nav-link");
         links.forEach((link) => {
           if (link.getAttribute("href") === currentFile) {
@@ -156,13 +153,7 @@
           <tr>
             <td>初期所持金</td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="initial"
-                data-col="0"
-                value="1000000"
-              />
+              <input type="number" class="val" data-row="initial" data-col="0" value="1000000" />
             </td>
             <td>-</td>
             <td>-</td>
@@ -173,58 +164,22 @@
           <tr>
             <td>家賃収入</td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="rent"
-                data-col="0"
-                value="80000"
-              />
+              <input type="number" class="val" data-row="rent" data-col="0" value="80000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="rent"
-                data-col="1"
-                value="80000"
-              />
+              <input type="number" class="val" data-row="rent" data-col="1" value="80000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="rent"
-                data-col="2"
-                value="80000"
-              />
+              <input type="number" class="val" data-row="rent" data-col="2" value="80000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="rent"
-                data-col="3"
-                value="80000"
-              />
+              <input type="number" class="val" data-row="rent" data-col="3" value="80000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="rent"
-                data-col="4"
-                value="80000"
-              />
+              <input type="number" class="val" data-row="rent" data-col="4" value="80000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="rent"
-                data-col="5"
-                value="80000"
-              />
+              <input type="number" class="val" data-row="rent" data-col="5" value="80000" />
             </td>
           </tr>
 
@@ -234,172 +189,64 @@
           <tr>
             <td>ローン支払</td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="loan"
-                data-col="0"
-                value="50000"
-              />
+              <input type="number" class="val" data-row="loan" data-col="0" value="50000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="loan"
-                data-col="1"
-                value="50000"
-              />
+              <input type="number" class="val" data-row="loan" data-col="1" value="50000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="loan"
-                data-col="2"
-                value="50000"
-              />
+              <input type="number" class="val" data-row="loan" data-col="2" value="50000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="loan"
-                data-col="3"
-                value="50000"
-              />
+              <input type="number" class="val" data-row="loan" data-col="3" value="50000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="loan"
-                data-col="4"
-                value="50000"
-              />
+              <input type="number" class="val" data-row="loan" data-col="4" value="50000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="loan"
-                data-col="5"
-                value="50000"
-              />
+              <input type="number" class="val" data-row="loan" data-col="5" value="50000" />
             </td>
           </tr>
           <tr>
             <td>管理費</td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="mng"
-                data-col="0"
-                value="10000"
-              />
+              <input type="number" class="val" data-row="mng" data-col="0" value="10000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="mng"
-                data-col="1"
-                value="10000"
-              />
+              <input type="number" class="val" data-row="mng" data-col="1" value="10000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="mng"
-                data-col="2"
-                value="10000"
-              />
+              <input type="number" class="val" data-row="mng" data-col="2" value="10000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="mng"
-                data-col="3"
-                value="10000"
-              />
+              <input type="number" class="val" data-row="mng" data-col="3" value="10000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="mng"
-                data-col="4"
-                value="10000"
-              />
+              <input type="number" class="val" data-row="mng" data-col="4" value="10000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="mng"
-                data-col="5"
-                value="10000"
-              />
+              <input type="number" class="val" data-row="mng" data-col="5" value="10000" />
             </td>
           </tr>
           <tr>
             <td>その他費用</td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="etc"
-                data-col="0"
-                value="5000"
-              />
+              <input type="number" class="val" data-row="etc" data-col="0" value="5000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="etc"
-                data-col="1"
-                value="5000"
-              />
+              <input type="number" class="val" data-row="etc" data-col="1" value="5000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="etc"
-                data-col="2"
-                value="5000"
-              />
+              <input type="number" class="val" data-row="etc" data-col="2" value="5000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="etc"
-                data-col="3"
-                value="5000"
-              />
+              <input type="number" class="val" data-row="etc" data-col="3" value="5000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="etc"
-                data-col="4"
-                value="5000"
-              />
+              <input type="number" class="val" data-row="etc" data-col="4" value="5000" />
             </td>
             <td>
-              <input
-                type="number"
-                class="val"
-                data-row="etc"
-                data-col="5"
-                value="5000"
-              />
+              <input type="number" class="val" data-row="etc" data-col="5" value="5000" />
             </td>
           </tr>
 
@@ -424,72 +271,6 @@
         </tbody>
       </table>
     </div>
-
-    <script>
-      function calculate() {
-        let prevBalance = 0;
-        const numMonths = 6;
-
-        for (let col = 0; col < numMonths; col++) {
-          // 各項目の値を取得（空欄なら0）
-          const rent =
-            parseFloat(
-              document.querySelector(`[data-row="rent"][data-col="${col}"]`)
-                .value,
-            ) || 0;
-          const loan =
-            parseFloat(
-              document.querySelector(`[data-row="loan"][data-col="${col}"]`)
-                .value,
-            ) || 0;
-          const mng =
-            parseFloat(
-              document.querySelector(`[data-row="mng"][data-col="${col}"]`)
-                .value,
-            ) || 0;
-          const etc =
-            parseFloat(
-              document.querySelector(`[data-row="etc"][data-col="${col}"]`)
-                .value,
-            ) || 0;
-
-          // 初月のみ初期所持金を加算
-          let initial = 0;
-          if (col === 0) {
-            initial =
-              parseFloat(
-                document.querySelector(`[data-row="initial"][data-col="0"]`)
-                  .value,
-              ) || 0;
-          }
-
-          // 月間収支の計算 (収入 - 支出)
-          const monthlyTotal = rent - (loan + mng + etc);
-
-          // 表示の更新
-          const monthlyEl = document.getElementById(`monthly-${col}`);
-          monthlyEl.innerText = monthlyTotal.toLocaleString();
-
-          // マイナスなら赤色にする
-          monthlyEl.className = monthlyTotal >= 0 ? "plus" : "minus";
-
-          // 累計残高の計算 (前月残高 + 今月収支 + 初月なら初期費用)
-          const currentBalance = prevBalance + monthlyTotal + initial;
-          const balanceEl = document.getElementById(`balance-${col}`);
-          balanceEl.innerText = currentBalance.toLocaleString() + " 円";
-
-          // 次の月の計算用に残高を保持
-          prevBalance = currentBalance;
-        }
-      }
-
-      // 全てのinput要素にイベントリスナーを設定
-      document.querySelectorAll(".val").forEach((input) => {
-        input.addEventListener("input", calculate);
-      });
-
-      // 初期計算の実行
-      calculate();
-    </script>
+    <script src="index2.js"></script>
   </body>
 </html>
