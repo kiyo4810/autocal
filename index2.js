@@ -1,15 +1,4 @@
-               // 今見ているURLをチェックして、一致するリンクに "active" クラスをつける魔法
-                const currentFile =
-                    window.location.pathname.split('/').pop() || 'index.html';
-                const links = document.querySelectorAll('.nav-link');
-                links.forEach((link) => {
-                    if (link.getAttribute('href') === currentFile) {
-                        link.classList.add('active');
-                    }
-                });
 function calculate() {
-    let prevBalance = 0;
-    const numMonths = 6;
     let prevBalance = 0;
     const numMonths = 6;
 
@@ -48,18 +37,11 @@ function calculate() {
 
         // 月間収支の計算 (収入 - 支出)
         const monthlyTotal = rent - (loan + mng + etc);
-        // 月間収支の計算 (収入 - 支出)
-        const monthlyTotal = rent - (loan + mng + etc);
 
         // 表示の更新
         const monthlyEl = document.getElementById(`monthly-${col}`);
         monthlyEl.innerText = monthlyTotal.toLocaleString();
-        // 表示の更新
-        const monthlyEl = document.getElementById(`monthly-${col}`);
-        monthlyEl.innerText = monthlyTotal.toLocaleString();
 
-        // マイナスなら赤色にする
-        monthlyEl.className = monthlyTotal >= 0 ? 'plus' : 'minus';
         // マイナスなら赤色にする
         monthlyEl.className = monthlyTotal >= 0 ? 'plus' : 'minus';
 
@@ -67,35 +49,27 @@ function calculate() {
         const currentBalance = prevBalance + monthlyTotal + initial;
         const balanceEl = document.getElementById(`balance-${col}`);
         balanceEl.innerText = currentBalance.toLocaleString() + ' 円';
-        // 累計残高の計算 (前月残高 + 今月収支 + 初月なら初期費用)
-        const currentBalance = prevBalance + monthlyTotal + initial;
-        const balanceEl = document.getElementById(`balance-${col}`);
-        balanceEl.innerText = currentBalance.toLocaleString() + ' 円';
 
-        // 次の月の計算用に残高を保持
-        prevBalance = currentBalance;
-    }
         // 次の月の計算用に残高を保持
         prevBalance = currentBalance;
     }
 }
 
+// ナビゲーションのactiveクラス設定
+const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+const links = document.querySelectorAll('.nav-link');
+links.forEach((link) => {
+    if (link.getAttribute('href') === currentFile) {
+        link.classList.add('active');
+    }
+});
+
 // 全てのinput要素にイベントリスナーを設定
 document.querySelectorAll('.val').forEach((input) => {
     input.addEventListener('input', calculate);
-document.querySelectorAll('.val').forEach((input) => {
-    input.addEventListener('input', calculate);
 });
-console.log('index2.jsに分離成功');
-console.log('index2.jsに分離成功２');
-console.log('index2.jsに分離成功３');
-console.log('index2.jsに分離成功４');
-console.log('index2.jsに分離成功５');
-console.log('index2.jsに分離成功６');
-console.log('index2.jsに分離成功７');
-console.log('index2.jsに分離成功８');
-console.log('index2.jsに分離成功９');
-console.log('index2.jsに分離成功１０');
+
+console.log('index2.js 修正完了');
 
 // 初期計算の実行
 calculate();
