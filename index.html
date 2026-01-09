@@ -1,360 +1,367 @@
 <!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ゴマちゃん背景・猫の声計算機（カンマ表示版）</title>
-    <link rel="icon" href="images/goma.png" type="image/png" />
-    <style>
-      /* --- スタイルは維持 --- */
-      body {
-        background-image: url("images/akipassport.png");
-        background-color: #ffffff;
-        background-repeat: repeat;
-        background-size: 150px;
-        background-position: center;
-        background-attachment: fixed;
-        transition: background-image 0.5s ease;
-        font-family: sans-serif;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        margin: 0;
-      }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ゴマちゃん背景・猫の声計算機（カンマ表示版）</title>
+        <link rel="icon" href="images/goma.png" type="image/png" />
+        <style>
+            /* --- スタイルは維持 --- */
+            body {
+                background-image: url('images/akipassport.png');
+                background-color: #ffffff;
+                background-repeat: repeat;
+                background-size: 150px;
+                background-position: center;
+                background-attachment: fixed;
+                transition: background-image 0.5s ease;
+                font-family: sans-serif;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
+            }
 
-      #site-nav {
-        text-align: center;
-        padding: 10px;
-        margin-bottom: 20px;
-        background-color: rgba(255, 255, 255, 0.8);
-        border-radius: 50px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        display: flex;
-        gap: 5px;
-        z-index: 100;
-      }
+            #site-nav {
+                text-align: center;
+                padding: 10px;
+                margin-bottom: 20px;
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 50px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                display: flex;
+                gap: 5px;
+                z-index: 100;
+            }
 
-      .nav-link {
-        display: inline-block;
-        padding: 10px 20px;
-        text-decoration: none;
-        color: #555;
-        border-radius: 25px;
-        font-size: 0.85rem;
-        font-weight: bold;
-      }
+            .nav-link {
+                display: inline-block;
+                padding: 10px 20px;
+                text-decoration: none;
+                color: #555;
+                border-radius: 25px;
+                font-size: 0.85rem;
+                font-weight: bold;
+            }
 
-      .nav-link.active {
-        background-color: #4385f4;
-        color: white !important;
-      }
+            .nav-link.active {
+                background-color: #4385f4;
+                color: white !important;
+            }
 
-      .container {
-        background-color: rgba(255, 255, 255, 0.85);
-        width: 90%;
-        max-width: 380px;
-        padding: 25px;
-        border-radius: 20px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        z-index: 10;
-      }
+            .container {
+                background-color: rgba(255, 255, 255, 0.85);
+                width: 90%;
+                max-width: 380px;
+                padding: 25px;
+                border-radius: 20px;
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+                z-index: 10;
+            }
 
-      #display {
-        width: 100%;
-        padding: 15px;
-        margin-bottom: 15px;
-        border: 2px solid #ddd;
-        border-radius: 10px;
-        font-size: 2rem;
-        text-align: right;
-        background: #fdfdfd;
-        color: #333;
-        outline: none;
-      }
+            #display {
+                width: 100%;
+                padding: 15px;
+                margin-bottom: 15px;
+                border: 2px solid #ddd;
+                border-radius: 10px;
+                font-size: 2rem;
+                text-align: right;
+                background: #fdfdfd;
+                color: #333;
+                outline: none;
+            }
 
-      .calc-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-        margin-bottom: 20px;
-      }
+            .calc-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+                margin-bottom: 20px;
+            }
 
-      .btn {
-        padding: 15px 5px;
-        border: none;
-        border-radius: 12px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition:
-          transform 0.1s,
-          background 0.2s;
-        box-shadow: 0 3px 0 #bbb;
-      }
+            .btn {
+                padding: 15px 5px;
+                border: none;
+                border-radius: 12px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition:
+                    transform 0.1s,
+                    background 0.2s;
+                box-shadow: 0 3px 0 #bbb;
+            }
 
-      .btn:active {
-        transform: translateY(3px);
-        box-shadow: none;
-      }
+            .btn:active {
+                transform: translateY(3px);
+                box-shadow: none;
+            }
 
-      .btn-num {
-        background: white;
-        color: #333;
-      }
-      .btn-op {
-        background: #f39c12;
-        color: white;
-      }
-      .btn-clear {
-        background: #e74c3c;
-        color: white;
-      }
-      .btn-equal {
-        background: #4385f4;
-        color: white;
-        grid-row: span 2;
-      }
-      .btn-pattern-active {
-        background-color: #28a745 !important;
-      }
+            .btn-num {
+                background: white;
+                color: #333;
+            }
+            .btn-op {
+                background: #f39c12;
+                color: white;
+            }
+            .btn-clear {
+                background: #e74c3c;
+                color: white;
+            }
+            .btn-equal {
+                background: #4385f4;
+                color: white;
+                grid-row: span 2;
+            }
+            .btn-pattern-active {
+                background-color: #28a745 !important;
+            }
 
-      .settings-area {
-        border-top: 1px solid #ccc;
-        padding-top: 15px;
-      }
+            .settings-area {
+                border-top: 1px solid #ccc;
+                padding-top: 15px;
+            }
 
-      label {
-        display: block;
-        font-size: 0.8rem;
-        margin-bottom: 5px;
-        color: #666;
-        font-weight: bold;
-      }
+            label {
+                display: block;
+                font-size: 0.8rem;
+                margin-bottom: 5px;
+                color: #666;
+                font-weight: bold;
+            }
 
-      .file-input {
-        margin-bottom: 10px;
-        font-size: 0.8rem;
-        width: 100%;
-      }
-      .pattern-toggle-btn {
-        width: 100%;
-        padding: 10px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <nav id="site-nav">
-      <a href="index.html" class="nav-link">メイン計算機</a>
-      <a href="chasepankun.html" class="nav-link">パンくんを追え</a>
-      <a href="index1.html" class="nav-link">Ver.1</a>
-      <a href="index2.html" class="nav-link">Ver.2</a>
-    </nav>
+            .file-input {
+                margin-bottom: 10px;
+                font-size: 0.8rem;
+                width: 100%;
+            }
+            .pattern-toggle-btn {
+                width: 100%;
+                padding: 10px;
+                background: #007bff;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <nav id="site-nav">
+            <a href="index.html" class="nav-link">メイン計算機</a>
+            <a href="chasepankun.html" class="nav-link">パンくんを追え</a>
+            <a href="index1.html" class="nav-link">Ver.1</a>
+            <a href="index2.html" class="nav-link">Ver.2</a>
+        </nav>
 
-    <div class="container">
-      <h3 style="text-align: center; margin-bottom: 15px">💰 猫の声計算機</h3>
-      <input type="text" id="display" value="0" readonly />
+        <div class="container">
+            <h3 style="text-align: center; margin-bottom: 15px">
+                💰 猫の声計算機
+            </h3>
+            <input type="text" id="display" value="0" readonly />
 
-      <div class="calc-grid">
-        <button class="btn btn-clear" onclick="clearDisplay()">C</button>
-        <button class="btn btn-op" onclick="inputOp('/')">÷</button>
-        <button class="btn btn-op" onclick="inputOp('*')">×</button>
-        <button class="btn btn-clear" onclick="deleteLast()">⌫</button>
+            <div class="calc-grid">
+                <button class="btn btn-clear" onclick="clearDisplay()">
+                    C
+                </button>
+                <button class="btn btn-op" onclick="inputOp('/')">÷</button>
+                <button class="btn btn-op" onclick="inputOp('*')">×</button>
+                <button class="btn btn-clear" onclick="deleteLast()">⌫</button>
 
-        <button class="btn btn-num" onclick="inputNum('7')">7</button>
-        <button class="btn btn-num" onclick="inputNum('8')">8</button>
-        <button class="btn btn-num" onclick="inputNum('9')">9</button>
-        <button class="btn btn-op" onclick="inputOp('-')">-</button>
+                <button class="btn btn-num" onclick="inputNum('7')">7</button>
+                <button class="btn btn-num" onclick="inputNum('8')">8</button>
+                <button class="btn btn-num" onclick="inputNum('9')">9</button>
+                <button class="btn btn-op" onclick="inputOp('-')">-</button>
 
-        <button class="btn btn-num" onclick="inputNum('4')">4</button>
-        <button class="btn btn-num" onclick="inputNum('5')">5</button>
-        <button class="btn btn-num" onclick="inputNum('6')">6</button>
-        <button class="btn btn-op" onclick="inputOp('+')">+</button>
+                <button class="btn btn-num" onclick="inputNum('4')">4</button>
+                <button class="btn btn-num" onclick="inputNum('5')">5</button>
+                <button class="btn btn-num" onclick="inputNum('6')">6</button>
+                <button class="btn btn-op" onclick="inputOp('+')">+</button>
 
-        <button class="btn btn-num" onclick="inputNum('1')">1</button>
-        <button class="btn btn-num" onclick="inputNum('2')">2</button>
-        <button class="btn btn-num" onclick="inputNum('3')">3</button>
-        <button class="btn btn-equal" onclick="calculateResult()">=</button>
+                <button class="btn btn-num" onclick="inputNum('1')">1</button>
+                <button class="btn btn-num" onclick="inputNum('2')">2</button>
+                <button class="btn btn-num" onclick="inputNum('3')">3</button>
+                <button class="btn btn-equal" onclick="calculateResult()">
+                    =
+                </button>
 
-        <button
-          class="btn btn-num"
-          style="grid-column: span 2"
-          onclick="inputNum('0')"
-        >
-          0
-        </button>
-        <button class="btn btn-num" onclick="inputNum('.')">.</button>
-      </div>
+                <button
+                    class="btn btn-num"
+                    style="grid-column: span 2"
+                    onclick="inputNum('0')"
+                >
+                    0
+                </button>
+                <button class="btn btn-num" onclick="inputNum('.')">.</button>
+            </div>
 
-      <div class="settings-area">
-        <label>背景画像を変更</label>
-        <input
-          type="file"
-          id="bgInput"
-          class="file-input"
-          accept="image/*"
-          onchange="changeBackground()"
-        />
-        <button
-          id="patternBtn"
-          class="pattern-toggle-btn btn-pattern-active"
-          onclick="togglePattern()"
-        >
-          繰り返し表示 OFF
-        </button>
-      </div>
-    </div>
+            <div class="settings-area">
+                <label>背景画像を変更</label>
+                <input
+                    type="file"
+                    id="bgInput"
+                    class="file-input"
+                    accept="image/*"
+                    onchange="changeBackground()"
+                />
+                <button
+                    id="patternBtn"
+                    class="pattern-toggle-btn btn-pattern-active"
+                    onclick="togglePattern()"
+                >
+                    繰り返し表示 OFF
+                </button>
+            </div>
+        </div>
 
-    <script>
-      // ナビゲーション
-      window.addEventListener("DOMContentLoaded", () => {
-        const currentFile =
-          window.location.pathname.split("/").pop() || "index.html";
-        document.querySelectorAll(".nav-link").forEach((link) => {
-          if (link.getAttribute("href") === currentFile)
-            link.classList.add("active");
-        });
-      });
+        <script>
+            // ナビゲーション
+            window.addEventListener('DOMContentLoaded', () => {
+                const currentFile =
+                    window.location.pathname.split('/').pop() || 'index.html';
+                document.querySelectorAll('.nav-link').forEach((link) => {
+                    if (link.getAttribute('href') === currentFile)
+                        link.classList.add('active');
+                });
+            });
 
-      // 音声
-      const catSound = new Audio("images/cat.mp3");
-      const specialSound = new Audio("images/special.mp3");
+            // 音声
+            const catSound = new Audio('images/cat.mp3');
+            const specialSound = new Audio('images/special.mp3');
 
-      function playCat() {
-        catSound.currentTime = 0;
-        catSound.play().catch((e) => {});
-      }
-      function playSpecial() {
-        specialSound.currentTime = 0;
-        specialSound.play().catch((e) => {});
-      }
+            function playCat() {
+                catSound.currentTime = 0;
+                catSound.play().catch((e) => {});
+            }
+            function playSpecial() {
+                specialSound.currentTime = 0;
+                specialSound.play().catch((e) => {});
+            }
 
-      // 計算機ロジック
-      let currentDisplay = "0";
-      let shouldResetScreen = false;
-      const displayEl = document.getElementById("display");
+            // 計算機ロジック
+            let currentDisplay = '0';
+            let shouldResetScreen = false;
+            const displayEl = document.getElementById('display');
 
-      // 【重要】カンマ区切りに変換して表示する関数
-      function updateDisplay() {
-        // 数字の部分と記号の部分を分けて、数字だけカンマをつける
-        const parts = currentDisplay.split(/([\+\-\*\/])/);
-        const formatted = parts
-          .map((part) => {
-            if (["+", "-", "*", "/"].includes(part) || part === "") return part;
-            if (part === ".") return ".";
+            // 【重要】カンマ区切りに変換して表示する関数
+            function updateDisplay() {
+                // 数字の部分と記号の部分を分けて、数字だけカンマをつける
+                const parts = currentDisplay.split(/([\+\-\*\/])/);
+                const formatted = parts
+                    .map((part) => {
+                        if (['+', '-', '*', '/'].includes(part) || part === '')
+                            return part;
+                        if (part === '.') return '.';
 
-            // 小数点がある場合を考慮
-            const numParts = part.split(".");
-            numParts[0] = Number(numParts[0]).toLocaleString();
-            return numParts.join(".");
-          })
-          .join("");
+                        // 小数点がある場合を考慮
+                        const numParts = part.split('.');
+                        numParts[0] = Number(numParts[0]).toLocaleString();
+                        return numParts.join('.');
+                    })
+                    .join('');
 
-        displayEl.value = formatted;
-      }
+                displayEl.value = formatted;
+            }
 
-      function inputNum(num) {
-        if (currentDisplay === "0" || shouldResetScreen) {
-          currentDisplay = num;
-          shouldResetScreen = false;
-        } else {
-          currentDisplay += num;
-        }
-        updateDisplay();
-        playCat();
-      }
+            function inputNum(num) {
+                if (currentDisplay === '0' || shouldResetScreen) {
+                    currentDisplay = num;
+                    shouldResetScreen = false;
+                } else {
+                    currentDisplay += num;
+                }
+                updateDisplay();
+                playCat();
+            }
 
-      function inputOp(op) {
-        shouldResetScreen = false;
-        const lastChar = currentDisplay.slice(-1);
-        if (["+", "-", "*", "/"].includes(lastChar)) {
-          currentDisplay = currentDisplay.slice(0, -1) + op;
-        } else {
-          currentDisplay += op;
-        }
-        updateDisplay();
-        playCat();
-      }
+            function inputOp(op) {
+                shouldResetScreen = false;
+                const lastChar = currentDisplay.slice(-1);
+                if (['+', '-', '*', '/'].includes(lastChar)) {
+                    currentDisplay = currentDisplay.slice(0, -1) + op;
+                } else {
+                    currentDisplay += op;
+                }
+                updateDisplay();
+                playCat();
+            }
 
-      function clearDisplay() {
-        currentDisplay = "0";
-        shouldResetScreen = false;
-        updateDisplay();
-        playCat();
-      }
+            function clearDisplay() {
+                currentDisplay = '0';
+                shouldResetScreen = false;
+                updateDisplay();
+                playCat();
+            }
 
-      function deleteLast() {
-        if (currentDisplay.length > 1) {
-          currentDisplay = currentDisplay.slice(0, -1);
-        } else {
-          currentDisplay = "0";
-        }
-        updateDisplay();
-        playCat();
-      }
+            function deleteLast() {
+                if (currentDisplay.length > 1) {
+                    currentDisplay = currentDisplay.slice(0, -1);
+                } else {
+                    currentDisplay = '0';
+                }
+                updateDisplay();
+                playCat();
+            }
 
-      function calculateResult() {
-        let expression = currentDisplay;
-        const lastChar = expression.slice(-1);
-        if (["+", "-", "*", "/"].includes(lastChar)) {
-          expression = expression.slice(0, -1);
-        }
+            function calculateResult() {
+                let expression = currentDisplay;
+                const lastChar = expression.slice(-1);
+                if (['+', '-', '*', '/'].includes(lastChar)) {
+                    expression = expression.slice(0, -1);
+                }
 
-        try {
-          let result = eval(expression);
+                try {
+                    let result = eval(expression);
 
-          // 精度調整
-          if (!Number.isInteger(result)) {
-            result = Math.round(result * 10000) / 10000;
-          }
+                    // 精度調整
+                    if (!Number.isInteger(result)) {
+                        result = Math.round(result * 10000) / 10000;
+                    }
 
-          currentDisplay = String(result);
-          shouldResetScreen = true;
-          updateDisplay();
-          playSpecial();
-        } catch (e) {
-          currentDisplay = "0";
-          updateDisplay();
-        }
-      }
+                    currentDisplay = String(result);
+                    shouldResetScreen = true;
+                    updateDisplay();
+                    playSpecial();
+                } catch (e) {
+                    currentDisplay = '0';
+                    updateDisplay();
+                }
+            }
 
-      // 背景変更
-      let isPatternMode = true;
-      function changeBackground() {
-        const file = document.getElementById("bgInput").files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            document.body.style.backgroundImage = `url('${e.target.result}')`;
-            applyStyle();
-          };
-          reader.readAsDataURL(file);
-        }
-      }
-      function togglePattern() {
-        isPatternMode = !isPatternMode;
-        applyStyle();
-      }
-      function applyStyle() {
-        const btn = document.getElementById("patternBtn");
-        if (isPatternMode) {
-          document.body.style.backgroundRepeat = "repeat";
-          document.body.style.backgroundSize = "150px";
-          btn.innerText = "繰り返し表示 OFF";
-          btn.classList.add("btn-pattern-active");
-        } else {
-          document.body.style.backgroundRepeat = "no-repeat";
-          document.body.style.backgroundSize = "contain";
-          btn.innerText = "繰り返し表示 ON";
-          btn.classList.remove("btn-pattern-active");
-        }
-      }
-    </script>
-  </body>
+            // 背景変更
+            let isPatternMode = true;
+            function changeBackground() {
+                const file = document.getElementById('bgInput').files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        document.body.style.backgroundImage = `url('${e.target.result}')`;
+                        applyStyle();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+            function togglePattern() {
+                isPatternMode = !isPatternMode;
+                applyStyle();
+            }
+            function applyStyle() {
+                const btn = document.getElementById('patternBtn');
+                if (isPatternMode) {
+                    document.body.style.backgroundRepeat = 'repeat';
+                    document.body.style.backgroundSize = '150px';
+                    btn.innerText = '繰り返し表示 OFF';
+                    btn.classList.add('btn-pattern-active');
+                } else {
+                    document.body.style.backgroundRepeat = 'no-repeat';
+                    document.body.style.backgroundSize = 'contain';
+                    btn.innerText = '繰り返し表示 ON';
+                    btn.classList.remove('btn-pattern-active');
+                }
+            }
+        </script>
+    </body>
 </html>

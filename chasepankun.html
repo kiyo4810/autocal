@@ -1,427 +1,442 @@
 <!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
-    />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>パンくんを追え</title>
-    <link rel="icon" href="images/pan.png" type="image/png" />
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        -webkit-user-select: none;
-        -webkit-touch-callout: none;
-        user-select: none;
-      }
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+        />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <title>パンくんを追え</title>
+        <link rel="icon" href="images/pan.png" type="image/png" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                -webkit-user-select: none;
+                -webkit-touch-callout: none;
+                user-select: none;
+            }
 
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-      }
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
 
-      body {
-        display: flex;
-        flex-direction: column; /* 縦に並べる */
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        font-family: Arial, sans-serif;
-      }
+            body {
+                display: flex;
+                flex-direction: column; /* 縦に並べる */
+                justify-content: center;
+                align-items: center;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                font-family: Arial, sans-serif;
+            }
 
-      /* --- 共通ナビゲーションスタイル --- */
-      #site-nav {
-        text-align: center;
-        padding: 10px;
-        margin-bottom: 10px;
-        background-color: rgba(255, 255, 255, 0.8);
-        border-radius: 50px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        display: flex;
-        gap: 5px;
-        z-index: 100; /* 最前面に */
-      }
+            /* --- 共通ナビゲーションスタイル --- */
+            #site-nav {
+                text-align: center;
+                padding: 10px;
+                margin-bottom: 10px;
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 50px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                display: flex;
+                gap: 5px;
+                z-index: 100; /* 最前面に */
+            }
 
-      .nav-link {
-        display: inline-block;
-        padding: 8px 16px;
-        text-decoration: none;
-        color: #555;
-        border-radius: 25px;
-        font-size: 0.8rem;
-        font-weight: bold;
-        transition: all 0.3s ease;
-      }
+            .nav-link {
+                display: inline-block;
+                padding: 8px 16px;
+                text-decoration: none;
+                color: #555;
+                border-radius: 25px;
+                font-size: 0.8rem;
+                font-weight: bold;
+                transition: all 0.3s ease;
+            }
 
-      .nav-link.active {
-        background-color: #4385f4;
-        color: white !important;
-      }
-      /* ------------------------------ */
+            .nav-link.active {
+                background-color: #4385f4;
+                color: white !important;
+            }
+            /* ------------------------------ */
 
-      .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: auto;
-        max-height: 90vh;
-        padding: 5px;
-        gap: 8px;
-        overflow-y: auto;
-      }
+            .container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: auto;
+                max-height: 90vh;
+                padding: 5px;
+                gap: 8px;
+                overflow-y: auto;
+            }
 
-      h1 {
-        color: white;
-        font-size: clamp(18px, 5vw, 36px);
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        flex-shrink: 0;
-        margin-bottom: 5px;
-      }
+            h1 {
+                color: white;
+                font-size: clamp(18px, 5vw, 36px);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+                flex-shrink: 0;
+                margin-bottom: 5px;
+            }
 
-      .title-area {
-        flex-shrink: 0;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 15px;
-        width: 100%;
-      }
+            .title-area {
+                flex-shrink: 0;
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                gap: 15px;
+                width: 100%;
+            }
 
-      .image-container img {
-        max-width: 90vw;
-        max-height: 80px;
-        width: auto;
-        height: auto;
-        object-fit: contain;
-        border-radius: 8px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-      }
+            .image-container img {
+                max-width: 90vw;
+                max-height: 80px;
+                width: auto;
+                height: auto;
+                object-fit: contain;
+                border-radius: 8px;
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            }
 
-      .game-wrapper {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        max-height: calc(100vh - 250px);
-      }
+            .game-wrapper {
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                max-height: calc(100vh - 250px);
+            }
 
-      #gameCanvas {
-        border: 3px solid white;
-        background-color: #0a0a32;
-        cursor: pointer;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        max-width: 95vw;
-        touch-action: none;
-      }
+            #gameCanvas {
+                border: 3px solid white;
+                background-color: #0a0a32;
+                cursor: pointer;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                max-width: 95vw;
+                touch-action: none;
+            }
 
-      .volume-control {
-        background: rgba(0, 0, 0, 0.7);
-        padding: 8px 10px;
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 5px;
-      }
+            .volume-control {
+                background: rgba(0, 0, 0, 0.7);
+                padding: 8px 10px;
+                border-radius: 8px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
 
-      .volume-slider {
-        width: 80px;
-      }
-      .volume-value {
-        color: white;
-        font-size: 10px;
-      }
+            .volume-slider {
+                width: 80px;
+            }
+            .volume-value {
+                color: white;
+                font-size: 10px;
+            }
 
-      .instructions {
-        color: white;
-        font-size: 11px;
-        background: rgba(0, 0, 0, 0.3);
-        padding: 8px;
-        border-radius: 6px;
-        text-align: center;
-      }
-    </style>
-  </head>
-  <body>
-    <nav id="site-nav">
-      <a href="index.html" class="nav-link">メイン計算機</a>
-      <a href="chasepankun.html" class="nav-link">パンくんを追え</a>
-      <a href="index1.html" class="nav-link">Ver.1</a>
-      <a href="index2.html" class="nav-link">Ver.2</a>
-    </nav>
+            .instructions {
+                color: white;
+                font-size: 11px;
+                background: rgba(0, 0, 0, 0.3);
+                padding: 8px;
+                border-radius: 6px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <nav id="site-nav">
+            <a href="index.html" class="nav-link">メイン計算機</a>
+            <a href="chasepankun.html" class="nav-link">パンくんを追え</a>
+            <a href="index1.html" class="nav-link">Ver.1</a>
+            <a href="index2.html" class="nav-link">Ver.2</a>
+        </nav>
 
-    <div class="container">
-      <h1>パンくんを追え</h1>
-      <div class="title-area">
-        <div class="image-container">
-          <img src="images/kiyo.png" alt="きよのイラスト" />
+        <div class="container">
+            <h1>パンくんを追え</h1>
+            <div class="title-area">
+                <div class="image-container">
+                    <img src="images/kiyo.png" alt="きよのイラスト" />
+                </div>
+                <div class="volume-control">
+                    <div class="volume-icon">🔊</div>
+                    <input
+                        type="range"
+                        id="volumeSlider"
+                        class="volume-slider"
+                        min="0"
+                        max="100"
+                        value="70"
+                    />
+                    <div class="volume-value">
+                        <span id="volumeValue">70</span>%
+                    </div>
+                </div>
+            </div>
+            <div class="game-wrapper">
+                <canvas id="gameCanvas"></canvas>
+            </div>
+            <div class="instructions">
+                <p>動いているパンくんをクリックしてスコアを上げましょう!</p>
+                <p>クリックするたびにパンくんはスピードが上がるよ</p>
+            </div>
         </div>
-        <div class="volume-control">
-          <div class="volume-icon">🔊</div>
-          <input
-            type="range"
-            id="volumeSlider"
-            class="volume-slider"
-            min="0"
-            max="100"
-            value="70"
-          />
-          <div class="volume-value"><span id="volumeValue">70</span>%</div>
-        </div>
-      </div>
-      <div class="game-wrapper">
-        <canvas id="gameCanvas"></canvas>
-      </div>
-      <div class="instructions">
-        <p>動いているパンくんをクリックしてスコアを上げましょう!</p>
-        <p>クリックするたびにパンくんはスピードが上がるよ</p>
-      </div>
-    </div>
 
-    <script>
-      // --- ページ全体の仕組み ---
+        <script>
+            // --- ページ全体の仕組み ---
 
-      // ページ（HTML）の読み込みが完了した瞬間に実行する
-      window.addEventListener("DOMContentLoaded", () => {
-        // 現在のURLからファイル名（index.htmlなど）を抜き出し、無ければindex.htmlとする
-        const currentFile =
-          window.location.pathname.split("/").pop() || "index.html";
-        // 画面内のナビゲーションリンク（.nav-link）をすべて取得する
-        const links = document.querySelectorAll(".nav-link");
+            // ページ（HTML）の読み込みが完了した瞬間に実行する
+            window.addEventListener('DOMContentLoaded', () => {
+                // 現在のURLからファイル名（index.htmlなど）を抜き出し、無ければindex.htmlとする
+                const currentFile =
+                    window.location.pathname.split('/').pop() || 'index.html';
+                // 画面内のナビゲーションリンク（.nav-link）をすべて取得する
+                const links = document.querySelectorAll('.nav-link');
 
-        // リンクを一つずつチェックする
-        links.forEach((link) => {
-          // もしリンクの移動先と、いま開いているファイル名が同じなら
-          if (link.getAttribute("href") === currentFile) {
-            // そのリンクに「active」という目印（クラス）をつけて色を変える準備をする
-            link.classList.add("active");
-          }
-        });
-      });
+                // リンクを一つずつチェックする
+                links.forEach((link) => {
+                    // もしリンクの移動先と、いま開いているファイル名が同じなら
+                    if (link.getAttribute('href') === currentFile) {
+                        // そのリンクに「active」という目印（クラス）をつけて色を変える準備をする
+                        link.classList.add('active');
+                    }
+                });
+            });
 
-      // --- ゲームのロジック（基本設定） ---
+            // --- ゲームのロジック（基本設定） ---
 
-      // 絵を描くためのキャンバス（画用紙）を取得
-      const canvas = document.getElementById("gameCanvas");
-      // 画用紙に描くためのペン（コンテキスト）を取得
-      const ctx = canvas.getContext("2d");
-      // 音量を調整するスライダーを取得
-      const volumeSlider = document.getElementById("volumeSlider");
-      // 音量の数字を表示する場所を取得
-      const volumeValue = document.getElementById("volumeValue");
+            // 絵を描くためのキャンバス（画用紙）を取得
+            const canvas = document.getElementById('gameCanvas');
+            // 画用紙に描くためのペン（コンテキスト）を取得
+            const ctx = canvas.getContext('2d');
+            // 音量を調整するスライダーを取得
+            const volumeSlider = document.getElementById('volumeSlider');
+            // 音量の数字を表示する場所を取得
+            const volumeValue = document.getElementById('volumeValue');
 
-      // ゲーム内の仮想的な画面サイズ（基準となる大きさ）
-      const GAME_WIDTH = 600;
-      const GAME_HEIGHT = 400;
+            // ゲーム内の仮想的な画面サイズ（基準となる大きさ）
+            const GAME_WIDTH = 600;
+            const GAME_HEIGHT = 400;
 
-      // ゲームで使うデータの初期値
-      let score = 0; // スコア
-      let spriteX = GAME_WIDTH / 2; // キャラクターの横位置（最初は真ん中）
-      let spriteY = GAME_HEIGHT / 2; // キャラクターの縦位置（最初は真ん中）
-      let spriteSpeed = [2, 2]; // 移動速度 [横に2, 縦に2]
-      let spriteRadius = 25; // キャラクターの当たり判定の大きさ
-      let spriteImage = null; // キャラクターの画像を入れる箱
-      let scaleX = 1; // 実際の画面サイズに合わせるための横の倍率
-      let scaleY = 1; // 実際の画面サイズに合わせるための縦の倍率
-      let volume = 70; // 効果音の大きさ（0〜100）
+            // ゲームで使うデータの初期値
+            let score = 0; // スコア
+            let spriteX = GAME_WIDTH / 2; // キャラクターの横位置（最初は真ん中）
+            let spriteY = GAME_HEIGHT / 2; // キャラクターの縦位置（最初は真ん中）
+            let spriteSpeed = [2, 2]; // 移動速度 [横に2, 縦に2]
+            let spriteRadius = 25; // キャラクターの当たり判定の大きさ
+            let spriteImage = null; // キャラクターの画像を入れる箱
+            let scaleX = 1; // 実際の画面サイズに合わせるための横の倍率
+            let scaleY = 1; // 実際の画面サイズに合わせるための縦の倍率
+            let volume = 70; // 効果音の大きさ（0〜100）
 
-      // --- 音を鳴らす仕組み ---
+            // --- 音を鳴らす仕組み ---
 
-      let audioContext = null; // 音を出すための大元のシステム
-      function initAudio() {
-        // まだシステムが準備できていなければ作成する（ブラウザ制限対策）
-        if (!audioContext) {
-          audioContext = new (
-            window.AudioContext || window.webkitAudioContext
-          )();
-        }
-        return audioContext;
-      }
+            let audioContext = null; // 音を出すための大元のシステム
+            function initAudio() {
+                // まだシステムが準備できていなければ作成する（ブラウザ制限対策）
+                if (!audioContext) {
+                    audioContext = new (
+                        window.AudioContext || window.webkitAudioContext
+                    )();
+                }
+                return audioContext;
+            }
 
-      // 成功したとき（クリック時）に高い音を鳴らす
-      function playSuccessSound() {
-        try {
-          const ctxAudio = initAudio(); // システム起動
-          const now = ctxAudio.currentTime; // 今の時間
-          const gainNode = ctxAudio.createGain(); // ボリュームつまみ作成
-          gainNode.gain.value = (volume / 100) * 0.3; // スライダーの値を反映
-          gainNode.connect(ctxAudio.destination); // つまみをスピーカーに接続
+            // 成功したとき（クリック時）に高い音を鳴らす
+            function playSuccessSound() {
+                try {
+                    const ctxAudio = initAudio(); // システム起動
+                    const now = ctxAudio.currentTime; // 今の時間
+                    const gainNode = ctxAudio.createGain(); // ボリュームつまみ作成
+                    gainNode.gain.value = (volume / 100) * 0.3; // スライダーの値を反映
+                    gainNode.connect(ctxAudio.destination); // つまみをスピーカーに接続
 
-          const osc = ctxAudio.createOscillator(); // 電子音の発振器を作成
-          osc.type = "sine"; // 柔らかな音の種類に設定
-          osc.frequency.setValueAtTime(800, now); // 最初の音の高さ(800Hz)
-          osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1); // 0.1秒で音を高くする（ピコッ！）
-          osc.connect(gainNode); // 発振器をつまみに接続
-          osc.start(now); // 音を出す
-          osc.stop(now + 0.1); // 0.1秒後に止める
-        } catch (e) {
-          console.log(e);
-        } // エラーが起きてもゲームを止めない
-      }
+                    const osc = ctxAudio.createOscillator(); // 電子音の発振器を作成
+                    osc.type = 'sine'; // 柔らかな音の種類に設定
+                    osc.frequency.setValueAtTime(800, now); // 最初の音の高さ(800Hz)
+                    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1); // 0.1秒で音を高くする（ピコッ！）
+                    osc.connect(gainNode); // 発振器をつまみに接続
+                    osc.start(now); // 音を出す
+                    osc.stop(now + 0.1); // 0.1秒後に止める
+                } catch (e) {
+                    console.log(e);
+                } // エラーが起きてもゲームを止めない
+            }
 
-      // --- 画像の読み込み ---
+            // --- 画像の読み込み ---
 
-      const img = new Image(); // 新しい画像の箱を作る
-      img.src = "images/pan.png"; // 読み込む画像のパスを指定
-      img.onload = () => {
-        spriteImage = img;
-      }; // 読み込みが終わったら変数に保存
+            const img = new Image(); // 新しい画像の箱を作る
+            img.src = 'images/pan.png'; // 読み込む画像のパスを指定
+            img.onload = () => {
+                spriteImage = img;
+            }; // 読み込みが終わったら変数に保存
 
-      // --- ユーザーの操作への反応 ---
+            // --- ユーザーの操作への反応 ---
 
-      // 音量スライダーが動かされたとき
-      volumeSlider.addEventListener("input", (e) => {
-        volume = parseInt(e.target.value); // 新しい音量を取得
-        volumeValue.textContent = volume; // 画面上の数字を書き換える
-        // スライダーの溝の色を動的に変える
-        volumeSlider.style.background = `linear-gradient(to right, #667eea 0%, #667eea ${volume}%, #ccc ${volume}%, #ccc 100%)`;
-      });
+            // 音量スライダーが動かされたとき
+            volumeSlider.addEventListener('input', (e) => {
+                volume = parseInt(e.target.value); // 新しい音量を取得
+                volumeValue.textContent = volume; // 画面上の数字を書き換える
+                // スライダーの溝の色を動的に変える
+                volumeSlider.style.background = `linear-gradient(to right, #667eea 0%, #667eea ${volume}%, #ccc ${volume}%, #ccc 100%)`;
+            });
 
-      // 画面のサイズが変わったときにキャンバスの大きさを調整する
-      function resizeCanvas() {
-        const containerWidth = Math.min(window.innerWidth - 20, GAME_WIDTH); // 画面幅に合わせつつ最大値を守る
-        const containerHeight = Math.min(window.innerHeight - 300, GAME_HEIGHT); // 高さも調整
-        const aspectRatio = GAME_WIDTH / GAME_HEIGHT; // 元の縦横比
+            // 画面のサイズが変わったときにキャンバスの大きさを調整する
+            function resizeCanvas() {
+                const containerWidth = Math.min(
+                    window.innerWidth - 20,
+                    GAME_WIDTH,
+                ); // 画面幅に合わせつつ最大値を守る
+                const containerHeight = Math.min(
+                    window.innerHeight - 300,
+                    GAME_HEIGHT,
+                ); // 高さも調整
+                const aspectRatio = GAME_WIDTH / GAME_HEIGHT; // 元の縦横比
 
-        let canvasWidth = containerWidth;
-        let canvasHeight = containerWidth / aspectRatio;
+                let canvasWidth = containerWidth;
+                let canvasHeight = containerWidth / aspectRatio;
 
-        // 高さがはみ出す場合は調整
-        if (canvasHeight > containerHeight) {
-          canvasHeight = containerHeight;
-          canvasWidth = canvasHeight * aspectRatio;
-        }
+                // 高さがはみ出す場合は調整
+                if (canvasHeight > containerHeight) {
+                    canvasHeight = containerHeight;
+                    canvasWidth = canvasHeight * aspectRatio;
+                }
 
-        canvas.width = Math.max(canvasWidth, 250); // 最低サイズを確保
-        canvas.height = Math.max(canvasHeight, 166);
+                canvas.width = Math.max(canvasWidth, 250); // 最低サイズを確保
+                canvas.height = Math.max(canvasHeight, 166);
 
-        // 基準サイズ(600x400)に対して、今の画面が何倍の大きさかを計算（クリック判定用）
-        scaleX = canvas.width / GAME_WIDTH;
-        scaleY = canvas.height / GAME_HEIGHT;
-      }
+                // 基準サイズ(600x400)に対して、今の画面が何倍の大きさかを計算（クリック判定用）
+                scaleX = canvas.width / GAME_WIDTH;
+                scaleY = canvas.height / GAME_HEIGHT;
+            }
 
-      // --- 描画と計算（メインエンジン） ---
+            // --- 描画と計算（メインエンジン） ---
 
-      // 画面を描く処理
-      function draw() {
-        ctx.fillStyle = "#0a0a32"; // 背景の色（紺色）
-        ctx.fillRect(0, 0, canvas.width, canvas.height); // 画面全体を塗りつぶし（リセット）
+            // 画面を描く処理
+            function draw() {
+                ctx.fillStyle = '#0a0a32'; // 背景の色（紺色）
+                ctx.fillRect(0, 0, canvas.width, canvas.height); // 画面全体を塗りつぶし（リセット）
 
-        ctx.fillStyle = "white"; // 文字の色
-        const fontSize = Math.max(16, canvas.width / 20); // 画面の大きさに合わせて文字サイズを変える
-        ctx.font = `bold ${fontSize}px Arial`; // フォント設定
-        ctx.fillText(`Score: ${score}`, 15, fontSize + 10); // スコアを表示
+                ctx.fillStyle = 'white'; // 文字の色
+                const fontSize = Math.max(16, canvas.width / 20); // 画面の大きさに合わせて文字サイズを変える
+                ctx.font = `bold ${fontSize}px Arial`; // フォント設定
+                ctx.fillText(`Score: ${score}`, 15, fontSize + 10); // スコアを表示
 
-        const drawX = spriteX * scaleX; // 実際の描画位置を計算（横）
-        const drawY = spriteY * scaleY; // 実際の描画位置を計算（縦）
-        const spriteSize = 100 * Math.min(scaleX, scaleY); // キャラクターの大きさを調整
+                const drawX = spriteX * scaleX; // 実際の描画位置を計算（横）
+                const drawY = spriteY * scaleY; // 実際の描画位置を計算（縦）
+                const spriteSize = 100 * Math.min(scaleX, scaleY); // キャラクターの大きさを調整
 
-        if (spriteImage) {
-          // 画像があれば画像を描く
-          ctx.drawImage(
-            spriteImage,
-            drawX - spriteSize / 2,
-            drawY - spriteSize / 2,
-            spriteSize,
-            spriteSize,
-          );
-        } else {
-          // 画像がなければ黄色い円を描く（予備）
-          ctx.fillStyle = "yellow";
-          ctx.beginPath();
-          ctx.arc(
-            drawX,
-            drawY,
-            spriteRadius * Math.min(scaleX, scaleY),
-            0,
-            Math.PI * 2,
-          );
-          ctx.fill();
-        }
-      }
+                if (spriteImage) {
+                    // 画像があれば画像を描く
+                    ctx.drawImage(
+                        spriteImage,
+                        drawX - spriteSize / 2,
+                        drawY - spriteSize / 2,
+                        spriteSize,
+                        spriteSize,
+                    );
+                } else {
+                    // 画像がなければ黄色い円を描く（予備）
+                    ctx.fillStyle = 'yellow';
+                    ctx.beginPath();
+                    ctx.arc(
+                        drawX,
+                        drawY,
+                        spriteRadius * Math.min(scaleX, scaleY),
+                        0,
+                        Math.PI * 2,
+                    );
+                    ctx.fill();
+                }
+            }
 
-      // キャラクターの位置を更新する処理
-      function update() {
-        spriteX += spriteSpeed[0]; // 横に動かす
-        spriteY += spriteSpeed[1]; // 縦に動かす
+            // キャラクターの位置を更新する処理
+            function update() {
+                spriteX += spriteSpeed[0]; // 横に動かす
+                spriteY += spriteSpeed[1]; // 縦に動かす
 
-        // 左右の壁に当たったら跳ね返る
-        if (spriteX < 50 || spriteX > GAME_WIDTH - 50) spriteSpeed[0] *= -1;
-        // 上下の壁に当たったら跳ね返る
-        if (spriteY < 50 || spriteY > GAME_HEIGHT - 50) spriteSpeed[1] *= -1;
-      }
+                // 左右の壁に当たったら跳ね返る
+                if (spriteX < 50 || spriteX > GAME_WIDTH - 50)
+                    spriteSpeed[0] *= -1;
+                // 上下の壁に当たったら跳ね返る
+                if (spriteY < 50 || spriteY > GAME_HEIGHT - 50)
+                    spriteSpeed[1] *= -1;
+            }
 
-      // --- クリック・タッチされたときの判定 ---
+            // --- クリック・タッチされたときの判定 ---
 
-      function handleClick(event) {
-        const rect = canvas.getBoundingClientRect(); // キャンバスの画面上の位置を取得
+            function handleClick(event) {
+                const rect = canvas.getBoundingClientRect(); // キャンバスの画面上の位置を取得
 
-        // マウスか指か、どちらで触れたかによって座標の取り方を変える
-        let clientX = event.touches ? event.touches[0].clientX : event.clientX;
-        let clientY = event.touches ? event.touches[0].clientY : event.clientY;
+                // マウスか指か、どちらで触れたかによって座標の取り方を変える
+                let clientX = event.touches
+                    ? event.touches[0].clientX
+                    : event.clientX;
+                let clientY = event.touches
+                    ? event.touches[0].clientY
+                    : event.clientY;
 
-        // 指が離れた瞬間のための座標取得
-        if (event.changedTouches) {
-          clientX = event.changedTouches[0].clientX;
-          clientY = event.changedTouches[0].clientY;
-        }
+                // 指が離れた瞬間のための座標取得
+                if (event.changedTouches) {
+                    clientX = event.changedTouches[0].clientX;
+                    clientY = event.changedTouches[0].clientY;
+                }
 
-        // クリックされた位置が「ゲーム内の基準サイズ」でどこかを計算
-        const clickX = (clientX - rect.left) / scaleX;
-        const clickY = (clientY - rect.top) / scaleY;
+                // クリックされた位置が「ゲーム内の基準サイズ」でどこかを計算
+                const clickX = (clientX - rect.left) / scaleX;
+                const clickY = (clientY - rect.top) / scaleY;
 
-        // キャラクターの中心とクリック位置の距離を計算（三平方の定理）
-        const dist = Math.sqrt(
-          Math.pow(clickX - spriteX, 2) + Math.pow(clickY - spriteY, 2),
-        );
+                // キャラクターの中心とクリック位置の距離を計算（三平方の定理）
+                const dist = Math.sqrt(
+                    Math.pow(clickX - spriteX, 2) +
+                        Math.pow(clickY - spriteY, 2),
+                );
 
-        // 距離が60以下なら「当たった」とみなす
-        if (dist < 60) {
-          score += 1; // スコアアップ
-          // キャラクターを別の場所に飛ばす（ワープ）
-          spriteX = Math.random() * (GAME_WIDTH - 100) + 50;
-          spriteY = Math.random() * (GAME_HEIGHT - 100) + 50;
-          // スピードを5%アップさせる
-          spriteSpeed[0] *= 1.05;
-          spriteSpeed[1] *= 1.05;
-          playSuccessSound(); // 音を鳴らす
-        }
-      }
+                // 距離が60以下なら「当たった」とみなす
+                if (dist < 60) {
+                    score += 1; // スコアアップ
+                    // キャラクターを別の場所に飛ばす（ワープ）
+                    spriteX = Math.random() * (GAME_WIDTH - 100) + 50;
+                    spriteY = Math.random() * (GAME_HEIGHT - 100) + 50;
+                    // スピードを5%アップさせる
+                    spriteSpeed[0] *= 1.05;
+                    spriteSpeed[1] *= 1.05;
+                    playSuccessSound(); // 音を鳴らす
+                }
+            }
 
-      // マウスを押したとき
-      canvas.addEventListener("mousedown", handleClick);
-      // 指で触れたとき（画面のスクロールなどを防ぐ設定付き）
-      canvas.addEventListener(
-        "touchstart",
-        (e) => {
-          e.preventDefault();
-          handleClick(e);
-        },
-        { passive: false },
-      );
+            // マウスを押したとき
+            canvas.addEventListener('mousedown', handleClick);
+            // 指で触れたとき（画面のスクロールなどを防ぐ設定付き）
+            canvas.addEventListener(
+                'touchstart',
+                (e) => {
+                    e.preventDefault();
+                    handleClick(e);
+                },
+                { passive: false },
+            );
 
-      // --- ゲームの開始 ---
+            // --- ゲームの開始 ---
 
-      // 動き続けるループ処理
-      function gameLoop() {
-        update(); // 計算する
-        draw(); // 描く
-        requestAnimationFrame(gameLoop); // 次のコマもお願いする
-      }
+            // 動き続けるループ処理
+            function gameLoop() {
+                update(); // 計算する
+                draw(); // 描く
+                requestAnimationFrame(gameLoop); // 次のコマもお願いする
+            }
 
-      resizeCanvas(); // 最初に一度サイズを整える
-      window.addEventListener("resize", resizeCanvas); // 画面サイズ変更時にも整える
-      gameLoop(); // ループスタート！
-    </script>
-  </body>
+            resizeCanvas(); // 最初に一度サイズを整える
+            window.addEventListener('resize', resizeCanvas); // 画面サイズ変更時にも整える
+            gameLoop(); // ループスタート！
+        </script>
+    </body>
 </html>
