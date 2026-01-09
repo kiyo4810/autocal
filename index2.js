@@ -54,6 +54,6 @@ function calculate() {
 document.querySelectorAll(".val").forEach((input) => {
   input.addEventListener("input", calculate);
 });
-
+console.log("index2.jsに分離成功");
 // 初期計算の実行
 calculate();
