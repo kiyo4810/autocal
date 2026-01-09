@@ -86,6 +86,7 @@ console.log('index2.jsに分離成功６');
 console.log('index2.jsに分離成功７');
 console.log('index2.jsに分離成功８');
 console.log('index2.jsに分離成功９');
+console.log('index2.jsに分離成功１０');
 
 // 初期計算の実行
 calculate();
