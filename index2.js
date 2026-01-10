@@ -12,20 +12,20 @@ function initializeTable() {
         headerRow.appendChild(th);
     }
 
-    // 新しい項目定義
+    // 項目定義（デフォルト値を万円単位に修正：例 80000円 -> 8万円）
     const rowDefinitions = [
         ['【収入】', 'category-header', 'section'],
-        ['初期所持金', '', 'init_cash', '0'],
-        ['手残り収入', '', 'income_net', '0'],
+        ['初期所持金', '', 'init_cash', '100'], // 100万円
+        ['手残り収入', '', 'income_net', '500'], // 500万円
         ['その他収入', '', 'income_etc', '0'],
         ['-- 年間収入合計', 'subtotal-income-row', 'total_income'],
 
         ['【支出】', 'category-header', 'section'],
-        ['生活費', '', 'exp_life', '0'],
-        ['住宅', '', 'exp_house', '0'],
+        ['生活費', '', 'exp_life', '200'], // 200万円
+        ['住宅', '', 'exp_house', '120'], // 120万円
         ['教育', '', 'exp_edu', '0'],
         ['車', '', 'exp_car', '0'],
-        ['その他費用', '', 'exp_etc', '0'],
+        ['その他費用', '', 'exp_etc', '10'],
         ['-- 年間支出合計', 'subtotal-expense-row', 'total_expense'],
 
         ['累計年残高', 'balance-row', 'grand_balance'],
@@ -46,7 +46,6 @@ function initializeTable() {
         } else {
             for (let col = 0; col < COLUMN_COUNT; col++) {
                 const td = document.createElement('td');
-                // 計算項目か入力項目か判定
                 if (
                     ['total_income', 'total_expense', 'grand_balance'].includes(
                         rowId
@@ -82,7 +81,7 @@ function calculate() {
             return el ? parseFloat(el.value) || 0 : 0;
         };
 
-        // 1. 収入計算
+        // 収入計算
         const initCash = getVal('init_cash');
         const incomeNet = getVal('income_net');
         const incomeEtc = getVal('income_etc');
@@ -90,7 +89,7 @@ function calculate() {
         document.getElementById(`total_income-${col}`).innerText =
             totalIncome.toLocaleString();
 
-        // 2. 支出計算
+        // 支出計算
         const expLife = getVal('exp_life');
         const expHouse = getVal('exp_house');
         const expEdu = getVal('exp_edu');
@@ -100,19 +99,19 @@ function calculate() {
         document.getElementById(`total_expense-${col}`).innerText =
             totalExpense.toLocaleString();
 
-        // 3. 累計残高計算
+        // 累計残高計算
         const currentBalance = prevBalance + totalIncome - totalExpense;
         const balanceEl = document.getElementById(`grand_balance-${col}`);
         balanceEl.innerText = currentBalance.toLocaleString();
 
-        // マイナスの場合は赤文字にする
-        balanceEl.style.color = currentBalance < 0 ? '#dc3545' : '#007bff';
+        // マイナス表示判定
+        balanceEl.style.color = currentBalance < 0 ? '#dc3545' : '#28a745';
 
         prevBalance = currentBalance;
     }
 }
 
-// ナビゲーション処理
+// ナビゲーション処理などはそのまま
 const currentFile = window.location.pathname.split('/').pop() || 'index.html';
 document.querySelectorAll('.nav-link').forEach((link) => {
     if (link.getAttribute('href') === currentFile) link.classList.add('active');

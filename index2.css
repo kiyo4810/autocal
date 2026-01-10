@@ -109,3 +109,26 @@ input:focus {
     outline: none;
     box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
 }
+/* 既存のCSSに追加・修正 */
+.unit-label {
+    text-align: right;
+    font-size: 0.9rem;
+    color: #666;
+    padding-bottom: 5px;
+}
+
+/* 入力欄の幅を少し調整（桁数が減るので） */
+input {
+    width: 80%;
+    padding: 6px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    text-align: right;
+    font-size: 1rem;
+}
+
+/* 合計値や残高のテキストが「万円」であることを強調 */
+[id^='total_'],
+[id^='grand_'] {
+    font-family: 'Consolas', 'Monaco', monospace; /* 数字を揃えやすくする */
+}
