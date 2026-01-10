@@ -7,13 +7,17 @@ const COLUMN_COUNT = END_AGE - START_AGE + 1; // 合計の列数（0から100ま
  * テーブルの初期生成関数
  * 画面が読み込まれた時に、HTMLの<table>の中にヘッダーと行を自動で作ります。
  */
+// function initializeTable() {
 function initializeTable() {
-    const headerRow = document.getElementById('header-row'); // 年齢を表示する行（<thead>内の<tr>）を取得
-    const tableBody = document.getElementById('table-body'); // データを表示する本体（<tbody>）を取得
-
+    // const headerRow = document.getElementById('header-row'); // 年齢を表示する行（<thead>内の<tr>）を取得
+    // const tableBody = document.getElementById('table-body'); // データを表示する本体（<tbody>）を取得
+    const headerRow = document.getElementById('header-row');
+    const tableBody = document.getElementById('table-body');
     // 1. ヘッダー行（0歳、1歳...）をループで作る
+    // for (let i = START_AGE; i <= END_AGE; i++) {
     for (let i = START_AGE; i <= END_AGE; i++) {
-        const th = document.createElement('th'); // <th>タグ（見出しセル）を作成
+        // const th = document.createElement('th'); // <th>タグ（見出しセル）を作成
+        const th = document.createElement('th');
         th.innerText = `${i}歳`; // 中身を「〇〇歳」にする
         headerRow.appendChild(th); // ヘッダー行に作成したセルを追加
     }
