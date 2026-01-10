@@ -16,20 +16,20 @@ function initializeTable() {
         headerRow.appendChild(th);
     }
 
-    // 2. 行の定義 [表示名, クラス名, 行ID(data-row用), デフォルト値, 初回列のみか]
+    // 2. 行の定義 [表示名, クラス名, 行ID, デフォルト値, (削除:初回のみフラグ)]
     const rowDefinitions = [
-        ['【プラス要因】', 'category-header', 'section', '', false],
-        ['初期所持金', '', 'initial', '1000000', true],
-        ['家賃収入', '', 'rent', '80000', false],
-        ['【マイナス要因】', 'category-header', 'section', '', false],
-        ['ローン支払', '', 'loan', '50000', false],
-        ['管理費', '', 'mng', '10000', false],
-        ['その他費用', '', 'etc', '5000', false],
-        ['年間収支合計', 'result-row', 'monthly', '', false],
-        ['累計残高', 'balance-row', 'balance', '', false],
+        ['【プラス要因】', 'category-header', 'section', ''],
+        ['初期/臨時所持金', '', 'initial', '0'], // 初期値を0に変更し、全年齢対応
+        ['家賃収入', '', 'rent', '80000'],
+        ['【マイナス要因】', 'category-header', 'section', ''],
+        ['ローン支払', '', 'loan', '50000'],
+        ['管理費', '', 'mng', '10000'],
+        ['その他費用', '', 'etc', '5000'],
+        ['年間収支合計', 'result-row', 'monthly', ''],
+        ['累計残高', 'balance-row', 'balance', ''],
     ];
 
-    rowDefinitions.forEach(([label, className, rowId, defVal, isFirstOnly]) => {
+    rowDefinitions.forEach(([label, className, rowId, defVal]) => {
         const tr = document.createElement('tr');
         if (className) tr.className = className;
 
@@ -40,7 +40,6 @@ function initializeTable() {
         tr.appendChild(tdLabel);
 
         if (rowId === 'section') {
-            // カテゴリ見出しの場合は空のセルを埋める（またはcolspan）
             for (let i = 0; i < COLUMN_COUNT; i++) {
                 tr.appendChild(document.createElement('td'));
             }
@@ -52,9 +51,6 @@ function initializeTable() {
                 if (rowId === 'monthly' || rowId === 'balance') {
                     td.id = `${rowId}-${col}`;
                     td.innerText = '0';
-                } else if (isFirstOnly && col > 0) {
-                    td.innerText = '-';
-                    td.style.color = '#ccc';
                 } else {
                     const input = document.createElement('input');
                     input.type = 'number';
@@ -86,19 +82,21 @@ function calculate() {
             return el ? parseFloat(el.value) || 0 : 0;
         };
 
+        const initial = getVal('initial'); // 各年齢でのプラス入力
         const rent = getVal('rent');
         const loan = getVal('loan');
         const mng = getVal('mng');
         const etc = getVal('etc');
-        const initial = col === 0 ? getVal('initial') : 0;
 
-        // 年間収支
+        // 年間収支 (純粋なその年の収支)
         const yearlyTotal = rent - (loan + mng + etc);
+
+        // 表示
         const monthlyEl = document.getElementById(`monthly-${col}`);
         monthlyEl.innerText = yearlyTotal.toLocaleString();
         monthlyEl.className = yearlyTotal >= 0 ? 'plus' : 'minus';
 
-        // 累計残高
+        // 累計残高 (前年残高 + その年の収支 + その年の臨時収入)
         const currentBalance = prevBalance + yearlyTotal + initial;
         const balanceEl = document.getElementById(`balance-${col}`);
         balanceEl.innerText = currentBalance.toLocaleString();
