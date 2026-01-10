@@ -43,13 +43,22 @@ function initializeTable() {
     // 2. 定義した項目ごとに「行(tr)」と「セル(td)」を作る
     rowDefinitions.forEach(([label, className, rowId, defVal]) => {
         const tr = document.createElement('tr'); // 1行(<tr>)作成
+            console.log(tr +"←チェックポイントA tr");
         if (className) tr.className = className; // スタイル用のクラス名があれば設定
-
+            console.log(tr.className +"←チェックポイントB tr.className");
         // 行の左端（項目名）のセルを作成
         const tdLabel = document.createElement('td');
+            console.log(tdLabel +"←チェックポイントC tdLabel");
+
         tdLabel.innerText = label;
+            console.log(tdLabel.innerText +"←チェックポイントD tdLabel.innerText");
+
         tdLabel.className = 'sticky-col'; // CSSで左側に固定するためのクラス
+            console.log(tdLabel.className +"←チェックポイントE tdLabel.className");
+
         tr.appendChild(tdLabel);
+            console.log(tr +"←チェックポイントF tr");
+
 
         if (rowId === 'section') {
             // 見出し行（【収入】など）の場合、データの代わりに空のセルで埋める
