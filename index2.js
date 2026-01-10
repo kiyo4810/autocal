@@ -2,53 +2,56 @@ const START_AGE = 0;
 const END_AGE = 100;
 const COLUMN_COUNT = END_AGE - START_AGE + 1;
 
-/**
- * テーブルの初期生成
- */
 function initializeTable() {
     const headerRow = document.getElementById('header-row');
     const tableBody = document.getElementById('table-body');
 
-    // 1. ヘッダー（0歳〜100歳）を作成
     for (let i = START_AGE; i <= END_AGE; i++) {
         const th = document.createElement('th');
         th.innerText = `${i}歳`;
         headerRow.appendChild(th);
     }
 
-    // 2. 行の定義 [表示名, クラス名, 行ID, デフォルト値, (削除:初回のみフラグ)]
+    // 新しい項目定義
     const rowDefinitions = [
-        ['【プラス要因】', 'category-header', 'section', ''],
-        ['初期/臨時所持金', '', 'initial', '0'], // 初期値を0に変更し、全年齢対応
-        ['家賃収入', '', 'rent', '80000'],
-        ['【マイナス要因】', 'category-header', 'section', ''],
-        ['ローン支払', '', 'loan', '50000'],
-        ['管理費', '', 'mng', '10000'],
-        ['その他費用', '', 'etc', '5000'],
-        ['年間収支合計', 'result-row', 'monthly', ''],
-        ['累計残高', 'balance-row', 'balance', ''],
+        ['【収入】', 'category-header', 'section'],
+        ['初期所持金', '', 'init_cash', '0'],
+        ['手残り収入', '', 'income_net', '0'],
+        ['その他収入', '', 'income_etc', '0'],
+        ['-- 年間収入合計', 'subtotal-income-row', 'total_income'],
+
+        ['【支出】', 'category-header', 'section'],
+        ['生活費', '', 'exp_life', '0'],
+        ['住宅', '', 'exp_house', '0'],
+        ['教育', '', 'exp_edu', '0'],
+        ['車', '', 'exp_car', '0'],
+        ['その他費用', '', 'exp_etc', '0'],
+        ['-- 年間支出合計', 'subtotal-expense-row', 'total_expense'],
+
+        ['累計年残高', 'balance-row', 'grand_balance'],
     ];
 
     rowDefinitions.forEach(([label, className, rowId, defVal]) => {
         const tr = document.createElement('tr');
         if (className) tr.className = className;
 
-        // 項目名（固定列）
         const tdLabel = document.createElement('td');
         tdLabel.innerText = label;
         tdLabel.className = 'sticky-col';
         tr.appendChild(tdLabel);
 
         if (rowId === 'section') {
-            for (let i = 0; i < COLUMN_COUNT; i++) {
+            for (let i = 0; i < COLUMN_COUNT; i++)
                 tr.appendChild(document.createElement('td'));
-            }
         } else {
-            // データ入力・表示セル
             for (let col = 0; col < COLUMN_COUNT; col++) {
                 const td = document.createElement('td');
-
-                if (rowId === 'monthly' || rowId === 'balance') {
+                // 計算項目か入力項目か判定
+                if (
+                    ['total_income', 'total_expense', 'grand_balance'].includes(
+                        rowId
+                    )
+                ) {
                     td.id = `${rowId}-${col}`;
                     td.innerText = '0';
                 } else {
@@ -68,9 +71,6 @@ function initializeTable() {
     });
 }
 
-/**
- * 計算処理
- */
 function calculate() {
     let prevBalance = 0;
 
@@ -82,35 +82,41 @@ function calculate() {
             return el ? parseFloat(el.value) || 0 : 0;
         };
 
-        const initial = getVal('initial'); // 各年齢でのプラス入力
-        const rent = getVal('rent');
-        const loan = getVal('loan');
-        const mng = getVal('mng');
-        const etc = getVal('etc');
+        // 1. 収入計算
+        const initCash = getVal('init_cash');
+        const incomeNet = getVal('income_net');
+        const incomeEtc = getVal('income_etc');
+        const totalIncome = initCash + incomeNet + incomeEtc;
+        document.getElementById(`total_income-${col}`).innerText =
+            totalIncome.toLocaleString();
 
-        // 年間収支 (純粋なその年の収支)
-        const yearlyTotal = rent - (loan + mng + etc);
+        // 2. 支出計算
+        const expLife = getVal('exp_life');
+        const expHouse = getVal('exp_house');
+        const expEdu = getVal('exp_edu');
+        const expCar = getVal('exp_car');
+        const expEtc = getVal('exp_etc');
+        const totalExpense = expLife + expHouse + expEdu + expCar + expEtc;
+        document.getElementById(`total_expense-${col}`).innerText =
+            totalExpense.toLocaleString();
 
-        // 表示
-        const monthlyEl = document.getElementById(`monthly-${col}`);
-        monthlyEl.innerText = yearlyTotal.toLocaleString();
-        monthlyEl.className = yearlyTotal >= 0 ? 'plus' : 'minus';
-
-        // 累計残高 (前年残高 + その年の収支 + その年の臨時収入)
-        const currentBalance = prevBalance + yearlyTotal + initial;
-        const balanceEl = document.getElementById(`balance-${col}`);
+        // 3. 累計残高計算
+        const currentBalance = prevBalance + totalIncome - totalExpense;
+        const balanceEl = document.getElementById(`grand_balance-${col}`);
         balanceEl.innerText = currentBalance.toLocaleString();
+
+        // マイナスの場合は赤文字にする
+        balanceEl.style.color = currentBalance < 0 ? '#dc3545' : '#007bff';
 
         prevBalance = currentBalance;
     }
 }
 
-// ナビゲーションのアクティブ設定
+// ナビゲーション処理
 const currentFile = window.location.pathname.split('/').pop() || 'index.html';
 document.querySelectorAll('.nav-link').forEach((link) => {
     if (link.getAttribute('href') === currentFile) link.classList.add('active');
 });
 
-// 実行
 initializeTable();
 calculate();
