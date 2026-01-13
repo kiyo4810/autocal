@@ -47,9 +47,9 @@ function initializeTable() {
     // 2. 定義した項目ごとに「行(tr)」と「セル(td)」を作る
     rowDefinitions.forEach(([label, className, rowId, defVal]) => {
         const tr = document.createElement('tr'); // 1行(<tr>)作成
-        console.log(tr + '←チェックポイントA tr');
+        console.log(tr);
         if (className) tr.className = className; // スタイル用のクラス名があれば設定
-        console.log(tr.className + '←チェックポイントB tr.className');
+        console.log(tr.className);
         // 行の左端（項目名）のセルを作成
         const tdLabel = document.createElement('td');
         console.log(tdLabel + '←チェックポイントC tdLabel');
@@ -114,7 +114,7 @@ function calculate() {
             );
             return el ? parseFloat(el.value) || 0 : 0; // 数字があれば取得、なければ0
         };
-
+        // debugger; // ★ ここでプログラムが止まる！
         // --- 1. その列（その年）の収入を合計 ---
         const initCash = getVal('init_cash'); // その年の初期/臨時収入
         const incomeNet = getVal('income_net'); // 手残り
