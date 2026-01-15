@@ -87,7 +87,7 @@ function App() {
         >
             <div className="container">
                 <h3 style={{ textAlign: 'center', marginBottom: '15px' }}>
-                    💰 猫の声計算機
+                    💰 React猫計算機
                 </h3>
                 <input
                     type="text"
