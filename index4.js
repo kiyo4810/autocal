@@ -49,3 +49,39 @@
     let Pos = new Position(3, 5);
     console.log(Pos);
 }
+
+// // アロー関数練習
+// // 普通の関数
+// let keisan = function (x, y) {
+//     return x + y;
+// };
+// // アロー関数で短く
+// console.log(keisan(5, 3));
+// let keisan2 = (x, y) => {
+//     return x * y;
+// };
+// console.log(keisan2(7, 3));
+// // アロー関数のルールでもっと短くできます。処理が1行なら{}を省略できる
+// let keisan3 = (x, y) => x * y;
+// console.log(keisan3(7, 8));
+
+function tashizansuzzo() {
+    alert('たしざんすっぞ');
+}
+tashizansuzzo();
+
+function tashizan(a, b) {
+    return a + b;
+}
+tashizan(5, 333);
+
+console.log(tashizan(5, 333));
+
+const heytashizan = () => {
+    console.log('ヘイ足し算すんぞ');
+};
+heytashizan();
+
+const tashizanhensu = (a, b) => a + b;
+console.log(tashizanhensu(55, 3));
+// tashizanhensu();
