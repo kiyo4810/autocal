@@ -1,8 +1,8 @@
-// react/vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+// https://vite.dev/config/
 export default defineConfig({
     plugins: [react()],
-    base: '/autocal/', // リポジトリ名に合わせます。末尾のスラッシュを忘れずに！
+    base: '/autocal/', // ここがリポジトリ名と一致している必要があります
 });
