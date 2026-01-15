@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
     plugins: [react()],
-    base: '/autocal/react/dist/', // あなたのリポジトリ名に合わせて調整
+    base: '/autocal/', // リポジトリ名に合わせます。末尾のスラッシュを忘れずに！
 });
