@@ -4,12 +4,12 @@ import './App.css';
 function App() {
     const [currentDisplay, setCurrentDisplay] = useState('0');
     const [shouldResetScreen, setShouldResetScreen] = useState(false);
-    const [bgImage, setBgImage] = useState('/images/akipassport.png');
+    const [bgImage, setBgImage] = useState('/autocal/images/akipassport.png');
     const [isPatternMode, setIsPatternMode] = useState(true);
 
     // 音声ファイルの準備
-    const catSound = useRef(new Audio('/images/cat.mp3'));
-    const specialSound = useRef(new Audio('/images/special.mp3'));
+    const catSound = useRef(new Audio('/autocal/images/cat.mp3'));
+    const specialSound = useRef(new Audio('/autocal/images/special.mp3'));
 
     const playSound = (sound) => {
         sound.current.currentTime = 0;
