@@ -5,7 +5,7 @@ function App() {
     const [isCatMode, setIsCatMode] = useState(true); // trueなら猫モード、falseなら通常モード
     const [currentDisplay, setCurrentDisplay] = useState('0');
     const [shouldResetScreen, setShouldResetScreen] = useState(false);
-    const [bgImage, setBgImage] = useState('/autocal/images/akipassport.png');
+    const [bgImage, setBgImage] = useState('/autocal/images/pan.png');
     const [isPatternMode, setIsPatternMode] = useState(true);
 
     // 音声ファイルの準備
