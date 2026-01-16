@@ -85,3 +85,11 @@ heytashizan();
 const tashizanhensu = (a, b) => a + b;
 console.log(tashizanhensu(55, 3));
 // tashizanhensu();
+
+const fruit = ['りんご', 'ばなな', 'みかん'];
+const f1 = fruit[0];
+console.log(f1);
+
+const [fa, fb, fc] = ['りんご', 'ばなな', 'みかん'];
+
+console.log(fc);
