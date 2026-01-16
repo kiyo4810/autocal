@@ -28,10 +28,11 @@ jobs:
               run: npm install
             - name: Build
               run: npm run build
+            # 修正後（マルチライン記法を使って複数の場所を指定します）
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
-                  path: ./react/dist
+                  path: . # ルート全体を対象にする（またはビルド後にファイルをコピーする処理を入れる）
 
     deploy:
         environment:
