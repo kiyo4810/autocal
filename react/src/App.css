@@ -107,3 +107,36 @@ label {
     border-radius: 8px;
     cursor: pointer;
 }
+/* --- 通常モード（normal-theme）専用のスタイル --- */
+
+/* 1. 全体の枠線を事務っぽくグレーにする */
+.normal-theme .container {
+    background-color: #ffffff !important;
+    border: 2px solid #999 !important;
+    border-radius: 4px !important; /* 丸みを抑える */
+    box-shadow: none !important; /* 影を消す */
+}
+
+/* 2. ボタンを四角くして、色を地味にする */
+.normal-theme .btn {
+    border-radius: 2px !important; /* ボタンもカッチリ */
+    box-shadow: none !important;
+    font-family: 'MS Gothic', sans-serif;
+}
+
+/* 3. 数字ボタンと演算ボタンの色の区別を事務っぽく */
+.normal-theme .btn-num {
+    background-color: #f5f5f5 !important;
+    color: #333 !important;
+    border: 1px solid #ccc !important;
+}
+
+.normal-theme .btn-op {
+    background-color: #e0e0e0 !important;
+    color: #000 !important;
+}
+
+.normal-theme .btn-equal {
+    background-color: #333 !important; /* イコールは黒で引き締める */
+    color: #fff !important;
+}

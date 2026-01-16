@@ -38,7 +38,8 @@ function App() {
             prev === '0' || shouldResetScreen ? num : prev + num
         );
         setShouldResetScreen(false);
-        playSound(catSound);
+        // 猫モードの時だけ鳴らす
+        if (isCatMode) playSound(catSound);
     };
 
     const inputOp = (op) => {
@@ -49,7 +50,8 @@ function App() {
         } else {
             setCurrentDisplay((prev) => prev + op);
         }
-        playSound(catSound);
+        // 猫モードの時だけ鳴らす
+        if (isCatMode) playSound(catSound);
     };
 
     const calculate = () => {
@@ -62,7 +64,8 @@ function App() {
                 result = Math.round(result * 10000) / 10000;
             setCurrentDisplay(String(result));
             setShouldResetScreen(true);
-            playSound(specialSound);
+            // 猫モードの時だけスペシャル音を鳴らす
+            if (isCatMode) playSound(specialSound);
         } catch {
             setCurrentDisplay('0');
         }
