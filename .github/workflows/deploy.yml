@@ -26,14 +26,12 @@ jobs:
                   cd react
                   npm install
                   npm run build
-                  # distフォルダの中にHTML版と画像をコピーして「合体」させる
                   cp -r ../html_ver ./dist/
                   cp -r ../images ./dist/
 
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
-                  # ここを必ず 'react/dist' にします
                   path: react/dist
 
     deploy:
