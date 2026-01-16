@@ -1,4 +1,4 @@
-name: Deploy React and HTML ver
+name: Final Deploy Fix
 
 on:
     push:
@@ -26,15 +26,14 @@ jobs:
                   cd react
                   npm install
                   npm run build
-                  # 完成した dist フォルダの中に、HTML版フォルダをコピーして入れる
+                  # distフォルダの中にHTML版と画像をコピーして「合体」させる
                   cp -r ../html_ver ./dist/
-                  # images フォルダもコピーして入れる
                   cp -r ../images ./dist/
 
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
-                  # Reactの完成品(html_ver入り)が詰まったフォルダを指定
+                  # ここを必ず 'react/dist' にします
                   path: react/dist
 
     deploy:
