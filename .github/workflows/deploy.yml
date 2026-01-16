@@ -23,15 +23,25 @@ jobs:
 
             - name: Build React
               run: |
+                  # 1. Reactフォルダに移動してビルド
                   cd react
                   npm install
                   npm run build
-                  cp -r ../html_ver ./dist/
-                  cp -r ../images ./dist/
+
+                  # 2. ビルド完了後の dist フォルダに必要なものをコピー
+                  # エラー回避のため、存在確認してからコピーするようにしています
+                  if [ -d "../html_ver" ]; then
+                    cp -r ../html_ver ./dist/
+                  fi
+
+                  if [ -d "../images" ]; then
+                    cp -r ../images ./dist/
+                  fi
 
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
+                  # 公開するフォルダの場所
                   path: react/dist
 
     deploy:
