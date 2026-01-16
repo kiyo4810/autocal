@@ -1,8 +1,8 @@
-name: Deploy to GitHub Pages
+name: Deploy React and HTML ver
 
 on:
     push:
-        branches: ['main'] # あなたのメインブランチ名に合わせてください
+        branches: ['main']
 
 permissions:
     contents: read
@@ -12,27 +12,30 @@ permissions:
 jobs:
     build:
         runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: ./react # Reactプロジェクトがある場所を指定
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+
             - name: Set up Node
               uses: actions/setup-node@v4
               with:
                   node-version: 20
-                  cache: 'npm'
-                  cache-dependency-path: './react/package-lock.json'
-            - name: Install dependencies
-              run: npm install
-            - name: Build
-              run: npm run build
-            # 修正後（マルチライン記法を使って複数の場所を指定します）
+
+            - name: Build React
+              run: |
+                  cd react
+                  npm install
+                  npm run build
+                  # 完成した dist フォルダの中に、HTML版フォルダをコピーして入れる
+                  cp -r ../html_ver ./dist/
+                  # images フォルダもコピーして入れる
+                  cp -r ../images ./dist/
+
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
-                  path: . # ルート全体を対象にする（またはビルド後にファイルをコピーする処理を入れる）
+                  # Reactの完成品(html_ver入り)が詰まったフォルダを指定
+                  path: react/dist
 
     deploy:
         environment:
