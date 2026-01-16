@@ -79,18 +79,24 @@ function App() {
 
     return (
         <div
-            className="calculator-body"
+            // 1. className にモードの名前を追加（半角スペースを忘れずに！）
+            className={`calculator-body ${
+                isCatMode ? 'cat-theme' : 'normal-theme'
+            }`}
             style={{
-                backgroundImage: `url(${bgImage})`,
+                // 2. 猫モードの時だけ画像を表示し、通常モードは背景色にする
+                backgroundImage: isCatMode ? `url(${bgImage})` : 'none',
+                backgroundColor: isCatMode ? 'transparent' : '#f0f0f0',
+
                 backgroundRepeat: isPatternMode ? 'repeat' : 'no-repeat',
-                backgroundSize: isPatternMode ? '150px' : 'cover', // 'contain' から 'cover' に変更
-                backgroundPosition: 'center', // 画像を中央に寄せる
-                backgroundAttachment: 'fixed', // スクロールしても背景を固定する（お好みで）
+                backgroundSize: isPatternMode ? '150px' : 'cover',
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed',
             }}
         >
             <div className="container">
                 <h3 style={{ textAlign: 'center', marginBottom: '15px' }}>
-                    💰 React版猫計算機
+                    {isCatMode ? '💰 React版猫計算機' : '🏢 事務用計算機'}
                 </h3>
                 <input
                     type="text"
