@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 function App() {
+    const [isCatMode, setIsCatMode] = useState(true); // trueなら猫モード、falseなら通常モード
     const [currentDisplay, setCurrentDisplay] = useState('0');
     const [shouldResetScreen, setShouldResetScreen] = useState(false);
     const [bgImage, setBgImage] = useState('/autocal/images/akipassport.png');
@@ -200,6 +201,16 @@ function App() {
                         onClick={() => setIsPatternMode(!isPatternMode)}
                     >
                         繰り返し表示 {isPatternMode ? 'OFF' : 'ON'}
+                    </button>
+                    {/* --- ここから追加：モード切り替えボタン --- */}
+                    <button
+                        className={`mode-toggle-btn ${
+                            isCatMode ? 'cat-active' : 'normal-active'
+                        }`}
+                        onClick={() => setIsCatMode(!isCatMode)}
+                        style={{ marginLeft: '10px' }} // 隣と少し隙間をあける
+                    >
+                        {isCatMode ? '🐾 猫モード' : '🏢 通常モード'}
                     </button>
                 </div>
             </div>
