@@ -82,7 +82,9 @@ function App() {
             style={{
                 backgroundImage: `url(${bgImage})`,
                 backgroundRepeat: isPatternMode ? 'repeat' : 'no-repeat',
-                backgroundSize: isPatternMode ? '150px' : 'contain',
+                backgroundSize: isPatternMode ? '150px' : 'cover', // 'contain' から 'cover' に変更
+                backgroundPosition: 'center', // 画像を中央に寄せる
+                backgroundAttachment: 'fixed', // スクロールしても背景を固定する（お好みで）
             }}
         >
             <div className="container">
