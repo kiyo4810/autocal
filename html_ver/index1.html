@@ -253,8 +253,8 @@
         <script>
             // 外部APIを叩く際のCORS制限（セキュリティ制限）を回避するためのプロキシサーバーのURL
             // const proxy = 'https://corsproxy.io/?';
-            // プロキシの定義を変更
-            const proxy = 'https://api.allorigins.win/raw?url=';
+            // const proxy = 'https://api.allorigins.win/raw?url='; // これを消して以下に変更
+            const proxy = 'https://y-cors.vercel.app/api?url=';
             // 米ドル/円の為替レートを保持するための変数（初期値は0）
             let usdJpyRate = 0;
 
