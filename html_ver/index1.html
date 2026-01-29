@@ -167,6 +167,7 @@
             <a href="chasepankun.html" class="nav-link">パンくんを追え</a>
             <a href="index1.html" class="nav-link">Ver.1</a>
             <a href="index2.html" class="nav-link">Ver.2</a>
+            <a href="index4.html" class="nav-link">index4</a>
 
             <script>
                 // 今見ているURLをチェックして、一致するリンクに "active" クラスをつける魔法
@@ -181,7 +182,10 @@
             </script>
         </nav>
         <div class="container">
-            <h3>全米ETF VTI(S&P500)、VT(オルカン)自動計算機 V.20260129_GAS</h3>
+            <h3>
+                全米ETF VTI(S&P500)、VT(オルカン)自動計算機
+                <br />V.20260129_GAS経由版
+            </h3>
 
             <div class="stock-box">
                 <div class="stock-title">
@@ -265,6 +269,9 @@
 
                     // VTIの更新
                     document.getElementById('vti-price').value = data.vti;
+                    console.log(data.vti);
+                    // document.getElementById('vti-price').textContent = data.vti;
+
                     document.getElementById('vti-price-display').innerText =
                         `$${data.vti.toFixed(2)}`;
                     document.getElementById('vti-update').innerText =

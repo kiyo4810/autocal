@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
     <head>
         <meta charset="UTF-8" />
@@ -7,6 +7,58 @@
         <title>デモサイト</title>
     </head>
     <body>
+        <nav id="site-nav">
+            <style>
+                #site-nav {
+                    text-align: center;
+                    padding: 15px 0;
+                    margin-bottom: 20px;
+                }
+                .nav-link {
+                    display: inline-block;
+                    margin: 0 5px;
+                    padding: 10px 18px;
+                    background: rgba(255, 255, 255, 0.7);
+                    text-decoration: none;
+                    color: #555;
+                    border-radius: 25px;
+                    font-size: 0.85rem;
+                    font-weight: bold;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+                    transition: all 0.3s ease;
+                    border: 1px solid transparent;
+                }
+                .nav-link:hover {
+                    transform: translateY(-2px);
+                    background: #fff;
+                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+                }
+                /* 今いるページのボタンを自動で目立たせるスタイル */
+                .nav-link.active {
+                    background: #007bff;
+                    color: white;
+                    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+                }
+            </style>
+
+            <a href="index.html" class="nav-link">メイン計算機</a>
+            <a href="chasepankun.html" class="nav-link">パンくんを追え</a>
+            <a href="index1.html" class="nav-link">Ver.1</a>
+            <a href="index2.html" class="nav-link">Ver.2</a>
+            <a href="index4.html" class="nav-link">index4</a>
+
+            <script>
+                // 今見ているURLをチェックして、一致するリンクに "active" クラスをつける魔法
+                const currentFile =
+                    window.location.pathname.split('/').pop() || 'index.html';
+                const links = document.querySelectorAll('.nav-link');
+                links.forEach((link) => {
+                    if (link.getAttribute('href') === currentFile) {
+                        link.classList.add('active');
+                    }
+                });
+            </script>
+        </nav>
         <p>デモサイトの内容</p>
         <div id="adultcheck" class="rarara"></div>
         <script src="index4.js"></script>
