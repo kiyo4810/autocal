@@ -8,7 +8,7 @@
         interests: ['おんがく', 'さんすう'],
         bio: function () {
             alert(
-                `${this.name[0]}、${this.name[1]} は ${this.age} 歳です。 趣味は ${this.interests[0]} と ${this.interests[1]}です。`
+                `${this.name[0]}、${this.name[1]} は ${this.age} 歳です。 趣味は ${this.interests[0]} と ${this.interests[1]}です。`,
             );
             return '自己紹介おわり';
         },
@@ -91,5 +91,21 @@ const f1 = fruit[0];
 console.log(f1);
 
 const [fa, fb, fc] = ['りんご', 'ばなな', 'みかん'];
-
+document.getElementById('fruits').textContent = `${fa}と${fb}と${fc}`;
 console.log(fc);
+
+let anum = 4;
+let bnum = 6;
+function multi(a, b) {
+    return a * b;
+}
+console.log(multi(anum, bnum));
+document.getElementById('mab').textContent = multi(anum, bnum);
+
+let cnum = 5;
+let dnum = 8;
+const multi2 = (c, d) => {
+    return c * d;
+};
+console.log(multi2(cnum, dnum));
+document.getElementById('mcd').textContent = multi2(cnum, dnum);
