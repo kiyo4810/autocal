@@ -251,69 +251,49 @@
             <a href="index.html" class="nav-link">← 単純計算機に戻る</a>
         </div>
         <script>
-            // 外部APIを叩く際のCORS制限（セキュリティ制限）を回避するためのプロキシサーバーのURL
-            // const proxy = 'https://corsproxy.io/?';
-            // const proxy = 'https://api.allorigins.win/raw?url='; // これを消して以下に変更
-            const proxy = 'https://y-cors.vercel.app/api?url=';
-            // 米ドル/円の為替レートを保持するための変数（初期値は0）
             let usdJpyRate = 0;
 
-            // 特定の銘柄（VTIやVT）の価格を取得する非同期関数
-            async function fetchPrice(symbol, priceId, updateId, displayId) {
-                // Yahoo FinanceのチャートAPIからデータを取得するためのURL（シンボル名を埋め込む）
-                const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`;
-                try {
-                    // プロキシを経由してAPIにリクエストを送り、レスポンスを待機(await)
-                    const response = await fetch(
-                        proxy + encodeURIComponent(targetUrl),
-                    );
-                    // レスポンスのJSONデータを解析
-                    const data = await response.json();
-                    // JSONの階層を辿って現在の市場価格（株価）を抽出
-                    const currentPrice =
-                        data.chart.result[0].meta.regularMarketPrice;
+            async function updateAllData() {
+                // ステップ2でコピーしたURLに差し替えてください
+                const gasUrl =
+                    'https://script.google.com/macros/s/AKfycbwRjlctSQtC4INJ4rGJuDzkRrNTkyn9znVHEeoWevcaheimwD5-TqIV-95ozoci-bkr/exec';
 
-                    // 隠し入力欄（または数値保持用）に最新価格を設定
-                    document.getElementById(priceId).value = currentPrice;
-                    // 表示用の要素に、ドル記号を付けて小数点2桁で表示
-                    document.getElementById(displayId).innerText =
-                        `$${currentPrice.toFixed(2)}`;
-                    // 取得に成功した時間を画面に表示
-                    document.getElementById(updateId).innerText =
-                        `最終取得: ${new Date().toLocaleTimeString()}`;
-                    // 価格が更新されたので、合計金額を再計算する関数を呼ぶ
-                    calculate();
-                } catch (error) {
-                    // 通信エラー等が発生した場合の処理
-                    document.getElementById(updateId).innerText =
-                        '自動取得失敗。手動入力してください。';
-                    // 取得に失敗したら、ユーザーが手動で価格を入力できるよう読み取り専用を解除
-                    document.getElementById(priceId).readOnly = false;
-                }
-            }
-
-            // 米ドル/円の為替レートを取得する非同期関数
-            async function fetchExRate() {
-                // Yahoo Financeの為替取得用URL（JPY=Xは米ドル/円を指す）
-                const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/JPY=X`;
                 try {
-                    const response = await fetch(
-                        proxy + encodeURIComponent(targetUrl),
-                    );
+                    const response = await fetch(gasUrl);
                     const data = await response.json();
-                    // 取得した最新のレートを変数 usdJpyRate に格納
-                    usdJpyRate = data.chart.result[0].meta.regularMarketPrice;
-                    // 画面上に現在のレートを表示
+
+                    // VTIの更新
+                    document.getElementById('vti-price').value = data.vti;
+                    document.getElementById('vti-price-display').innerText =
+                        `$${data.vti.toFixed(2)}`;
+
+                    // VTの更新
+                    document.getElementById('vt-price').value = data.vt;
+                    document.getElementById('vt-price-display').innerText =
+                        `$${data.vt.toFixed(2)}`;
+
+                    // 為替の更新
+                    usdJpyRate = data.rate;
                     document.getElementById('rate-display').innerText =
                         `現在レート: 1ドル = ${usdJpyRate.toFixed(2)}円`;
-                    // レートが更新されたので合計金額を再計算
-                    calculate();
+
+                    // 共通の更新処理
+                    const now = new Date().toLocaleTimeString();
+                    document.getElementById('vti-update').innerText =
+                        `最終取得: ${now}`;
+                    document.getElementById('vt-update').innerText =
+                        `最終取得: ${now}`;
+
+                    calculate(); // 再計算を実行
                 } catch (error) {
-                    // エラー時のメッセージ表示
-                    document.getElementById('rate-display').innerText =
-                        '為替レートの取得に失敗しました';
+                    console.error('取得失敗:', error);
                 }
             }
+
+            // 初回実行
+            updateAllData();
+            // 5分ごとに更新
+            setInterval(updateAllData, 300000);
 
             // 保有数と価格から合計（ドル・円）を算出する関数
             function calculate() {
