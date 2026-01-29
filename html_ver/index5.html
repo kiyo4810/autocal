@@ -1,0 +1,37 @@
+<div class="calc-box">
+    <h3>掛け算シミュレーター</h3>
+    <input type="number" id="numA" value="5" oninput="update()"> × 
+    <input type="number" id="numB" value="8" oninput="update()"> = 
+    <span id="mcd" class="result">40</span>
+</div>
+
+<script>
+//     ここでのポイント
+// oninput="update()": HTMLの input タグにこれを書くことで、
+// ユーザーがキーボードで数字を打つたび、あるいは矢印で数値を上下させるたびに、
+// 即座にJavaScriptの update 関数が実行されます。
+// const update = () => { ... }: 表示を更新する処理そのものもアロー関数で書いています。
+// 現在のWeb開発では、このように「何かの動作に反応して動く関数（イベントハンドラー）」を
+// アロー関数で書くのが一般的です。
+// Number(): input.value で取得した値は「文字列（"5"）」として扱われるため、
+// 計算前に Number() で「数値（5）」に変換しています。
+    // 1. 計算ロジックをアロー関数で定義
+    const multi2 = (c, d) => c * d;
+
+    // 2. 入力値を取得して表示を更新するアロー関数
+    const update = () => {
+        // 入力欄の値を数値(Number)として取得
+//         使い分けの覚え方：
+// **「入力」**してもらう場所から取るなら .value
+// **「表示」**している場所を書き換える（または取る）なら .textContent
+// と覚えておけば間違いありません！
+        const a = Number(document.getElementById('numA').value);
+        const b = Number(document.getElementById('numB').value);
+
+        // multi2を使って計算し、結果を表示
+        document.getElementById('mcd').textContent = multi2(a, b);
+    };
+</script>
+
+</body>
+</html>
