@@ -250,96 +250,126 @@
 
             <a href="index.html" class="nav-link">← 単純計算機に戻る</a>
         </div>
-
         <script>
+            // 外部APIを叩く際のCORS制限（セキュリティ制限）を回避するためのプロキシサーバーのURL
             const proxy = 'https://corsproxy.io/?';
+            // 米ドル/円の為替レートを保持するための変数（初期値は0）
             let usdJpyRate = 0;
 
+            // 特定の銘柄（VTIやVT）の価格を取得する非同期関数
             async function fetchPrice(symbol, priceId, updateId, displayId) {
+                // Yahoo FinanceのチャートAPIからデータを取得するためのURL（シンボル名を埋め込む）
                 const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`;
                 try {
+                    // プロキシを経由してAPIにリクエストを送り、レスポンスを待機(await)
                     const response = await fetch(
                         proxy + encodeURIComponent(targetUrl),
                     );
+                    // レスポンスのJSONデータを解析
                     const data = await response.json();
+                    // JSONの階層を辿って現在の市場価格（株価）を抽出
                     const currentPrice =
                         data.chart.result[0].meta.regularMarketPrice;
 
+                    // 隠し入力欄（または数値保持用）に最新価格を設定
                     document.getElementById(priceId).value = currentPrice;
+                    // 表示用の要素に、ドル記号を付けて小数点2桁で表示
                     document.getElementById(displayId).innerText =
                         `$${currentPrice.toFixed(2)}`;
+                    // 取得に成功した時間を画面に表示
                     document.getElementById(updateId).innerText =
                         `最終取得: ${new Date().toLocaleTimeString()}`;
+                    // 価格が更新されたので、合計金額を再計算する関数を呼ぶ
                     calculate();
                 } catch (error) {
+                    // 通信エラー等が発生した場合の処理
                     document.getElementById(updateId).innerText =
                         '自動取得失敗。手動入力してください。';
+                    // 取得に失敗したら、ユーザーが手動で価格を入力できるよう読み取り専用を解除
                     document.getElementById(priceId).readOnly = false;
                 }
             }
 
+            // 米ドル/円の為替レートを取得する非同期関数
             async function fetchExRate() {
+                // Yahoo Financeの為替取得用URL（JPY=Xは米ドル/円を指す）
                 const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/JPY=X`;
                 try {
                     const response = await fetch(
                         proxy + encodeURIComponent(targetUrl),
                     );
                     const data = await response.json();
+                    // 取得した最新のレートを変数 usdJpyRate に格納
                     usdJpyRate = data.chart.result[0].meta.regularMarketPrice;
+                    // 画面上に現在のレートを表示
                     document.getElementById('rate-display').innerText =
                         `現在レート: 1ドル = ${usdJpyRate.toFixed(2)}円`;
+                    // レートが更新されたので合計金額を再計算
                     calculate();
                 } catch (error) {
+                    // エラー時のメッセージ表示
                     document.getElementById('rate-display').innerText =
                         '為替レートの取得に失敗しました';
                 }
             }
 
+            // 保有数と価格から合計（ドル・円）を算出する関数
             function calculate() {
+                // VTIの価格を取得（空なら0にする）
                 const vtiPrice =
                     parseFloat(document.getElementById('vti-price').value) || 0;
+                // VTIの保有数を取得（空なら0にする）
                 const vtiQty =
                     parseFloat(document.getElementById('vti-qty').value) || 0;
+                // VTの価格を取得
                 const vtPrice =
                     parseFloat(document.getElementById('vt-price').value) || 0;
+                // VTの保有数を取得
                 const vtQty =
                     parseFloat(document.getElementById('vt-qty').value) || 0;
 
+                // 各銘柄の小計（価格 × 数量）を計算
                 const vtiSub = vtiPrice * vtiQty;
                 const vtSub = vtPrice * vtQty;
 
+                // VTIの小計を3桁区切り・小数点2桁で画面に表示
                 document.getElementById('vti-subtotal').innerText =
                     vtiSub.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                     });
+                // VTの小計を3桁区切り・小数点2桁で画面に表示
                 document.getElementById('vt-subtotal').innerText =
                     vtSub.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                     });
 
+                // 2つの銘柄を足してドルベースの合計を算出
                 const totalUsd = vtiSub + vtSub;
+                // ドル合計を画面に表示
                 document.getElementById('total-val').innerText =
                     totalUsd.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                     });
 
-                // 日本円の計算
+                // 日本円への換算計算（為替レートが0より大きい場合のみ実行）
                 if (usdJpyRate > 0) {
+                    // ドル合計にレートを掛けて四捨五入（円は整数が一般的）
                     const totalJpy = Math.round(totalUsd * usdJpyRate);
+                    // 円合計を3桁区切りで画面に表示
                     document.getElementById('total-jpy').innerText =
                         totalJpy.toLocaleString();
                 }
             }
 
-            // 初回取得
+            // ページを読み込んだ瞬間に1回、各データを取得しに行く
             fetchPrice('VTI', 'vti-price', 'vti-update', 'vti-price-display');
             fetchPrice('VT', 'vt-price', 'vt-update', 'vt-price-display');
             fetchExRate();
 
-            // 5分ごとに更新
+            // 定期実行の設定：300,000ミリ秒（5分）ごとに最新データへ更新する
             setInterval(() => {
                 fetchPrice(
                     'VTI',
