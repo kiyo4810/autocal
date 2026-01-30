@@ -1,75 +1,103 @@
-<div class="calc-box">
-    <h3>掛け算シミュレーター</h3>
-    <input type="number" id="numA" value="3" oninput="update()"> × 
-    <input type="number" id="numB" value="8" oninput="update()"> = 
-    <span id="mcd" class="result">24</span>
-</div>
-<div id="mDetail">ららら</div>
-<button class="btn" id="mBtn">ここ押せ！</button>
-<button class="btn">ここを押してね</button>
-<button class="btn">ここを押そうね</button>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            .btn.clicked {
+                background-color: red;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="calc-box">
+            <h3>掛け算シミュレーター</h3>
+            <input type="number" id="numA" value="3" oninput="update()" /> ×
+            <input type="number" id="numB" value="8" oninput="update()" /> =
+            <span id="mcd" class="result">24</span>
+        </div>
+        <div id="mDetail">ららら</div>
+        <button class="btn" id="mBtn">ここ押せ！</button>
+        <button class="btn">ここを押してね</button>
+        <button class="btn">ここを押そうね</button>
 
+        <script>
+            //     ここでのポイント
+            // oninput="update()": HTMLの input タグにこれを書くことで、
+            // ユーザーがキーボードで数字を打つたび、あるいは矢印で数値を上下させるたびに、
+            // 即座にJavaScriptの update 関数が実行されます。
+            // const update = () => { ... }: 表示を更新する処理そのものもアロー関数で書いています。
+            // 現在のWeb開発では、このように「何かの動作に反応して動く関数（イベントハンドラー）」を
+            // アロー関数で書くのが一般的です。
+            // Number(): input.value で取得した値は「文字列（"5"）」として扱われるため、
+            // 計算前に Number() で「数値（5）」に変換しています。
+            // 1. 計算ロジックをアロー関数で定義
+            const multi2 = (c, d) => c * d;
 
-<script>
-//     ここでのポイント
-// oninput="update()": HTMLの input タグにこれを書くことで、
-// ユーザーがキーボードで数字を打つたび、あるいは矢印で数値を上下させるたびに、
-// 即座にJavaScriptの update 関数が実行されます。
-// const update = () => { ... }: 表示を更新する処理そのものもアロー関数で書いています。
-// 現在のWeb開発では、このように「何かの動作に反応して動く関数（イベントハンドラー）」を
-// アロー関数で書くのが一般的です。
-// Number(): input.value で取得した値は「文字列（"5"）」として扱われるため、
-// 計算前に Number() で「数値（5）」に変換しています。
-    // 1. 計算ロジックをアロー関数で定義
-    const multi2 = (c, d) => c * d;
+            // 2. 入力値を取得して表示を更新するアロー関数
+            const update = () => {
+                // 入力欄の値を数値(Number)として取得
+                //         使い分けの覚え方：
+                // **「入力」**してもらう場所から取るなら .value
+                // **「表示」**している場所を書き換える（または取る）なら .textContent
+                // と覚えておけば間違いありません！
+                const a = Number(document.getElementById('numA').value);
+                const b = Number(document.getElementById('numB').value);
 
-    // 2. 入力値を取得して表示を更新するアロー関数
-    const update = () => {
-        // 入力欄の値を数値(Number)として取得
-//         使い分けの覚え方：
-// **「入力」**してもらう場所から取るなら .value
-// **「表示」**している場所を書き換える（または取る）なら .textContent
-// と覚えておけば間違いありません！
-        const a = Number(document.getElementById('numA').value);
-        const b = Number(document.getElementById('numB').value);
+                // multi2を使って計算し、結果を表示
+                document.getElementById('mcd').textContent = multi2(a, b);
+            };
 
-        // multi2を使って計算し、結果を表示
-        document.getElementById('mcd').textContent = multi2(a, b);
-    };
+            // const man={
+            //     sex: 'male',
+            //     name: "きよひこ",
+            //     niceMessage: () =>{
+            //         console.log("いいぞがんばれ");
 
-    // const man={
-    //     sex: 'male',
-    //     name: "きよひこ",
-    //     niceMessage: () =>{
-    //         console.log("いいぞがんばれ");
-            
-    //     },
-    //     badMessage: ()=>{
-    //         console.log("ばかたれ！");
-            
-    //     }
-    // }
+            //     },
+            //     badMessage: ()=>{
+            //         console.log("ばかたれ！");
 
-    // const button = document.getElementById("mBtn");
-    // const detail = document.getElementById("mDetail");
-    //  console.log(button);
-    //  console.table(man);
-     
+            //     }
+            // }
 
-    // const hi = ()=>{
-    //     detail.textContent= `性別は${man.sex}で名前は${man.name}です`;
-    // };
-    // button.addEventListener("click", hi);
-    // document.getElementById("mBtn");
-    document.getElementsByClassName("btn");
-    const btn01 = document.getElementById("mBtn");
-    console.log(btn01);
-    btn01.addEventListener("click",()=> document.getElementById("mDetail").textContent = "へんこうだ！");
-    const btn02 = document.getElementsByClassName("btn");
-    console.table(btn02);
-    // また迷ったらこれを見ろ　https://www.youtube.com/watch?v=6L7RmLIlkjs
-    
-</script>
+            // const button = document.getElementById("mBtn");
+            // const detail = document.getElementById("mDetail");
+            //  console.log(button);
+            //  console.table(man);
 
-</body>
+            // const hi = ()=>{
+            //     detail.textContent= `性別は${man.sex}で名前は${man.name}です`;
+            // };
+            // button.addEventListener("click", hi);
+            // document.getElementById("mBtn");
+            // document.getElementsByClassName("btn");
+            const btn01 = document.getElementById('mBtn');
+            // console.log(btn01);
+            btn01.addEventListener(
+                'click',
+                () =>
+                    (document.getElementById('mDetail').textContent =
+                        'へんこうだ！'),
+            );
+            // const btn02 = document.getElementsByClassName("btn");
+            // console.table(btn02);
+            // また迷ったらこれを見ろ　https://www.youtube.com/watch?v=6L7RmLIlkjs
+            const btnArray = document.getElementsByClassName('btn');
+
+            for (let index = 0; index < btnArray.length; index++) {
+                // 普通の関数で行くなら
+                // btnArray[index].addEventListener('click', function () {
+                // アロー関数で行くなら
+                btnArray[index].addEventListener('click', () => {
+                    // ↓普通の関数なら（アロー関数を使わないなら）
+                    // this.classList.toggle('clicked');
+                    // アロー関数を使うならthisはwindowそのものを意味してしまうから使えない
+                    btnArray[index].classList.toggle('clicked');
+                });
+            }
+        </script>
+    </body>
 </html>
