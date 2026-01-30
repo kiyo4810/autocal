@@ -4,6 +4,11 @@
     <input type="number" id="numB" value="8" oninput="update()"> = 
     <span id="mcd" class="result">24</span>
 </div>
+<div id="mDetail">ららら</div>
+<button class="btn" id="mBtn">ここ押せ！</button>
+<button class="btn">ここを押してね</button>
+<button class="btn">ここを押そうね</button>
+
 
 <script>
 //     ここでのポイント
@@ -31,6 +36,39 @@
         // multi2を使って計算し、結果を表示
         document.getElementById('mcd').textContent = multi2(a, b);
     };
+
+    // const man={
+    //     sex: 'male',
+    //     name: "きよひこ",
+    //     niceMessage: () =>{
+    //         console.log("いいぞがんばれ");
+            
+    //     },
+    //     badMessage: ()=>{
+    //         console.log("ばかたれ！");
+            
+    //     }
+    // }
+
+    // const button = document.getElementById("mBtn");
+    // const detail = document.getElementById("mDetail");
+    //  console.log(button);
+    //  console.table(man);
+     
+
+    // const hi = ()=>{
+    //     detail.textContent= `性別は${man.sex}で名前は${man.name}です`;
+    // };
+    // button.addEventListener("click", hi);
+    // document.getElementById("mBtn");
+    document.getElementsByClassName("btn");
+    const btn01 = document.getElementById("mBtn");
+    console.log(btn01);
+    btn01.addEventListener("click",()=> document.getElementById("mDetail").textContent = "へんこうだ！");
+    const btn02 = document.getElementsByClassName("btn");
+    console.table(btn02);
+    // また迷ったらこれを見ろ　https://www.youtube.com/watch?v=6L7RmLIlkjs
+    
 </script>
 
 </body>
