@@ -9,6 +9,18 @@
                 background-color: red;
                 color: white;
             }
+            .btn:disabled {
+                background-color: dimgrey;
+            }
+            .button-blue {
+                background-color: blue;
+            }
+            .button-yellow {
+                background-color: yellow;
+            }
+            .button-green {
+                background-color: green;
+            }
         </style>
     </head>
     <body>
@@ -18,12 +30,53 @@
             <input type="number" id="numB" value="8" oninput="update()" /> =
             <span id="mcd" class="result">24</span>
         </div>
-        <div id="mDetail">ららら</div>
-        <button class="btn" id="mBtn">ここ押せ！</button>
-        <button class="btn">ここを押してね</button>
-        <button class="btn">ここを押そうね</button>
-
+        <p>
+        <div id="mDetail">ここよく見てからクリックしてね</div>
+        <button class="btn" id="mBtn1">ここ押せ！</button>
+        <button class="btn" id="mBtn2">クリックしてね！</button>
+        <button class="btn" id="mBtn3">ここを押そうね</button>
+        </p>
+        <div class="color">色違いになるよ
+        <button class="button button-blue" id="mBtn4">青山</button>
+        <button class="button button-yellow" id="mBtn5">黃子</button>
+        <button class="button button-green" id="mBtn6">みどり</button>
+        </div>
+        <div class="list-box">
+            <h2>クリックされた色一覧</h2>
+            <ul id="list-color"></ul>
+        </div>
+        </p>
         <script>
+            // const buttonColor =document.querySelectorAll(".color .button");
+            // const listColor = document.getElementById("list-color");
+            // const buttonColorClick = function () {
+            //     let element = document.createElement("li");
+            //     console.log(this.innerHTML);
+            //     element.innerHTML =this.innerHTML;
+            //     listColor.appendChild(element);
+            // }
+            // for (let index = 0; index < buttonColor.length; index++) {
+            //     buttonColor[index].addEventListener('click',buttonColorClick)
+                
+            // }
+            // 青山、黃子、みどりのbuttonタグ３つ全てを取得する
+            const elemsBtn = document.querySelectorAll(".color .button");
+            // リストを格納するuｌのタグ要素を丸ごと取得する
+            const elemUl = document. getElementById("list-color");
+            // 後にイベントリスナーに収納する関数を先に作る
+            const creLiFunc = function (e) {
+                let element = document.createElement("li");
+                element.innerHTML= e.currentTarget.innerHTML;
+                console.log("どふよ？", element);
+                elemUl.appendChild(element);
+            }
+            
+            for (let index = 0; index < elemsBtn.length; index++) {
+                elemsBtn[index].addEventListener("click", creLiFunc);
+                
+            }
+            
+            
             //     ここでのポイント
             // oninput="update()": HTMLの input タグにこれを書くことで、
             // ユーザーがキーボードで数字を打つたび、あるいは矢印で数値を上下させるたびに、
@@ -74,14 +127,23 @@
             // button.addEventListener("click", hi);
             // document.getElementById("mBtn");
             // document.getElementsByClassName("btn");
-            const btn01 = document.getElementById('mBtn');
+            const btn01 = document.getElementById('mBtn1');
             // console.log(btn01);
             btn01.addEventListener(
                 'click',
                 () =>
                     (document.getElementById('mDetail').textContent =
-                        'へんこうだ！'),
+                        '変更したぞ！'),
             );
+            const btn02 = document.getElementById('mBtn2');
+            btn02.addEventListener('click', function () {
+                this.innerHTML = '押してくれてありがとう';
+            });
+            const btn03 = document.getElementById('mBtn3');
+            btn03.addEventListener(`click`, function () {
+                this.innerHTML = 'Thanks for clicking!!';
+                this.setAttribute('disabled', true);
+            });
             // const btn02 = document.getElementsByClassName("btn");
             // console.table(btn02);
             // また迷ったらこれを見ろ　https://www.youtube.com/watch?v=6L7RmLIlkjs
