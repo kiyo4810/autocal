@@ -98,6 +98,34 @@
                     btnArray[index].classList.toggle('clicked');
                 });
             }
+
+            // コールバック関数1
+            const func = function (cb) {
+                document.body.appendChild(
+                    document.createElement('p'),
+                ).innerText = '手順１コールバック！';
+                cb();
+            };
+            func(() => {
+                document.body.appendChild(
+                    document.createElement('p'),
+                ).innerText = '手順２コールバック！';
+            });
+
+            // コールバック関数2
+            const funC = function (callback) {
+                console.log('いちばん');
+                document.body.appendChild(
+                    document.createElement('p'),
+                ).innerText = '１番';
+                callback();
+            };
+            funC(() => {
+                console.log('にばん');
+                document.body.appendChild(
+                    document.createElement('p'),
+                ).innerText = '２番';
+            });
         </script>
     </body>
 </html>
