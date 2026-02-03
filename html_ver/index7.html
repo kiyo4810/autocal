@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="jp">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="index7.css" />
+    </head>
+    <body>
+        <!-- questions -->
+        <div class="questions">
+            <h2 class="txtl">
+                <i class="fa fa-envelope-open-o" aria-hidden="true"></i
+                >よくある質問
+            </h2>
+            <div class="faq">
+                <dl>
+                    <dt>あなたはアホですか？</dt>
+                    <dd>はい、アホです</dd>
+
+                    <dt>私はボケですか？</dt>
+                    <dd>いいえ、ぼけではありません</dd>
+
+                    <dt>猫はかわいいですか？</dt>
+                    <dd>もちろんです</dd>
+                </dl>
+            </div>
+        </div>
+        <script
+            src="https://code.jquery.com/jquery-4.0.0.min.js"
+            integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao="
+            crossorigin="anonymous"
+        ></script>
+        <script>
+            $(function () {
+                $('.faq dt').on('click', function () {
+                    // alert('くりっくされたよ');
+                    // .slideToggle
+                    // .slideUp もある
+                    // .slideDown　もある
+                    // $('.faq dd').slideToggle();
+                    $(this).next().slideToggle(); //回答がスライドしてきて表示非表示が変わる
+                    $(this).toggleClass('open'); //クリックしたら矢印の向きが変わる
+                });
+            });
+        </script>
+    </body>
+</html>
