@@ -30,6 +30,9 @@ body {
     justify-content: center; /* 【左右】の真ん中に寄せる */
     /* align-items: center; 【上下】の真ん中に寄せる */
     /*min-height: 100vh; 画面の高さを100%確保（これがないと上下中央にならない） */
+    background-image: url('images/akipassport.png');
+    background-color: #ffffff;
+    background-repeat: repeat;
 }
 
 /* 質問リストの幅を整える（お好みで） */
