@@ -1,0 +1,13 @@
+.modal {
+    width: 90%;
+    height: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(200, 0, 255, 0.5);
+}
+.modal .inner {
+    width: 80%;
+    height: 100%;
+    background: rgba(0, 0, 255, 0.5);
+}
