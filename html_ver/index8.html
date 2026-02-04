@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>jQueryの練習</title>
+        <script
+            src="https://code.jquery.com/jquery-4.0.0.min.js"
+            integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao="
+            crossorigin="anonymous"
+        ></script>
+    </head>
+    <body>
+        <div>
+            <input type="button" id="button7" value="ボタン7　アキ" />
+        </div>
+        <div id="div7" style="background: darkorchid">
+            div7 <img src="./images/aki-impact.jpg" width="30%" alt="" />
+        </div>
+
+        <h1>jQueryの練習 by　せお丸先生</h1>
+        <div id="seomaru">
+            <a href="https://www.youtube.com/watch?v=75ccB4PTVCc&t=769s"
+                >https://www.youtube.com/watch?v=75ccB4PTVCc&t=769s</a
+            >
+        </div>
+        <div id="div1" style="background: aqua">div1</div>
+        <div>
+            <input
+                type="button"
+                id="button1"
+                value="ボタン１ $('#div1').hide();"
+            />
+            <input
+                type="button"
+                id="button1-2"
+                value="ボタン１−２ $('#div1').show();"
+            />
+        </div>
+        <div id="div2" style="background: yellowgreen">div2</div>
+        <div>
+            <input
+                type="button"
+                id="button2"
+                value="ボタン２ div2 button2.addEventListener→div2.style.display = 'none'"
+            />
+        </div>
+        <div id="div3" style="background: darkcyan">div3</div>
+        <div>
+            <input
+                type="button"
+                id="button3"
+                value="ボタン３ $('#div3').show();"
+            />
+        </div>
+        <div id="div4" style="background: darkolivegreen">div4</div>
+        <div>
+            <input
+                type="button"
+                id="button4"
+                value="ボタン４ $('#div4').fadeToggle();"
+            />
+        </div>
+        <div id="div5" style="background: darkgoldenrod">div5</div>
+        <div>
+            <input
+                type="button"
+                id="button5"
+                value="ボタン5　$('#div5').slideToggle();"
+            />
+        </div>
+        <div id="div6" style="background: darkorchid">div6</div>
+        <div>
+            <input
+                type="button"
+                id="button6"
+                value="ボタン6　$('#div6').toggle();"
+            />
+        </div>
+        <script>
+            // jQueryバージョン;
+            $('#button1').click(function () {
+                $('#div1').hide();
+            });
+            $('#button1-2').click(function () {
+                $('#div1').show();
+            });
+            // 普通のJavaScriptバージョン;
+            const div2 = document.getElementById('div2');
+            const button2 = document.getElementById('button2');
+            button2.addEventListener('click', function () {
+                div2.style.display = 'none';
+            });
+            $('#div3').hide();
+            $('#button3').click(function () {
+                $('#div3').show();
+            });
+            $('#button4').click(function () {
+                $('#div4').fadeToggle();
+            });
+            $('#button5').click(function () {
+                $('#div5').slideToggle();
+            });
+            $('#button6').click(function () {
+                $('#div6').toggle();
+            });
+            $('#div7').hide();
+            $('#button7').click(function () {
+                $('#div7').toggle();
+            });
+        </script>
+    </body>
+</html>
