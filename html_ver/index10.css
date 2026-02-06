@@ -17,27 +17,27 @@
     height: 100%;
 }
 .section:nth-child(1) {
-    background: url('./images/bg1.jpeg');
+    background: url('./images/LINE_ALBUM_0126_260206_1.jpg');
     background-size: cover;
     background-attachment: fixed;
 }
 .section:nth-child(2) {
-    background: url('./images/bg2.jpeg');
+    background: url('./images/LINE_ALBUM_0126_260206_2.jpg');
     background-size: cover;
     background-attachment: fixed;
 }
 .section:nth-child(3) {
-    background: url('./images/bg3.jpeg');
+    background: url('./images/LINE_ALBUM_20261_260206_2.jpg');
     background-size: cover;
     background-attachment: fixed;
 }
 .section:nth-child(4) {
-    background: url('./images/bg4.jpeg');
+    background: url('./images/LINE_ALBUM_0126_260206_4.jpg');
     background-size: cover;
     background-attachment: fixed;
 }
 .section:nth-child(5) {
-    background: url('./images/bg5.jpeg');
+    background: url('./images/LINE_ALBUM_20261_260206_6.jpg');
     background-size: cover;
     background-attachment: fixed;
 }
