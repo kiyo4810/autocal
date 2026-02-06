@@ -41,6 +41,41 @@
     background-size: cover;
     background-attachment: fixed;
 }
+.section:nth-child(6) {
+    background: url('./images/LINE_ALBUM_20261__260206_7.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+}
+.section:nth-child(7) {
+    background: url('./images/LINE_ALBUM_20261_260206_1.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+}
+.section:nth-child(8) {
+    background: url('./images/LINE_ALBUM_20261_260206_3.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+}
+.section:nth-child(9) {
+    background: url('./images/LINE_ALBUM_20261_260206_4.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+}
+.section:nth-child(10) {
+    background: url('./images/LINE_ALBUM_20261__260206_9.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+}
+.section:nth-child(11) {
+    background: url('./images/LINE_ALBUM_20261__260206_11.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+}
+.section:nth-child(12) {
+    background: url('./images/LINE_ALBUM_20261__260206_12.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+}
 .content {
     position: absolute;
     bottom: 50px;
