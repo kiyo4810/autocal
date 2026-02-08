@@ -63,6 +63,7 @@ p.innerHTML =
     window.innerHeight +
     'pxの高さですよ';
 document.body.appendChild(p);
+
 const p2 = document.querySelector('.p2').textContent;
 console.log(p2);
 const pAll = document.querySelectorAll('p');
