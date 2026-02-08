@@ -34,17 +34,17 @@ body {
 
 .wave1 {
     opacity: 0.6;
-    animation: wave 3s linear infinite;
+    animation: wave 3s;
 }
 
 .wave2 {
     opacity: 0.7;
-    animation: wave 4s linear infinite;
+    animation: wave 4s;
 }
 
 .wave3 {
     opacity: 0.8;
-    animation: wave 5s linear infinite;
+    animation: wave 5s;
 }
 
 .wave4 {
@@ -60,15 +60,24 @@ body {
         background-position: 0;
     }
 }
+/* --- ボタンの修正 --- */
 .custom-btn {
-    padding: 10px 20px;
+    position: fixed; /* 画面に固定 */
+    top: 20px; /* 上から20px */
+    left: 50%; /* 中央寄せの起点 */
+    transform: translateX(-50%); /* 自身の幅の半分戻して完全に中央へ */
+
+    padding: 10px 24px;
     background-color: #ffffff;
     color: #3586ff;
     border: 2px solid #3586ff;
-    border-radius: 5px;
+    border-radius: 30px; /* 少し丸みを持たせると今風です */
     cursor: pointer;
     font-weight: bold;
     transition: 0.3s;
+    /* 波よりも手前に持ってくるための設定 */
+    z-index: 9999;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 浮いている感を出して視認性アップ */
 }
 
 .custom-btn:hover {
