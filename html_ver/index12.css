@@ -44,19 +44,34 @@ body {
 
 .wave3 {
     opacity: 0.8;
-    animation: wave 5m linear infinite;
+    animation: wave 5s linear infinite;
 }
 
 .wave4 {
     opacity: 1;
-    animation: wave 6s linear infinite;
+    animation: wave 6s;
 }
 
 @keyframes wave {
     0% {
-        background-position: 1000px;
+        background-position: 500px;
     }
     100% {
         background-position: 0;
     }
+}
+.custom-btn {
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: #3586ff;
+    border: 2px solid #3586ff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.custom-btn:hover {
+    background-color: #3586ff;
+    color: #ffffff;
 }
