@@ -87,3 +87,32 @@ body {
     background-color: #3586ff;
     color: #ffffff;
 }
+
+/* --- ソース表示（フッター）の強制固定 --- */
+#source {
+    position: fixed; /* 画面に対して固定 */
+    bottom: 0; /* 最下部に配置 */
+    left: 0; /* 左端から */
+    width: 100%; /* 横幅いっぱい */
+    background-color: rgba(
+        255,
+        255,
+        255,
+        0.8
+    ); /* 背景を少し透過させて読みやすく */
+    padding: 10px; /* 内側の余白 */
+    text-align: center; /* 文字を中央寄せ */
+    z-index: 10000; /* ボタン(9999)より手前、または同等に設定 */
+    font-size: 12px; /* スマホで見やすいサイズ */
+    border-top: 1px solid #ccc;
+}
+
+#source a {
+    color: #3586ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#source a:hover {
+    text-decoration: underline;
+}
