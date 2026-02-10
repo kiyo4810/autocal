@@ -36,7 +36,10 @@ html {
     /* 赤色テスト用（これで赤くなれば成功！） */
     /* background-color: red !important; */
     /* 写真に戻す時は下の行のコメントアウトを外す */
-    background: url('./images/aki-impact.jpg') no-repeat center center;
+    /* background: url('./images/aki-impact.jpg') no-repeat center center; */
+    background: url('./images/LINE_ALBUM_20261_260206_3.jpg') no-repeat center
+        center;
+
     background-size: cover;
     z-index: -2; /* 一番奥 */
 }
@@ -86,6 +89,7 @@ h1 {
     margin-bottom: 0.5rem;
 }
 
+/* --- コントロール全体の枠 --- */
 .controls {
     position: fixed;
     bottom: 30px;
@@ -93,22 +97,39 @@ h1 {
     transform: translateX(-50%);
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
-    padding: 10px 20px;
-    border-radius: 50px;
+    padding: 12px 20px;
+    border-radius: 30px; /* 折り返しを考慮して少し角を調整 */
     border: 1px solid rgba(255, 255, 255, 0.3);
     z-index: 100;
+    width: 90%; /* 画面幅の90%に収める */
+    max-width: 500px; /* 広がりすぎ防止 */
 }
 
+/* --- 中の要素の並び --- */
 .control-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap; /* 入らない時に折り返す設定 */
+    gap: 10px; /* 要素同士の隙間 */
 }
 
 .control-item label {
     font-size: 12px;
     color: white;
     font-weight: bold;
+}
+
+/* --- スライダー自体の幅調整 --- */
+#speedRange {
+    flex-grow: 1; /* 空いているスペースいっぱいに広がる */
+    min-width: 100px; /* 極端に小さくなりすぎないように */
+}
+
+/* --- モード名（サイケなど）の調整 --- */
+#mode-name {
+    min-width: 4em; /* 文字が変わっても幅をある程度確保 */
+    text-align: center;
 }
 
 /* ボタン自体のスタイル */
@@ -148,11 +169,31 @@ h1 {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
+/* レスポンシブ (Oppo Reno 3A / スマホ全般) */
 @media screen and (max-width: 480px) {
+    /* 元々の設定を継承しつつ */
     h1 {
         font-size: 1.8rem;
     }
+
+    /* よりスマホ向けに最適化した設定に上書き */
     .controls {
-        width: 85%;
+        width: 92%; /* 85%より少し広げて余裕を持たせる */
+        padding: 12px;
+        border-radius: 20px;
+        bottom: 20px; /* 下端に少し寄せて画面を広く使う */
+    }
+
+    #toggle-color {
+        font-size: 11px;
+        padding: 5px 10px;
+    }
+
+    #mode-name {
+        font-size: 12px;
+    }
+
+    .control-item label {
+        font-size: 11px; /* Speedという文字も少し小さく */
     }
 }
