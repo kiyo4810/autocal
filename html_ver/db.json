@@ -1,0 +1,257 @@
+{
+  "categories": [
+    {
+      "id": "announcements",
+      "name": "お知らせ",
+      "slug": "announcements",
+      "emoji": "📣",
+      "description": "全般的なお知らせやコミュニティの議論",
+      "color": "bg-blue-50 border-blue-200 hover:bg-blue-100",
+      "iconColor": "text-blue-600",
+      "recentActivity": "2時間前"
+    },
+    {
+      "id": "polls",
+      "name": "アンケート",
+      "slug": "polls",
+      "emoji": "📊",
+      "description": "コミュニティのアンケートや投票",
+      "color": "bg-green-50 border-green-200 hover:bg-green-100",
+      "iconColor": "text-green-600",
+      "recentActivity": "1時間前"
+    },
+    {
+      "id": "quiz",
+      "name": "クイズ",
+      "slug": "quiz",
+      "emoji": "🧠",
+      "description": "知識テストやクイズチャレンジ",
+      "color": "bg-purple-50 border-purple-200 hover:bg-purple-100",
+      "iconColor": "text-purple-600",
+      "recentActivity": "3時間前"
+    }
+  ],
+  "posts": [
+    {
+      "id": "1",
+      "type": "announcements",
+      "title": "コミュニティ掲示板アプリへようこそ！",
+      "author": "田中 太郎",
+      "authorAvatar": "/placeholder.svg?height=32&width=32",
+      "createdAt": "2時間前",
+      "status": "open",
+      "views": 445,
+      "category": "announcements",
+      "excerpt": "新しいコミュニティ掲示板アプリを開設しました。皆様のご参加をお待ちしています...",
+      "content": "皆様、こんにちは！👋\n\n開発者向けのコミュニティ掲示板アプリへようこそ！ここは知識を共有、質問、アンケートなど、様々な方法で成長していく場所です。\n\n一緒に素晴らしいものを作り上げていきましょう！",
+      "reactions": {
+        "thumbsUp": 12,
+        "heart": 8,
+        "rocket": 3,
+        "eyes": 15
+      }
+    },
+    {
+      "id": "2",
+      "type": "announcements",
+      "title": "7月のお知らせ",
+      "author": "佐藤 花子",
+      "authorAvatar": "/placeholder.svg?height=32&width=32",
+      "createdAt": "1日前",
+      "status": "open",
+      "views": 234,
+      "category": "announcements",
+      "excerpt": "7月のお知らせをまとめました！",
+      "content": "皆様、こんにちは！👋\n\n開発者向けのコミュニティ掲示板アプリへようこそ！ここは知識を共有、質問、アンケートなど、様々な方法で成長していく場所です。\n\n一緒に素晴らしいものを作り上げていきましょう！",
+      "reactions": {
+        "thumbsUp": 8,
+        "heart": 3,
+        "rocket": 2,
+        "eyes": 12
+      }
+    },
+    {
+      "id": "3",
+      "type": "poll",
+      "title": "2025年に使いたいフレームワークは？",
+      "author": "山田 次郎",
+      "authorAvatar": "/placeholder.svg?height=32&width=32",
+      "createdAt": "2時間前",
+      "status": "open",
+      "views": 156,
+      "category": "polls",
+      "excerpt": "あなたのプロジェクトでどのフレームワークを使いたいか投票してください...",
+      "content": "皆様のフレームワーク選好を教えてください。この投票結果はコンテンツや議論の方向性を決めるのに役立ちます。",
+      "reactions": {
+        "thumbsUp": 45,
+        "heart": 12,
+        "rocket": 8,
+        "eyes": 89
+      },
+      "pollOptions": [
+        {
+          "id": "react",
+          "label": "React",
+          "votes": 82
+        },
+        {
+          "id": "vue",
+          "label": "Vue.js",
+          "votes": 33
+        },
+        {
+          "id": "svelte",
+          "label": "Svelte",
+          "votes": 27
+        },
+        {
+          "id": "angular",
+          "label": "Angular",
+          "votes": 24
+        }
+      ],
+      "totalVotes": 166
+    },
+    {
+      "id": "4",
+      "type": "poll",
+      "title": "好みの開発環境は？",
+      "author": "鈴木 一郎",
+      "authorAvatar": "/placeholder.svg?height=32&width=32",
+      "createdAt": "3日前",
+      "status": "open",
+      "views": 234,
+      "category": "polls",
+      "excerpt": "コミュニティの皆様が好む開発ツールを教えてください...",
+      "content": "どの開発環境やツールをお使いですか？皆様の選択を共有してください！",
+      "reactions": {
+        "thumbsUp": 23,
+        "heart": 5,
+        "rocket": 3,
+        "eyes": 34
+      },
+      "pollOptions": [
+        {
+          "id": "vscode",
+          "label": "VS Code",
+          "votes": 69
+        },
+        {
+          "id": "cursor",
+          "label": "Cursor",
+          "votes": 28
+        },
+        {
+          "id": "windsurf",
+          "label": "Windsurf",
+          "votes": 15
+        },
+        {
+          "id": "vim",
+          "label": "Vim/Neovim",
+          "votes": 12
+        }
+      ],
+      "totalVotes": 124
+    },
+    {
+      "id": "5",
+      "type": "quiz",
+      "title": "JavaScript基礎クイズ",
+      "author": "高橋 美和",
+      "authorAvatar": "/placeholder.svg?height=32&width=32",
+      "createdAt": "4時間前",
+      "status": "open",
+      "views": 89,
+      "category": "quiz",
+      "excerpt": "JavaScript基礎知識をテストするクイズに挑戦してみてください...",
+      "content": "JavaScript基礎知識をテストするクイズです。初心者の方や基本を復習したい方に最適です。",
+      "reactions": {
+        "thumbsUp": 34,
+        "heart": 15,
+        "rocket": 22,
+        "eyes": 67
+      },
+      "quizQuestions": [
+        {
+          "id": 1,
+          "question": "`console.log(typeof typeof 1);` このJavaScriptコードの出力は何になるか知っていますか？",
+          "options": [
+            "number",
+            "string",
+            "1",
+            "true"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": 2,
+          "question": "配列の末尾に要素を追加するメソッドは？",
+          "options": [
+            "append()",
+            "push()",
+            "add()",
+            "insert()"
+          ],
+          "correctAnswer": 1
+        },
+        {
+          "id": 3,
+          "question": "「===」演算子の機能は？",
+          "options": [
+            "値を代入する",
+            "値のみを比較する",
+            "値と型の両方を比較する",
+            "変数を宣言する"
+          ],
+          "correctAnswer": 2
+        }
+      ],
+      "totalAttempts": 89
+    },
+    {
+      "id": "6",
+      "type": "quiz",
+      "title": "React Hooks理解度チェック",
+      "author": "中村 健太",
+      "authorAvatar": "/placeholder.svg?height=32&width=32",
+      "createdAt": "5日前",
+      "status": "open",
+      "views": 178,
+      "category": "quiz",
+      "excerpt": "React Hooksの理解度をチェックするクイズです...",
+      "content": "React Hooksの理解度をチェックする包括的なクイズです。",
+      "reactions": {
+        "thumbsUp": 19,
+        "heart": 7,
+        "rocket": 11,
+        "eyes": 42
+      },
+      "quizQuestions": [
+        {
+          "id": 1,
+          "question": "useStateの正しい書き方は？",
+          "options": [
+            "const [state, setState] = useState(初期値);",
+            "const state = useState(初期値);",
+            "useState(state, setState, 初期値);",
+            "const state = new useState(初期値);"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "id": 2,
+          "question": "useEffectはデフォルトでいつ実行される？",
+          "options": [
+            "コンポーネントマウント時のみ",
+            "コンポーネントアンマウント時のみ",
+            "毎回のレンダリング後",
+            "stateが変更された時のみ"
+          ],
+          "correctAnswer": 2
+        }
+      ],
+      "totalAttempts": 56
+    }
+  ]
+}

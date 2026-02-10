@@ -322,6 +322,20 @@
             replayBtn.addEventListener('click', () => {
                 window.location.reload();
             });
+            console.log(document.title);
+            document.title = 'わわわわーん';
+            console.log(document.title);
+            let h1in = document.querySelector('h1');
+            // console.log(h1in);
+            h1in.addEventListener('click', function () {
+                h1in.classList.toggle('isActive');
+                if (h1in.classList.contains('isActive')) {
+                    h1in.innerHTML = 'ありですやん、あり！';
+                } else {
+                    h1in.innerHTML = ' なしですやん、なし！';
+                }
+            });
+            // h1in.innerHTML = 'ままままーん';
         </script>
     </body>
 </html>

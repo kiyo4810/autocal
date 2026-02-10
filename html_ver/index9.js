@@ -55,24 +55,25 @@ let askyourname = prompt('あなたのなまえは？');
 window.console.log(askyourname);
 console.log(window.innerHeight);
 console.log(window.innerWidth);
-const p = document.createElement('p');
-p.innerHTML =
-    'あなたの名前は' +
-    askyourname +
-    'で、画面は' +
-    window.innerHeight +
-    'pxの高さですよ';
-document.body.appendChild(p);
+// const p = document.createElement('p');
+// p.innerHTML =
+//     'あなたの名前は' +
+//     askyourname +
+//     'で、画面は' +
+//     window.innerHeight +
+//     'pxの高さですよ';
+// document.body.appendChild(p);
 
-const p2 = document.querySelector('.p2').textContent;
-console.log(p2);
+// const p2 = document.querySelector('.p2').textContent;
+// console.log(p2);
 const pAll = document.querySelectorAll('p');
 for (let index = 0; index < pAll.length; index++) {
     const element = pAll[index];
-    console.log(element.textContent);
+    console.dir(element);
 }
-const oriH2 = document.querySelector('h2');
-oriH2.innerText = 'SSAW';
+// const oriH2 = document.querySelector('h2');
+// oriH2.innerText = 'SSAW';
+
 const btntry = document.getElementById('bt');
 btntry.addEventListener('click', () => {
     // console.log('山本リンダ');
@@ -81,4 +82,11 @@ btntry.addEventListener('click', () => {
     for (let index = 0; index < pAll2.length; index++) {
         pAll2[index].classList.add('visible');
     }
+});
+
+const pFetch = document.querySelectorAll('p');
+pFetch.forEach(function (element) {
+    // console.log('HTML構造', element);
+    // console.log(element.outerHTML);
+    console.log('', element);
 });
