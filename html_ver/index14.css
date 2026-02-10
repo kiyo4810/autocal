@@ -1,5 +1,10 @@
 :root {
     --bg-speed: 5s;
+    /* 初期値（カフェカラー） */
+    --c1: rgba(44, 26, 18, 0.4);
+    --c2: rgba(141, 64, 36, 0.1);
+    --c3: rgba(224, 122, 95, 0.3);
+    --c4: rgba(61, 44, 37, 0.9);
 }
 
 * {
@@ -43,26 +48,17 @@ html {
     left: 0;
     width: 100vw;
     height: 100vh;
-    /* rgbaの最後を0.3〜0.5にして、下の写真や赤色が透けるようにする */
+    /* 変数を適用する */
     background: linear-gradient(
         -80deg,
-        /* カフェカラーバージョンオリジナル */
-        /* rgba(44, 26, 18, 0.4),
-        rgba(141, 64, 36, 0.1),
-        rgba(224, 122, 95, 0.3),
-        rgba(61, 44, 37, 0.9)  */
-        /* カフェカラーバージョンスタバ */ rgba(0, 112, 74, 0.7),
-        rgba(30, 57, 50, 0.8),
-        rgba(255, 255, 255, 0.4),
-        rgba(0, 168, 98, 0.6) /*サイケカラーバージョン*/
-            /* rgba(255, 0, 255, 0.9),
-        rgba(0, 255, 255, 0.7),
-        rgba(57, 255, 20, 0.7),
-        rgba(255, 255, 0, 0.7) */
+        var(--c1),
+        var(--c2),
+        var(--c3),
+        var(--c4)
     );
     background-size: 400% 400%;
     animation: gradientBG var(--bg-speed) ease infinite;
-    z-index: -1; /* 写真のすぐ上 */
+    z-index: -1;
 }
 
 /* 以下、@keyframes と .content, .controls はそのままでOK */
@@ -113,6 +109,43 @@ h1 {
     font-size: 12px;
     color: white;
     font-weight: bold;
+}
+
+/* ボタン自体のスタイル */
+#toggle-color {
+    background: rgba(255, 255, 255, 0.15); /* スライダーと同じ半透明 */
+    backdrop-filter: blur(10px); /* 背景をぼかす */
+    color: white; /* 文字色 */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* 細い境界線 */
+    padding: 6px 15px; /* 内側の余白 */
+    border-radius: 20px; /* カプセル型 */
+    cursor: pointer; /* ホバー時に指マーク */
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.3s ease; /* 変化を滑らかに */
+    outline: none;
+}
+
+/* マウスを乗せた時（ホバー） */
+#toggle-color:hover {
+    background: rgba(255, 255, 255, 0.3); /* 少し明るくする */
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px); /* ほんの少し浮き上がらせる */
+}
+
+/* ボタンを押した瞬間 */
+#toggle-color:active {
+    transform: translateY(1px); /* 押し込んだような動き */
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ボタン横のテキスト（モード名）の調整 */
+#mode-name {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    font-weight: normal;
+    letter-spacing: 0.05em; /* 字間を少し広げて上品に */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 @media screen and (max-width: 480px) {
