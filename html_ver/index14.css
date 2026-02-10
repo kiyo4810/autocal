@@ -1,0 +1,125 @@
+:root {
+    --bg-speed: 15s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* ↓ background-color: #000; を削除して透明にする */
+    background: transparent;
+}
+
+/* 1. 写真レイヤー（ここをしっかり表示させる） */
+.background-photo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* 画面幅いっぱい */
+    height: 100vh; /* 画面高さいっぱい */
+    /* 赤色テスト用（これで赤くなれば成功！） */
+    /* background-color: red !important; */
+    /* 写真に戻す時は下の行のコメントアウトを外す */
+    background: url('./images/aki-impact.jpg') no-repeat center center;
+    background-size: cover;
+    z-index: -2; /* 一番奥 */
+}
+
+/* 2. 動くグラデーションレイヤー */
+.dynamic-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    /* rgbaの最後を0.3〜0.5にして、下の写真や赤色が透けるようにする */
+    background: linear-gradient(
+        -45deg,
+        /* カフェカラーバージョンオリジナル */
+        /* rgba(44, 26, 18, 0.4),
+        rgba(141, 64, 36, 0.3),
+        rgba(224, 122, 95, 0.3),
+        rgba(61, 44, 37, 0.4) */
+        /* カフェカラーバージョンスタバ */ rgba(0, 112, 74, 0.7),
+        rgba(30, 57, 50, 0.8),
+        rgba(255, 255, 255, 0.4),
+        rgba(0, 168, 98, 0.6) /* サイケカラーバージョン */
+            /* rgba(255, 0, 255, 0.9),
+        rgba(0, 255, 255, 0.7),
+        rgba(57, 255, 20, 0.7),
+        rgba(255, 255, 0, 0.7)*/
+    );
+    background-size: 400% 400%;
+    animation: gradientBG var(--bg-speed) ease infinite;
+    z-index: -1; /* 写真のすぐ上 */
+}
+
+/* 以下、@keyframes と .content, .controls はそのままでOK */
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.content {
+    text-align: center;
+    color: white;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.controls {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 100;
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-item label {
+    font-size: 12px;
+    color: white;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    .controls {
+        width: 85%;
+    }
+}
