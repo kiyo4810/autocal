@@ -17,10 +17,12 @@ body,
 html {
     height: 100%;
     width: 100%;
-    overflow: hidden;
+    /* overflow: hidden; オリジナルから修正*/
+    overflow: auto;
     font-family: sans-serif;
-    display: flex;
-    justify-content: center;
+    /* display: flex; */
+    /* justify-content: center; */
+    display: block;
     align-items: center;
     /* ↓ background-color: #000; を削除して透明にする */
     background: transparent;
@@ -87,6 +89,10 @@ html {
 h1 {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
+    /* ここから追記 */
+    text-align: center;
+    color: white;
+    margin: 20px 0 20px;
 }
 
 /* --- コントロール全体の枠 --- */
@@ -118,6 +124,48 @@ h1 {
     font-size: 12px;
     color: white;
     font-weight: bold;
+}
+/* --- gallery部分 --- */
+
+.gallery {
+    /* レスポンシブ前CSS
+    margin: 10px 50px;
+    text-align: center; */
+    margin: 10px auto; /* 左右マージンをautoにして中央寄せ */
+    text-align: center;
+    padding: 0 10px; /* スマホ時に端にピッタリくっつかないよう余白 */
+    max-width: 1200px; /* PCでの広がりすぎ防止 */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.gallery img {
+    /* レスポンシブ前CSS
+    width: 380px;
+    height: 220px;
+    object-fit: cover;
+    padding: 10px;
+    filter: grayscale(100%);
+    transition: 0.7s; */
+
+    /* 固定幅 380px を解除し、画面幅に合わせる */
+    width: 100%;
+    max-width: 380px; /* 最大でも380pxまでに制限 */
+    height: auto; /* 高さを自動にして比率を維持 */
+    /* 元の 380x220 の比率を保つ */
+    /* aspect-ratio: 19 / 11;  */
+    aspect-ratio: 16 / 10; /* 比率を整える */
+    object-fit: cover;
+    /* padding: 10px; paddingをgapに任せてスッキリさせる*/
+    filter: grayscale(100%);
+    transition: 0.7s;
+}
+
+.gallery img:hover {
+    filter: grayscale(0);
+    transform: scale(1.1);
 }
 
 /* --- スライダー自体の幅調整 --- */
@@ -171,17 +219,16 @@ h1 {
 
 /* レスポンシブ (Oppo Reno 3A / スマホ全般) */
 @media screen and (max-width: 480px) {
-    /* 元々の設定を継承しつつ */
+    /* --- 既存の設定 --- */
     h1 {
         font-size: 1.8rem;
     }
 
-    /* よりスマホ向けに最適化した設定に上書き */
     .controls {
-        width: 92%; /* 85%より少し広げて余裕を持たせる */
+        width: 92%;
         padding: 12px;
         border-radius: 20px;
-        bottom: 20px; /* 下端に少し寄せて画面を広く使う */
+        bottom: 20px;
     }
 
     #toggle-color {
@@ -194,6 +241,25 @@ h1 {
     }
 
     .control-item label {
-        font-size: 11px; /* Speedという文字も少し小さく */
+        font-size: 11px;
+    }
+
+    /* --- ここから追加分 --- */
+    .gallery {
+        margin: 10px 0; /* 左右の余白を削る */
+    }
+
+    .gallery img {
+        /* padding: 5px;  画像同士の間隔を少し詰める */
+        /* max-width: 100%; 画面幅からはみ出さないようにする */
+        /* height: auto;  比率を維持 */
+        width: 46%;
+    }
+
+    .content {
+        /* 下のボタン類に画像が被って隠れないように、下に大きな余白を作る */
+        padding-bottom: 150px;
+        /* レスポンシブ追記 */
+        padding-top: 20px;
     }
 }
