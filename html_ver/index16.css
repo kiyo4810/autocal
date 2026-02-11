@@ -1,0 +1,330 @@
+:root {
+    --bg-speed: 3s;
+    /* 初期値（カフェカラー） */
+    --c1: rgba(44, 26, 18, 0.4);
+    --c2: rgba(141, 64, 36, 0.1);
+    --c3: rgba(224, 122, 95, 0.3);
+    --c4: rgba(61, 44, 37, 0.9);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    height: 100%;
+    width: 100%;
+    /* overflow: hidden; オリジナルから修正*/
+    overflow: auto;
+    font-family: sans-serif;
+    /* display: flex; */
+    /* justify-content: center; */
+    display: block;
+    align-items: center;
+    /* ↓ background-color: #000; を削除して透明にする */
+    background: transparent;
+}
+
+/* 1. 写真レイヤー（ここをしっかり表示させる） */
+.background-photo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* 画面幅いっぱい */
+    height: 100vh; /* 画面高さいっぱい */
+    /* 赤色テスト用（これで赤くなれば成功！） */
+    /* background-color: red !important; */
+    /* 写真に戻す時は下の行のコメントアウトを外す */
+    /* background: url('./images/aki-impact.jpg') no-repeat center center; */
+    background: url('./images/LINE_ALBUM_20261_260206_3.jpg') no-repeat center
+        center;
+
+    background-size: cover;
+    z-index: -2; /* 一番奥 */
+}
+
+/* 2. 動くグラデーションレイヤー */
+.dynamic-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    /* 変数を適用する */
+    background: linear-gradient(
+        -80deg,
+        var(--c1),
+        var(--c2),
+        var(--c3),
+        var(--c4)
+    );
+    background-size: 400% 400%;
+    animation: gradientBG var(--bg-speed) ease infinite;
+    z-index: -1;
+}
+
+/* 以下、@keyframes と .content, .controls はそのままでOK */
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.content {
+    text-align: center;
+    color: white;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    /* 追加：コンテンツがコントロールバーに被らないようにする */
+    padding-top: 20px;
+    padding-bottom: 180px; /* コントロールエリアの高さ分＋余裕を確保 */
+    max-width: 800px; /* 読みやすくするために幅を制限 */
+    margin: 0 auto; /* 中央寄せ */
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    /* ここから追記 */
+    text-align: center;
+    color: white;
+    margin: 20px 0 20px;
+}
+
+/* --- コントロール全体の枠 --- */
+.controls {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 12px 20px;
+    border-radius: 30px; /* 折り返しを考慮して少し角を調整 */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 100;
+    width: 90%; /* 画面幅の90%に収める */
+    max-width: 500px; /* 広がりすぎ防止 */
+}
+
+/* --- 中の要素の並び --- */
+.control-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap; /* 入らない時に折り返す設定 */
+    gap: 10px; /* 要素同士の隙間 */
+}
+
+.control-item label {
+    font-size: 12px;
+    color: white;
+    font-weight: bold;
+}
+/* --- gallery部分 --- */
+
+.gallery {
+    /* レスポンシブ前CSS
+    margin: 10px 50px;
+    text-align: center; */
+    margin: 10px auto; /* 左右マージンをautoにして中央寄せ */
+    text-align: center;
+    padding: 0 10px; /* スマホ時に端にピッタリくっつかないよう余白 */
+    max-width: 1200px; /* PCでの広がりすぎ防止 */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.gallery img {
+    /* レスポンシブ前CSS
+    width: 380px;
+    height: 220px;
+    object-fit: cover;
+    padding: 10px;
+    filter: grayscale(100%);
+    transition: 0.7s; */
+
+    /* 固定幅 380px を解除し、画面幅に合わせる */
+    width: 100%;
+    max-width: 380px; /* 最大でも380pxまでに制限 */
+    height: auto; /* 高さを自動にして比率を維持 */
+    /* 元の 380x220 の比率を保つ */
+    /* aspect-ratio: 19 / 11;  */
+    aspect-ratio: 16 / 10; /* 比率を整える */
+    object-fit: cover;
+    /* padding: 10px; paddingをgapに任せてスッキリさせる*/
+    filter: grayscale(100%);
+    transition: 0.7s;
+}
+
+.gallery img:hover {
+    filter: grayscale(0);
+    transform: scale(1.1);
+}
+
+/* --- スライダー自体の幅調整 --- */
+#speedRange {
+    flex-grow: 1; /* 空いているスペースいっぱいに広がる */
+    min-width: 100px; /* 極端に小さくなりすぎないように */
+}
+
+/* --- モード名（サイケなど）の調整 --- */
+#mode-name {
+    min-width: 4em; /* 文字が変わっても幅をある程度確保 */
+    text-align: center;
+}
+
+/* ボタン自体のスタイル */
+#toggle-color {
+    background: rgba(255, 255, 255, 0.15); /* スライダーと同じ半透明 */
+    backdrop-filter: blur(10px); /* 背景をぼかす */
+    color: white; /* 文字色 */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* 細い境界線 */
+    padding: 6px 15px; /* 内側の余白 */
+    border-radius: 20px; /* カプセル型 */
+    cursor: pointer; /* ホバー時に指マーク */
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.3s ease; /* 変化を滑らかに */
+    outline: none;
+}
+
+/* マウスを乗せた時（ホバー） */
+#toggle-color:hover {
+    background: rgba(255, 255, 255, 0.3); /* 少し明るくする */
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px); /* ほんの少し浮き上がらせる */
+}
+
+/* ボタンを押した瞬間 */
+#toggle-color:active {
+    transform: translateY(1px); /* 押し込んだような動き */
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ボタン横のテキスト（モード名）の調整 */
+#mode-name {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    font-weight: normal;
+    letter-spacing: 0.05em; /* 字間を少し広げて上品に */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* レスポンシブ (Oppo Reno 3A / スマホ全般) */
+@media screen and (max-width: 480px) {
+    /* 2026-02-11追加コード */
+    .content {
+        /* スマホはコントロールエリアが少し高くなる可能性があるので余白を維持 */
+        padding-bottom: 200px;
+    }
+    /* --- 既存の設定 --- */
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .controls {
+        width: 92%;
+        padding: 12px;
+        border-radius: 20px;
+        bottom: 20px;
+    }
+
+    #toggle-color {
+        font-size: 11px;
+        padding: 5px 10px;
+    }
+
+    #mode-name {
+        font-size: 12px;
+    }
+
+    .control-item label {
+        font-size: 11px;
+    }
+
+    /* --- ここから追加分 --- */
+    .gallery {
+        margin: 10px 0; /* 左右の余白を削る */
+    }
+
+    .gallery img {
+        /* padding: 5px;  画像同士の間隔を少し詰める */
+        /* max-width: 100%; 画面幅からはみ出さないようにする */
+        /* height: auto;  比率を維持 */
+        width: 46%;
+    }
+
+    .content {
+        /* 下のボタン類に画像が被って隠れないように、下に大きな余白を作る */
+        padding-bottom: 150px;
+        /* レスポンシブ追記 */
+        padding-top: 20px;
+    }
+}
+/* ここからAI提案イベントカテゴリ学習サンプル・コード追記分 */
+body {
+    font-family: sans-serif;
+    padding: 20px;
+    line-height: 1.6;
+}
+.box {
+    width: 200px;
+    height: 100px;
+    background: #3498db;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.box.active {
+    background: #e74c3c;
+}
+.log-area {
+    background: #f4f4f4;
+    padding: 10px;
+    border: 1px solid #ccc;
+    height: 150px;
+    overflow-y: scroll;
+    font-family: monospace;
+}
+section {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+}
+.highlight {
+    color: red;
+    font-weight: bold;
+}
+/* --- ここから追記 --- */
+.log-area {
+    background: rgba(244, 244, 244, 0.9); /* 背景に馴染むよう少し透明に */
+    color: #333; /* 文字を読みやすく */
+    text-shadow: none; /* ログエリアはシャドウを消す */
+    border-radius: 10px;
+    margin: 10px auto;
+    max-width: 90%;
+    /* 高さが足りない場合はここも調整 */
+    height: 150px;
+    overflow-y: scroll;
+}
+#mouseBox {
+    /* 既存のスタイル ... */
+    margin-left: auto;
+    margin-right: auto;
+    display: flex; /* すでに入っていると思いますが、これがないと中央に寄りません */
+}
