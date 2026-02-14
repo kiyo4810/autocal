@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>【モダンJavaScript #7】モジュールの基礎を理解しよう！</title>
+        <link rel="stylesheet" href="index18.css" />
+    </head>
+    <body>
+        <div class="background-photo"></div>
+
+        <div class="dynamic-gradient"></div>
+
+        <main class="content">
+            <h1>
+                【モダンJavaScript
+                #7】(Vanilla　JSの)モジュールの基礎を理解しよう！
+            </h1>
+            <p>
+                <a href="https://www.youtube.com/watch?v=VE5wV-V--ag"
+                    >https://www.youtube.com/watch?v=VE5wV-V--ag</a
+                >
+            </p>
+            <div id="p"></div>
+            <div id="p2"></div>
+        </main>
+
+        <script type="module" src="index18user.js">
+            //moduleにするとこのname2は下のname2とは別物になる。連携しない。独立したものだから同じ名前のConst nameつかってよし
+                   //moduleは最後に読み込まれるので<head>タグ内に書いてもOK
+        </script>
+        <script type="module" src="index18index.js"></script>
+        <div class="controls">
+            <div class="control-item">
+                <button id="toggle-color">色の変化</button>
+                <span
+                    id="mode-name"
+                    style="color: white; font-size: 14px; margin-left: 10px"
+                    >カフェ</span
+                >
+
+                <label style="margin-left: 20px">Speed変化：</label>
+                <input
+                    type="range"
+                    id="speedRange"
+                    min="1"
+                    max="30"
+                    value="15"
+                    step="1"
+                />
+            </div>
+        </div>
+        <script>
+            const slider = document.getElementById('speedRange');
+            const root = document.documentElement;
+            slider.addEventListener('input', (e) => {
+                root.style.setProperty('--bg-speed', `${31 - e.target.value}s`);
+            });
+
+            // 3パターンの色を配列に格納
+            const patterns = [
+                {
+                    name: 'カフェ',
+                    c1: 'rgba(44, 26, 18, 0.4)',
+                    c2: 'rgba(141, 64, 36, 0.1)',
+                    c3: 'rgba(224, 122, 95, 0.3)',
+                    c4: 'rgba(61, 44, 37, 0.9)',
+                },
+                {
+                    name: 'スタバ',
+                    c1: 'rgba(0, 112, 74, 0.7)',
+                    c2: 'rgba(30, 57, 50, 0.8)',
+                    c3: 'rgba(255, 255, 255, 0.4)',
+                    c4: 'rgba(0, 168, 98, 0.6)',
+                },
+                {
+                    name: 'サイケ',
+                    c1: 'rgba(255, 0, 255, 0.9)',
+                    c2: 'rgba(0, 255, 255, 0.7)',
+                    c3: 'rgba(57, 255, 20, 0.7)',
+                    c4: 'rgba(255, 255, 0, 0.7)',
+                },
+            ];
+            let currentPattern = 0; // 現在どのパターンか管理するインデックス
+            const tglBtn = document.getElementById('toggle-color');
+            const modeText = document.getElementById('mode-name'); // テキスト表示用
+
+            tglBtn.addEventListener('click', () => {
+                // 次のパターンへ進む（3の次は0に戻る）
+                currentPattern = (currentPattern + 1) % patterns.length;
+
+                const p = patterns[currentPattern];
+
+                // 1. CSS変数を一気に書き換える
+                root.style.setProperty('--c1', p.c1);
+                root.style.setProperty('--c2', p.c2);
+                root.style.setProperty('--c3', p.c3);
+                root.style.setProperty('--c4', p.c4);
+                // 2. ボタン横のテキストを変える
+                modeText.textContent = p.name;
+            });
+        </script>
+        <script src="index18user.js"></script>
+        <script src="index18index.js"></script>
+    </body>
+</html>

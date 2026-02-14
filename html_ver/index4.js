@@ -109,3 +109,27 @@ const multi2 = (c, d) => {
 };
 console.log(multi2(cnum, dnum));
 document.getElementById('mcd').textContent = multi2(cnum, dnum);
+
+const colors = ['赤', '橙', '黃', '緑', '青', '藍', '紫'];
+colors.forEach((color) => {
+    console.log(color);
+    let div = document.createElement('div');
+    div.innerHTML = color;
+});
+const fruits = ['apple', 'banana'];
+fruits.forEach((value, index, array) => {
+    console.log(`${index}: ${value}`);
+});
+
+var lists = [1, 2, 3, 4, 5, 6, 7, 8];
+
+lists.forEach(function (value, index, array) {
+    let div = document.createElement('div');
+    div.innerText = value;
+    document.body.appendChild(div);
+    // array[index] = value * 2;
+    // array[index] = value + value;
+    // console.log(array.length);
+});
+
+console.log(lists);

@@ -74,7 +74,7 @@ function initializeTable() {
                 // 合計行や残高行（計算結果を表示するだけのセル）の場合
                 if (
                     ['total_income', 'total_expense', 'grand_balance'].includes(
-                        rowId
+                        rowId,
                     )
                 ) {
                     td.id = `${rowId}-${col}`; // 後でJSから数字を書き換えるためにIDを振る
@@ -110,7 +110,7 @@ function calculate() {
         const getVal = (rowId) => {
             // data-rowとdata-colが一致するinput要素を探す
             const el = document.querySelector(
-                `[data-row="${rowId}"][data-col="${col}"]`
+                `[data-row="${rowId}"][data-col="${col}"]`,
             );
             return el ? parseFloat(el.value) || 0 : 0; // 数字があれば取得、なければ0
         };
