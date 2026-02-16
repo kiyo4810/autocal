@@ -13,13 +13,15 @@ function initializeTable() {
     // const tableBody = document.getElementById('table-body'); // データを表示する本体（<tbody>）を取得
     const headerRow = document.getElementById('header-row');
     const tableBody = document.getElementById('table-body');
-    // 1. ヘッダー行（0歳、1歳...）をループで作る
+    console.log(headerRow);
+    console.log(tableBody);
+    // 1. ヘッダー行（0歳、1歳...）をループで作
     // for (let i = START_AGE; i <= END_AGE; i++) {
     for (let i = START_AGE; i <= END_AGE; i++) {
-        // const th = document.createElement('th'); // <th>タグ（見出しセル）を作成
-        const th = document.createElement('th');
+        const th = document.createElement('th'); // <th>タグ（見出しセル）を作成
         th.innerText = `${i}歳`; // 中身を「〇〇歳」にする
-        headerRow.appendChild(th); // ヘッダー行に作成したセルを追加
+        headerRow.appendChild(th); // ヘッダー行に作成したセルを追加。
+        console.log(headerRow);
     }
 
     /**
