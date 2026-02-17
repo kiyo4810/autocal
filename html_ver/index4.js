@@ -7,9 +7,9 @@
         gender: 'male',
         interests: ['おんがく', 'さんすう'],
         bio: function () {
-            alert(
-                `${this.name[0]}、${this.name[1]} は ${this.age} 歳です。 趣味は ${this.interests[0]} と ${this.interests[1]}です。`,
-            );
+            // alert(
+            //     `${this.name[0]}、${this.name[1]} は ${this.age} 歳です。 趣味は ${this.interests[0]} と ${this.interests[1]}です。`,
+            // );
             return '自己紹介おわり';
         },
         getNextAge: function () {
@@ -66,7 +66,7 @@
 // console.log(keisan3(7, 8));
 
 function tashizansuzzo() {
-    alert('たしざんすっぞ');
+    // alert('たしざんすっぞ');
 }
 tashizansuzzo();
 
@@ -126,7 +126,8 @@ var lists = [1, 2, 3, 4, 5, 6, 7, 8];
 lists.forEach(function (value, index, array) {
     let div = document.createElement('div');
     div.innerText = value;
-    document.body.appendChild(div);
+    const conD = document.querySelector('.container');
+    conD.appendChild(div);
     // array[index] = value * 2;
     // array[index] = value + value;
     // console.log(array.length);

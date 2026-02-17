@@ -4,18 +4,27 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>デモサイト</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+        <title>Lesson of Tailwind</title>
     </head>
-    <body>
-        <nav id="site-nav">
-            <style>
-                #site-nav {
-                    text-align: center;
-                    padding: 15px 0;
-                    margin-bottom: 20px;
-                }
-                .nav-link {
-                    display: inline-block;
+    <body class="bg-gradient-to-br from-yellow-200 to-purple-500 min-h-screen">
+        <div
+            class="container mx-auto mt-10 px-4 py-16 max-w-4xl text-center text-shadow-lg bg-[url('https://images.unsplash.com/photo-1498050108023-c5249f4df085')] bg-cover bg-center bg-no-repeat shadow-2xl rounded-xl relative"
+        >
+            <h1 class="text-3xl underline decoration-sky-500">
+                Lesson of Tailwind
+            </h1>
+            <nav id="site-nav" class="text-center py-3.5 mb-5">
+                <style>
+                    #site-nav {
+                        /* 以下TW移植済み */
+                        /* text-align: center;  */
+                        /* padding: 15px 0; */
+                        /* margin-bottom: 20px; */
+                    }
+                    .nav-link {
+                        /* display: inline-block;
                     margin: 0 5px;
                     padding: 10px 18px;
                     background: rgba(255, 255, 255, 0.7);
@@ -26,64 +35,138 @@
                     font-weight: bold;
                     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
                     transition: all 0.3s ease;
-                    border: 1px solid transparent;
-                }
-                .nav-link:hover {
-                    transform: translateY(-2px);
-                    background: #fff;
-                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-                }
-                /* 今いるページのボタンを自動で目立たせるスタイル */
-                .nav-link.active {
-                    background: #007bff;
-                    color: white;
-                    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-                }
-            </style>
-
-            <a href="index.html" class="nav-link">メイン計算機</a>
-            <a href="chasepankun.html" class="nav-link">パンくんを追え</a>
-            <a href="index1.html" class="nav-link">Ver.1</a>
-            <a href="index2.html" class="nav-link">Ver.2</a>
-            <a href="index4.html" class="nav-link">index4</a>
-
-            <script>
-                // 今見ているURLをチェックして、一致するリンクに "active" クラスをつける魔法
-                const currentFile =
-                    window.location.pathname.split('/').pop() || 'index.html';
-                const links = document.querySelectorAll('.nav-link');
-                links.forEach((link) => {
-                    if (link.getAttribute('href') === currentFile) {
-                        link.classList.add('active');
+                    border: 1px solid transparent; */
                     }
-                });
-            </script>
-        </nav>
-        <p>デモサイトの内容</p>
-        <div id="adultcheck" class="rarara"></div>
-        <div id="fruits"></div>
-        <div id="mab"></div>
-        <div id="mcd"></div>
-        <table>
-            <thead>
+                    .nav-link:hover {
+                        /* transform: translateY(-2px);
+                    background: #fff;
+                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); */
+                    }
+                    /* 今いるページのボタンを自動で目立たせるスタイル */
+                    .nav-link.active {
+                        /* background: #007bff;
+                    color: white;
+                    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); */
+                    }
+                </style>
+
+                <a
+                    href="index.html"
+                    class="nav-link inline-block mx-1 px-4 py-2.5 bg-white/70 no-underline text-gray-600 rounded-full text-sm font-bold shadow-sm transition-all duration-300 ease-in-out border border-transparen hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
+                    >メイン計算機</a
+                >
+                <a
+                    href="chasepankun.html"
+                    class="nav-link inline-block mx-1 px-4 py-2.5 bg-white/70 no-underline text-gray-600 rounded-full text-sm font-bold shadow-sm transition-all duration-300 ease-in-out border border-transparen hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
+                    >パンくんを追え</a
+                >
+                <a
+                    href="index1.html"
+                    class="nav-link inline-block mx-1 px-4 py-2.5 bg-white/70 no-underline text-gray-600 rounded-full text-sm font-bold shadow-sm transition-all duration-300 ease-in-out border border-transparen hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
+                    >Ver.1</a
+                >
+                <a
+                    href="index2.html"
+                    class="nav-link inline-block mx-1 px-4 py-2.5 bg-white/70 no-underline text-gray-600 rounded-full text-sm font-bold shadow-sm transition-all duration-300 ease-in-out border border-transparen hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
+                    >Ver.2</a
+                >
+                <a
+                    href="index4.html"
+                    class="nav-link inline-block mx-1 px-4 py-2.5 bg-white/70 no-underline text-gray-600 rounded-full text-sm font-bold shadow-sm transition-all duration-300 ease-in-out border border-transparen hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
+                    >index4</a
+                >
+
+                <script>
+                    // 今見ているURLをチェックして、一致するリンクに "active" クラスをつける魔法
+                    // const currentFile =
+                    //     window.location.pathname.split('/').pop() || 'index.html';
+                    // const links = document.querySelectorAll('.nav-link');
+                    // links.forEach((link) => {
+                    //     if (link.getAttribute('href') === currentFile) {
+                    //         link.classList.add('active');
+                    //     }
+                    // });
+                    // 全ての nav-link を取得
+                    // 1. 全てのリンクを取得
+                    const navLinks = document.querySelectorAll('.nav-link');
+
+                    // 2. 現在のファイル名を取得 (例: "index4.html")
+                    // location.pathname は "/folder/index4.html" のような値を返すので、最後の一部を取り出します
+                    const currentFile =
+                        window.location.pathname.split('/').pop() ||
+                        'index.html';
+
+                    navLinks.forEach((link) => {
+                        // 3. リンクの href 属性を取得 (例: "index4.html")
+                        const linkHref = link.getAttribute('href');
+
+                        // 4. ファイル名が一致するかチェック
+                        if (linkHref === currentFile) {
+                            console.log('一致');
+
+                            // 合致する場合：アクティブ用クラスを付与
+                            link.classList.add(
+                                'bg-blue-600',
+                                'text-white',
+                                'shadow-lg',
+                                'shadow-blue-500/30',
+                                'hover:bg-blue-600', // ← これを追加！
+                                'hover:text-white', // ← 文字色も白をキープ！
+                            );
+                            // かわりに通常用クラスを外す
+                            link.classList.remove(
+                                'bg-white/70',
+                                'text-gray-600',
+                                'shadow-sm',
+                                'hover:bg-white', // ← これを remove に追加！
+                                'hover:shadow-md', // ← これも remove に追加！
+                            );
+                        } else {
+                            console.log('不一致');
+
+                            // 合致しない場合：念のため通常用クラスにしておく
+                            link.classList.add(
+                                'bg-white/70',
+                                'text-gray-600',
+                                'shadow-sm',
+                                'hover:bg-white', // ← 通常時は白くなってほしいので add
+                            );
+                            link.classList.remove(
+                                'bg-blue-600',
+                                'text-white',
+                                'shadow-lg',
+                                'shadow-blue-500/30',
+                            );
+                        }
+                    });
+                </script>
+            </nav>
+            <p>デモサイトの内容</p>
+            <div id="adultcheck" class="rarara"></div>
+            <div id="fruits"></div>
+            <div id="mab"></div>
+            <div id="mcd"></div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>namae</th>
+                        <th>kanshin</th>
+                        <th>nenrei</th>
+                    </tr>
+                </thead>
                 <tr>
-                    <th>namae</th>
-                    <th>kanshin</th>
-                    <th>nenrei</th>
+                    <th>kiyo</th>
+                    <td>game</td>
+                    <td>53</td>
                 </tr>
-            </thead>
-            <tr>
-                <th>kiyo</th>
-                <td>game</td>
-                <td>53</td>
-            </tr>
-            <tr>
-                <th>bob</th>
-                <td>health</td>
-                <td>52</td>
-            </tr>
-            <tbody></tbody>
-        </table>
-        <script src="index4.js"></script>
+                <tr>
+                    <th>bob</th>
+                    <td>health</td>
+                    <td>52</td>
+                </tr>
+                <tbody></tbody>
+            </table>
+            <script src="index4.js" defer></script>
+        </div>
     </body>
 </html>
