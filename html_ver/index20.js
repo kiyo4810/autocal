@@ -2,8 +2,11 @@
 const video = document.getElementById('bgVideo');
 const btn = document.getElementById('volumeBtn');
 const audio = document.getElementById('bgAudio');
+console.log(btn);
 
-btn.addEventListener('click', () => {
+btn.addEventListener('click', (e) => {
+    console.log(e);
+
     // audio.paused が true なら停止中
     if (audio.paused) {
         // 音声を再生
