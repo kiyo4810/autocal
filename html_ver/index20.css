@@ -1,0 +1,78 @@
+/* --- 既存のスタイルはそのまま --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.container {
+    width: 100%;
+    height: 700px; /* PCでの高さ */
+    position: relative;
+    overflow: hidden; /* はみ出し防止 */
+}
+.container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 90%; /* スマホで横幅いっぱいに文字が広がらないよう調整 */
+    text-align: center;
+}
+
+.content h1 {
+    font-size: 64px;
+    color: #fff;
+    text-align: center;
+}
+.content span {
+    display: block; /* 改行を確実にするため追加 */
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 20px; /* ボタンとの間隔 */
+}
+.content button {
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    outline: none;
+    background: rgb(142, 96, 142);
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 12px 24px; /* スマホで押しやすいサイズに微調整 */
+}
+
+/* --- ここからレスポンシブ（スマホ向け）修正 --- */
+
+@media screen and (max-width: 768px) {
+    .container {
+        height: 100vh; /* スマホの画面いっぱいに表示（全画面） */
+    }
+
+    .content h1 {
+        font-size: 32px; /* 64pxは大きすぎるので半分に調整 */
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
+
+    .content span {
+        font-size: 18px; /* 読みやすいサイズに調整 */
+    }
+
+    .content button {
+        font-size: 18px; /* 指で押しやすく少し大きく */
+        width: 80%; /* ボタンをタップしやすく横長に */
+        max-width: 250px;
+    }
+}
