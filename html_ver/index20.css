@@ -76,3 +76,34 @@
         max-width: 250px;
     }
 }
+
+/* 右下に固定するスタイル */
+#teacher {
+    position: absolute;
+    bottom: 20px; /* 下から20px */
+    right: 20px; /* 右から20px */
+    z-index: 2; /* ビデオやコンテンツより上に表示 */
+}
+
+#teacher a {
+    color: rgba(255, 255, 255, 0.7); /* 白の少し透明（目立ちすぎない） */
+    text-decoration: none;
+    font-size: 12px; /* 小さめに設定 */
+    background: rgba(0, 0, 0, 0.3); /* 薄い黒背景を敷いて文字を見やすく */
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+#teacher a:hover {
+    color: #fff;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* スマホ(OPPO)用の微調整 */
+@media screen and (max-width: 768px) {
+    #teacher {
+        bottom: 10px; /* スマホでは少し詰める */
+        right: 10px;
+    }
+}
