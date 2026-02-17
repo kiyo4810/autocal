@@ -1,0 +1,12 @@
+th {
+    border: 1px solid black;
+}
+td {
+    border: 2px solid gray;
+    color: aqua;
+    background-color: chocolate;
+}
+body {
+    background-image: url(./images/cat4-big.jpg);
+    text-shadow: 1px 1px 2px rgb(254, 254, 254);
+}
