@@ -1,53 +1,67 @@
 const logArea = document.getElementById('log');
 
-// ログを表示する関数
+// ログを表示する関数（修正版）
 function addLog(e) {
-    const msg = `イベント発生: ${e.type} | ターゲット: ${e.target.tagName}の${e.target.innerText || ''}${e.key || ''}`;
+    // 1. ターゲットが持っている情報を整理
+    const tagName = e.target.tagName;
+    // 2. キー入力があれば表示、なければ空
+    const keyInfo = e.key ? ` (${e.key})` : '';
+    // 3. input要素ならvalue、それ以外なら固定テキストなど
+    const targetInfo =
+        e.target.id === 'mouseBox' ? '操作ボックス' : e.target.tagName;
+
+    const msg = `イベント: ${e.type.padEnd(10)} | 対象: ${targetInfo}${keyInfo}`;
+
     const div = document.createElement('div');
     div.textContent = msg;
     logArea.prepend(div);
-    console.log(e); // ブラウザのコンソールで詳細を確認！
+    console.log(e);
 }
 
 // --- 1. マウスイベント ---
 const mouseBox = document.getElementById('mouseBox');
+
 mouseBox.addEventListener('click', (e) => {
     addLog(e);
     mouseBox.classList.toggle('active');
 });
-// --- 1. マウスイベント (mouseoutを追加) ---
-mouseBox.addEventListener('mouseout', (e) => {
-    addLog(e);
-    // マウスが離れたら色を戻すなどの処理もできます
-    mouseBox.textContent = 'マウス外れたよ！';
-});
 
-// ついでに mouseover の方も書き換えると変化がわかりやすいです
 mouseBox.addEventListener('mouseover', (e) => {
+    // 順序：ログを先に取ってから文字を変える
     addLog(e);
     mouseBox.textContent = 'マウス乗ったよ！';
+});
+
+mouseBox.addEventListener('mouseout', (e) => {
+    addLog(e);
+    mouseBox.textContent = 'マウス外れたよ！';
 });
 
 // --- 2. キーボードイベント ---
 const keyInput = document.getElementById('keyInput');
 const keyDisplay = document.getElementById('keyDisplay');
+
 keyInput.addEventListener('keydown', (e) => {
     addLog(e);
-    keyDisplay.textContent = e.key; // e.keyでどのキーか取得
+    keyDisplay.textContent = e.key;
+});
+
+keyInput.addEventListener('input', (e) => {
+    addLog(e);
+    // inputイベントでは e.key が使えないので inputType などをコンソールで見るのが正解です
 });
 
 // --- 3. フォームイベント ---
 const sampleForm = document.getElementById('sampleForm');
 sampleForm.addEventListener('submit', (e) => {
-    e.preventDefault(); // ★重要！ページのリロードを止める
-    alert('フォーム送信をキャンセルしました（preventDefaultの効果）');
-    const index = e.currentTarget.fruitSelect.selectedIndex;
-    const selectedText = e.currentTarget.fruitSelect[index].textContent;
-    const formAns = document.getElementById('formAns');
-    formAns.innerText = selectedText + 'ですよ';
-    console.log(selectedText + 'ですよ');
-
+    //フォームが送信時画面リセットされるのを防ぐおまじない
+    e.preventDefault();
     addLog(e);
+
+    const selectedText =
+        sampleForm.fruitSelect.options[sampleForm.fruitSelect.selectedIndex]
+            .text;
+    document.getElementById('formAns').innerText = selectedText + 'ですよ';
 });
 
 // --- 4. ウィンドウイベント ---
