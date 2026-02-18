@@ -1,0 +1,57 @@
+#maincontainer-g {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    grid-template:
+        'A A' auto
+        'B C' 1fr
+        'D D' auto /
+        1fr 150px;
+}
+header {
+    grid-area: A;
+}
+main {
+    grid-area: B;
+}
+aside {
+    grid-area: C;
+}
+footer {
+    grid-area: D;
+}
+
+header {
+    background-color: gray;
+    text-align: center;
+    padding: 16px;
+}
+main {
+    padding: 32px;
+}
+main img {
+    width: 100%;
+    height: auto;
+}
+aside {
+    background-color: lightblue;
+    padding: 16px 32px;
+}
+footer {
+    background-color: lightpink;
+    text-align: center;
+    padding: 16px;
+}
+.container-f {
+    width: 800px;
+    padding: 10px;
+    margin: 30px 0;
+    background: #ccc;
+}
+.c01 {
+    display: flex;
+}
+.c02 {
+    display: flex;
+    flex-wrap: wrap;
+}
