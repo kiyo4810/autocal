@@ -78,25 +78,25 @@ body {
     left: 10%;
     animation:
         float 3s ease-in-out infinite,
-        move 15s linear infinite;
+        move 10s ease-in-out infinite;
 }
 .pan2 {
     left: 30%;
     animation:
         float 4s ease-in-out infinite,
-        move 20s linear infinite;
+        move 8s ease-in-out infinite;
 }
 .pan3 {
     left: 60%;
     animation:
         float 3.5s ease-in-out infinite,
-        move 18s linear infinite;
+        move 9s ease-in-out infinite;
 }
 .pan4 {
-    left: 80%;
+    left: 90%;
     animation:
         float 5s ease-in-out infinite,
-        move 25s linear infinite;
+        move 7s ease-in-out infinite;
 }
 
 /* 縦にプカプカ揺れるアニメーション */
@@ -113,9 +113,12 @@ body {
 /* 横にゆっくり流れるアニメーション（お好みで） */
 @keyframes move {
     0% {
-        margin-left: -50px;
+        margin-left: -100px;
+    }
+    50% {
+        margin-left: 100px;
     }
     100% {
-        margin-left: 50px;
+        margin-left: -100px;
     }
 }

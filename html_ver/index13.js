@@ -15,7 +15,7 @@ h1.after(arrayId);
 
 // fetchメソッドについて
 // https://www.youtube.com/watch?v=pzIxzegWVu8
-fetch('db.json')
+fetch('./db.json')
     .then((response) => {
         console.log(response);
         // console.log(response.json());
