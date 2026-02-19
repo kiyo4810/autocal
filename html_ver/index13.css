@@ -32,6 +32,7 @@ body {
     top: -100px;
 }
 
+/* ここから動く波 */
 .wave1 {
     opacity: 0.2;
     animation: wave 3s linear infinite;
@@ -58,5 +59,63 @@ body {
     }
     100% {
         background-position: 0;
+    }
+}
+
+/* ここから動くパンくん */
+/* パンくんの基本スタイル */
+.pan {
+    width: 100px; /* パンくんの横幅 */
+    height: 100px; /* パンくんの縦幅 */
+    background: url('images/pan.png') no-repeat center/contain;
+    position: absolute;
+    top: -120px; /* 波の上にくるように調整 */
+    z-index: 5; /* 波より手前に出す場合 */
+}
+
+/* 個別の配置とアニメーション速度 */
+.pan1 {
+    left: 10%;
+    animation:
+        float 3s ease-in-out infinite,
+        move 15s linear infinite;
+}
+.pan2 {
+    left: 30%;
+    animation:
+        float 4s ease-in-out infinite,
+        move 20s linear infinite;
+}
+.pan3 {
+    left: 60%;
+    animation:
+        float 3.5s ease-in-out infinite,
+        move 18s linear infinite;
+}
+.pan4 {
+    left: 80%;
+    animation:
+        float 5s ease-in-out infinite,
+        move 25s linear infinite;
+}
+
+/* 縦にプカプカ揺れるアニメーション */
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0) rotate(-5deg);
+    }
+    50% {
+        transform: translateY(15px) rotate(5deg); /* 15px分沈む */
+    }
+}
+
+/* 横にゆっくり流れるアニメーション（お好みで） */
+@keyframes move {
+    0% {
+        margin-left: -50px;
+    }
+    100% {
+        margin-left: 50px;
     }
 }
