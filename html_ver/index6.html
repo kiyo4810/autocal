@@ -292,7 +292,14 @@
                     <span id="entered" class="marker"></span>
                     <span id="remained"></span>
                 </div>
-                <input type="text" class="text" id="inputText" autofocus />
+                <input
+                    type="text"
+                    class="text"
+                    id="inputText"
+                    autofocus
+                    autocapitalize="off"
+                    autocomplete="off"
+                />
             </label>
         </div>
         <div id="message" class="text-container hidden">
@@ -344,21 +351,41 @@
                 remainedTextWords = currentText.split('');
             };
             setQuestion();
-            document.addEventListener('input', (e) => {
-                if (remainedTextWords[0] === e.data) {
+            inputText.addEventListener('input', (e) => {
+                // 1. 入力欄にある全文字列を取得
+                const value = inputText.value;
+
+                // 2. 「これまでに正解した文字」＋「次に打つべき1文字」が入力されたか判定
+                // つまり、inputの中身が「正解済みリスト + 次の1文字」と一致するかを見ます
+                const expectedText =
+                    enteredTextWords.join('') + remainedTextWords[0];
+
+                if (value === expectedText) {
                     console.log('正解');
+
+                    // 正解データを更新
                     enteredTextWords.push(remainedTextWords[0]);
                     remainedTextWords.shift();
+
+                    // 画面上の問題表示を更新
                     entered.textContent = enteredTextWords.join('');
                     remained.textContent = remainedTextWords.join('');
+
+                    // ★ ここで inputText.value = ''; はしない（文字を溜める）
+
                     if (remainedTextWords.length <= 0) {
                         if (questions.length <= 0) {
                             game.classList.add('hidden');
                             message.classList.remove('hidden');
                         } else {
+                            // 次の問題へ行くときは入力欄をリセット
                             setQuestion();
                         }
                     }
+                } else {
+                    // 間違った文字を打った場合、inputの値を「正解していたところまで」に強制的に戻す
+                    // これにより、間違った文字が入力欄に残るのを防ぎます
+                    inputText.value = enteredTextWords.join('');
                 }
             });
             replayBtn.addEventListener('click', () => {
