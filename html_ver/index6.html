@@ -209,10 +209,10 @@
                 background: #91dbf1;
             }
             .text {
-                width: 100%;
-                border: none;
+                width: 70%;
+                /* border: none; */
                 margin-top: 2rem;
-                font-size: 2vw;
+                font-size: 3vw;
                 letter-spacing: 0.1em;
                 text-align: center;
             }
@@ -235,16 +235,22 @@
             .hidden {
                 display: none;
             }
+            .titles {
+                margin-top: 20px;
+                text-align: center;
+            }
         </style>
     </head>
     <body>
         <div id="game" class="text-container">
-            <h1>タイピングゲーム学習</h1>
-            <h6>
-                <a href="https://www.youtube.com/watch?v=nE_ZIGhTlrQ"
-                    >https://www.youtube.com/watch?v=nE_ZIGhTlrQ</a
-                >
-            </h6>
+            <div class="titles">
+                <h1>タイピングゲーム学習</h1>
+                <h6>
+                    <a href="https://www.youtube.com/watch?v=nE_ZIGhTlrQ"
+                        >https://www.youtube.com/watch?v=nE_ZIGhTlrQ</a
+                    >
+                </h6>
+            </div>
             <label for="inputText">
                 <div class="question">
                     <span id="entered" class="marker"></span>
@@ -323,7 +329,8 @@
                 window.location.reload();
             });
             console.log(document.title);
-            document.title = 'わわわわーん';
+            document.title =
+                'タイピングゲームスタート！JSで動的に変わるタイトル';
             console.log(document.title);
             let h1in = document.querySelector('h1');
             // console.log(h1in);
