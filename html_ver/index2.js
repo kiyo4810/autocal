@@ -97,8 +97,13 @@ function calculate() {
     for (let col = 0; col < COLUMN_COUNT; col++) {
         // 特定のセルの入力値を取得する補助関数
         const getVal = (rowId) => {
+            // この時点ではrowIdは空でも実行するのはこのあと。だからrowIdにはinit_cashが入る
+            console.log(
+                `今から「${rowId}」の「${col}歳」のデータを探しに行きます！`,
+            ); // これを追加            debugger;
             // data-rowとdata-colが一致するinput要素を探す
             const el = document.querySelector(
+                // id でも class でもないので. や # は使えません。「属性の名前と中身を指定して探したいときは [] で囲む」というルール
                 `[data-row="${rowId}"][data-col="${col}"]`,
             );
             return el ? parseFloat(el.value) || 0 : 0; // 数字があれば取得、なければ0
