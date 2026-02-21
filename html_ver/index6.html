@@ -102,6 +102,11 @@
                     ),
                     url('images/akipassport.png');
                 background-repeat: repeat;
+                /* --- ここを追加・修正 --- */
+                background-repeat: no-repeat; /* 画像を繰り返さない（好みでrepeatでもOK） */
+                background-size: cover; /* 画面全体を覆うように拡大縮小 */
+                background-position: center; /* 画像の中心を画面の中心に合わせる ★これが重要 */
+                background-attachment: fixed; /* スクロールしても背景を動かさない（アプリ風になる） */
             }
             article,
             aside,
@@ -238,6 +243,37 @@
             .titles {
                 margin-top: 20px;
                 text-align: center;
+            }
+            /* --- レスポンシブ調整 --- */
+
+            /* 画面幅が短い（スマホ想定）時の設定 */
+            @media screen and (max-width: 480px) {
+                .text-container {
+                    /* dvhを使うことで、ブラウザのUIを除いた「本当に表示できる高さ」に合わせます */
+                    height: 100dvh;
+                    padding: 20px;
+                    box-sizing: border-box;
+                }
+
+                .text-container label {
+                    /* 親要素の中央に収まるよう、高さを自動（中身に合わせる）にします */
+                    height: auto;
+                    flex-grow: 1; /* 余白を埋める程度に広げる */
+                }
+
+                .question {
+                    /* スマホだと4vwは小さいので、少し大きく調整 */
+                    font-size: 8vw;
+                    word-break: break-all; /* 長い単語でも折り返すようにする */
+                }
+
+                .text {
+                    width: 90%; /* スマホでは横幅を広く使う */
+                    font-size: 6vw; /* 入力文字も見やすく大きく */
+                    padding: 15px;
+                    /* スマホ独自の「入力中の青枠」が邪魔ならここで調整 */
+                    -webkit-tap-highlight-color: transparent;
+                }
             }
         </style>
     </head>
