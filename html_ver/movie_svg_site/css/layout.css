@@ -1,5 +1,10 @@
 @charset "utf-8";
 /* レイアウトのためのCSS */
+* {
+    box-sizing: border-box;
+    max-width: 100%; /* どんな要素も画面幅を超えさせない */
+    overflow-wrap: break-word;
+}
 
 body {
     background: #333;
