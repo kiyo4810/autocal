@@ -522,10 +522,15 @@ body.appear #container {
 
 /* --- parts.css --- */
 
+/* --- parts.css の .slide-in を修正 --- */
+
 .slide-in {
     overflow: hidden;
-    display: block; /* inline-blockからblockに変更して横幅いっぱいに広げる */
-    width: 100%; /* 親要素（pv-title）と同じ幅にする */
+    display: block;
+    width: 100%;
+    /* 左右に 2% ほどの遊び（バッファ）を作る */
+    padding: 0 2%;
+    box-sizing: border-box; /* パディングを含めた横幅計算にする */
 }
 
 .slide-in_inner {
