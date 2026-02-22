@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>生涯収支シミュレーター Ver2-5</title>
+    <link rel="stylesheet" href="index2-5.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body>
+
+<nav id="site-nav">
+    <a href="index2-2.html" class="nav-link">Ver2-2</a>
+    <a href="index2-5.html" class="nav-link">Ver2-5</a>
+    <button class="nav-link nav-reset" onclick="resetData()">🔄 リセット</button>
+</nav>
+
+<header class="page-header">
+    <h1>生涯収支シミュレーター <span class="version-badge">Ver 2-5</span></h1>
+    <p>インフレ・資産運用・ライフイベントを考慮したリアルな人生収支予測</p>
+</header>
+
+<main>
+
+    <!-- ① 基本設定 -->
+    <section class="panel">
+        <button class="panel-toggle" onclick="togglePanel(this)">
+            <span>⚙️ 基本設定</span>
+            <span class="toggle-arrow">▾</span>
+        </button>
+        <div class="panel-content">
+            <div class="settings-grid">
+
+                <fieldset>
+                    <legend>基本情報</legend>
+                    <label>現在の年齢
+                        <input type="number" id="s_currentAge" value="30" min="0" max="99" title="シミュレーション開始年齢"> 歳
+                    </label>
+                    <label>現在の資産
+                        <input type="number" id="s_initialAssets" value="500" title="今持っている資産の合計（万円）"> 万円
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>経済パラメータ</legend>
+                    <label>インフレ率
+                        <input type="number" id="s_inflationRate" value="2.0" step="0.1" min="0" title="年間の物価上昇率（日本の目標は2%）"> %/年
+                    </label>
+                    <label>投資利回り
+                        <input type="number" id="s_investmentReturn" value="4.0" step="0.1" min="0" title="資産運用の年間期待リターン（インデックス投資は4〜7%が目安）"> %/年
+                    </label>
+                    <label>借入金利
+                        <input type="number" id="s_debtRate" value="1.5" step="0.1" min="0" title="残高がマイナスになった場合に発生する負債利息"> %/年
+                    </label>
+                    <p class="hint">※ プラス残高→運用益、マイナス残高→負債利息</p>
+                </fieldset>
+
+                <fieldset>
+                    <legend>収入設定</legend>
+                    <label>手取り年収
+                        <input type="number" id="s_salary" value="500" title="現在の手取り年収（税引き後）"> 万円
+                    </label>
+                    <label>年収上昇率
+                        <input type="number" id="s_salaryGrowth" value="2.0" step="0.1" title="毎年の昇給率（0にすると現状維持）"> %/年
+                    </label>
+                    <label>就労開始年齢
+                        <input type="number" id="s_workStartAge" value="22" title="給与収入が始まる年齢"> 歳
+                    </label>
+                    <label>退職年齢
+                        <input type="number" id="s_retirementAge" value="65" title="給与収入が終わる年齢"> 歳
+                    </label>
+                    <label>年金額
+                        <input type="number" id="s_pension" value="150" title="年金の年間受取額（万円）"> 万円/年
+                    </label>
+                    <label>年金開始年齢
+                        <input type="number" id="s_pensionStartAge" value="65" title="年金受給を開始する年齢"> 歳
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>基本支出 <small>（インフレ連動）</small></legend>
+                    <label>生活費
+                        <input type="number" id="s_livingCost" value="200" title="食費・光熱費・通信費など毎月の基本生活費（年間）"> 万円/年
+                    </label>
+                    <label>住居費
+                        <input type="number" id="s_housingCost" value="120" title="家賃または住宅ローン返済額（年間）"> 万円/年
+                    </label>
+                    <p class="hint">※ どちらもインフレ率に連動して毎年上昇します</p>
+                </fieldset>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ② ライフイベント -->
+    <section class="panel">
+        <button class="panel-toggle" onclick="togglePanel(this)">
+            <span>📅 ライフイベント</span>
+            <span class="toggle-arrow">▾</span>
+        </button>
+        <div class="panel-content">
+            <div class="event-presets">
+                <span class="preset-label">プリセット：</span>
+                <button onclick="openModal('birth')">👶 出産</button>
+                <button onclick="openModal('education')">🎓 教育費</button>
+                <button onclick="openModal('house')">🏠 住宅購入</button>
+                <button onclick="openModal('car')">🚗 車購入</button>
+                <button onclick="openModal('custom')">＋ カスタム</button>
+            </div>
+            <div id="events-list"></div>
+        </div>
+    </section>
+
+    <!-- ③ サマリーカード -->
+    <div class="summary-row">
+        <div class="summary-card">
+            <div class="card-icon">💰</div>
+            <div class="card-body">
+                <div class="card-label">生涯収入合計</div>
+                <div class="card-value" id="sum-income">--</div>
+                <div class="card-unit">万円</div>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="card-icon">💸</div>
+            <div class="card-body">
+                <div class="card-label">生涯支出合計</div>
+                <div class="card-value red" id="sum-expense">--</div>
+                <div class="card-unit">万円</div>
+            </div>
+        </div>
+        <div class="summary-card" id="card-final">
+            <div class="card-icon">🏦</div>
+            <div class="card-body">
+                <div class="card-label">100歳時点の残高</div>
+                <div class="card-value" id="sum-balance">--</div>
+                <div class="card-unit">万円</div>
+            </div>
+        </div>
+        <div class="summary-card" id="card-bankrupt">
+            <div class="card-icon">⚠️</div>
+            <div class="card-body">
+                <div class="card-label">資産枯渇年齢</div>
+                <div class="card-value" id="sum-bankrupt">なし</div>
+                <div class="card-unit" id="sum-bankrupt-unit"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ④ グラフ -->
+    <section class="panel">
+        <div class="panel-static-header">📊 収支グラフ</div>
+        <div class="panel-content chart-wrap">
+            <canvas id="mainChart"></canvas>
+        </div>
+    </section>
+
+    <!-- ⑤ 詳細テーブル -->
+    <section class="panel">
+        <button class="panel-toggle" onclick="togglePanel(this)">
+            <span>📋 詳細テーブル（年齢別）</span>
+            <span class="toggle-arrow">▾</span>
+        </button>
+        <div class="panel-content table-wrap">
+            <table id="simTable">
+                <thead>
+                    <tr>
+                        <th class="col-age">年齢</th>
+                        <th>給与 / 年金</th>
+                        <th>投資収益</th>
+                        <th>年間収入計</th>
+                        <th>生活費</th>
+                        <th>住居費</th>
+                        <th title="ホバーでイベント名を確認できます">イベント支出 ⓘ</th>
+                        <th>年間支出計</th>
+                        <th>年間収支</th>
+                        <th>累計残高</th>
+                    </tr>
+                </thead>
+                <tbody id="simTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<!-- モーダル -->
+<div id="modal-overlay" class="hidden">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="modal-title">イベントを追加</h3>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="m-id">
+            <label>イベント名
+                <input type="text" id="m-name" placeholder="例: 第一子大学入学">
+            </label>
+            <label>種別
+                <select id="m-type">
+                    <option value="expense">支出（マイナス）</option>
+                    <option value="income">収入（プラス）</option>
+                </select>
+            </label>
+            <label>発生開始年齢
+                <input type="number" id="m-startAge" value="35" min="0" max="100"> 歳から
+            </label>
+            <label>金額（年間）
+                <input type="number" id="m-amount" value="300"> 万円 / 年
+            </label>
+            <label>期間
+                <input type="number" id="m-duration" value="1" min="1"> 年間
+                <span class="hint">（1年 ＝ 一時的な支出）</span>
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="m-inflation">
+                インフレ連動（毎年少しずつ金額が上がる。生活費など継続費用に推奨）
+            </label>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal()">キャンセル</button>
+            <button class="btn-primary" onclick="saveEvent()">保存する</button>
+        </div>
+    </div>
+</div>
+
+<script src="index2-5.js"></script>
+</body>
+</html>
