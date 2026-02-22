@@ -524,17 +524,16 @@ body.appear #container {
 
 /* --- parts.css の .slide-in を修正 --- */
 
+/* --- parts.css 内の該当箇所を書き換え --- */
+
 .slide-in {
     overflow: hidden;
     display: block;
     width: 100%;
-    /* 左右に 2% ほどの遊び（バッファ）を作る */
-    padding: 0 2%;
-    box-sizing: border-box; /* パディングを含めた横幅計算にする */
 }
 
 .slide-in_inner {
-    display: inline-block; /* こちらは文字の塊を維持するためにそのままでOK */
+    display: inline-block;
 }
 /*上下のアニメーション*/
 

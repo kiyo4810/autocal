@@ -1,10 +1,5 @@
 @charset "utf-8";
 /* レイアウトのためのCSS */
-* {
-    box-sizing: border-box;
-    max-width: 100%; /* どんな要素も画面幅を超えさせない */
-    overflow-wrap: break-word;
-}
 
 body {
     background: #333;
@@ -44,17 +39,6 @@ h1 {
     }
 }
 
-/* .pv-title{
-    position:fixed;
-    bottom:0;
-    color:#d87514;
-    text-transform: uppercase;
-    font-weight: normal;
-    font-size: 13.7vw;
-    line-height: 0.8;
-    white-space: nowrap;
-} */
-
 .pv-title {
     position: fixed;
     bottom: 0;
@@ -65,18 +49,11 @@ h1 {
     line-height: 0.8;
     white-space: nowrap;
     text-align: center;
-    z-index: 10; /* 他の要素に隠されないように */
-
-    /* 修正ポイント：12.5vw から 11.5vw 程度に少しだけ下げる */
-    /* これでアプリ内ブラウザでの計算誤差を吸収します */
+    z-index: 10;
     font-size: 12.5vw;
-    /* 念のための保険：もし文字が横幅を突き抜けそうになったら、
-       文字自体を自動的に縮小して枠内に収める魔法のプロパティ */
-    overflow: hidden;
 }
 
 /*ナビゲーション位置*/
-
 #g-nav {
     position: absolute;
     z-index: 2;
@@ -84,10 +61,15 @@ h1 {
     right: 20px;
 }
 
-/* 画面幅が650px以上になったらサイズを固定して暴走を止める */
+/* 画面幅が650px以上になったらサイズを固定 */
 @media screen and (min-width: 650px) {
     .pv-title {
-        /* 650pxの12.5vwに相当する「約81px」で固定、あるいは少し大きくても90px程度に */
         font-size: 82px;
     }
+}
+
+#container {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
 }
