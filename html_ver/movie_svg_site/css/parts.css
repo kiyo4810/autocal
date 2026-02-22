@@ -441,6 +441,10 @@ body.appear #container {
 .modaal-content-container {
     padding: 10px;
 }
+/* モーダル内の動画もセピアにする（必要であれば） */
+.modaal-content-container video {
+    filter: sepia(50%);
+}
 
 /*===========================================================*/
 /*機能編  6-3-1 画面全体に背景動画を流す
@@ -476,6 +480,7 @@ body.appear #container {
     height: 56.25vw; /* 16:9の幅 → 9 ÷ 16 = 56.25% */
     min-height: 100%;
     min-width: 100%;
+    filter: sepia(50%); /* 100%で完全なセピア色になります */
 }
 
 .modaal-content-container video {
@@ -515,15 +520,17 @@ body.appear #container {
 /*印象編　8-5 テキストが流れるように出現（下から上）
 /*===========================================================*/
 
+/* --- parts.css --- */
+
 .slide-in {
     overflow: hidden;
-    display: inline-block;
+    display: block; /* inline-blockからblockに変更して横幅いっぱいに広げる */
+    width: 100%; /* 親要素（pv-title）と同じ幅にする */
 }
 
 .slide-in_inner {
-    display: inline-block;
+    display: inline-block; /* こちらは文字の塊を維持するためにそのままでOK */
 }
-
 /*上下のアニメーション*/
 
 .upAnime,

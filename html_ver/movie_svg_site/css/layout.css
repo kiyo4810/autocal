@@ -1,43 +1,45 @@
 @charset "utf-8";
 /* レイアウトのためのCSS */
 
-body{
-    background:#333;
-    font-family: 'Rammetto One', cursive, "游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
-	color: #333;
-	font-size:1rem;
-	line-height:1.85;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-text-size-adjust: 100%; 
-	word-wrap: break-word;
+body {
+    background: #333;
+    font-family:
+        'Rammetto One', cursive, '游ゴシック体', YuGothic, '游ゴシック Medium',
+        'Yu Gothic Medium', '游ゴシック', 'Yu Gothic', 'メイリオ', sans-serif;
+    color: #333;
+    font-size: 1rem;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    word-wrap: break-word;
 }
 
-body.appear{
-     background:#d87514;   
+body.appear {
+    background: #d87514;
 }
 
-@media screen and (max-width:768px) {
-body{
-	font-size:0.8rem;
-	}
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 0.8rem;
+    }
 }
 
 /*見出し設定*/
-h1{
-    position:fixed;
-    left:20px;
-    top:10px;
-    width:5em;
+h1 {
+    position: fixed;
+    left: 20px;
+    top: 10px;
+    width: 5em;
 }
 
-@media screen and (max-width:768px) {
-h1{
-    left:10px;
-}    
+@media screen and (max-width: 768px) {
+    h1 {
+        left: 10px;
+    }
 }
 
-.pv-title{
+/* .pv-title{
     position:fixed;
     bottom:0;
     color:#d87514;
@@ -46,14 +48,37 @@ h1{
     font-size: 13.7vw;
     line-height: 0.8;
     white-space: nowrap;
+} */
+
+.pv-title {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: #d87514;
+    text-transform: uppercase;
+    font-weight: normal;
+    line-height: 0.8;
+    white-space: nowrap;
+    text-align: center;
+    z-index: 10; /* 他の要素に隠されないように */
+
+    /* スマホ・タブレット（650px未満）の時のサイズ */
+    font-size: 12.5vw;
 }
 
 /*ナビゲーション位置*/
 
-#g-nav{
+#g-nav {
     position: absolute;
     z-index: 2;
-    top:20px;
-    right:20px;
+    top: 20px;
+    right: 20px;
 }
 
+/* 画面幅が650px以上になったらサイズを固定して暴走を止める */
+@media screen and (min-width: 650px) {
+    .pv-title {
+        /* 650pxの12.5vwに相当する「約81px」で固定、あるいは少し大きくても90px程度に */
+        font-size: 82px;
+    }
+}
