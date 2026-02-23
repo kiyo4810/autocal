@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中野記世彦（きよ）｜ フロントエンドエンジニア</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --yellow: #fad141;
+      --navy:   #0a0a32;
+      --blue:   #6f8fff;
+      --pink:   #f7757d;
+      --mint:   #b3dfcf;
+      --white:  #ffffff;
+      --black:  #000000;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--navy);
+      overflow-x: hidden;
+    }
+
+    /* ───────── NAV ───────── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 200;
+      background: var(--yellow);
+      border-bottom: 3px solid var(--black);
+      padding: 14px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-weight: 900;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.01em;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--pink); }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 3px;
+      background: var(--black);
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 55px;
+      left: 0;
+      width: 100%;
+      background: var(--yellow);
+      border-bottom: 3px solid var(--black);
+      z-index: 199;
+      padding: 16px 32px;
+    }
+
+    .mobile-menu.open { display: block; }
+
+    .mobile-menu ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mobile-menu a {
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    /* ───────── HERO ───────── */
+    .hero {
+      background: var(--yellow);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 32px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      right: -60px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: rgba(10,10,50,0.05);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--black);
+      color: var(--yellow);
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 22px;
+    }
+
+    .hero-name {
+      font-size: clamp(3.2rem, 8vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+
+    .hero-name-en {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 600;
+      color: rgba(10,10,50,0.55);
+      margin-bottom: 28px;
+    }
+
+    .hero-tagline {
+      font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+      line-height: 2;
+      margin-bottom: 44px;
+      max-width: 460px;
+    }
+
+    .hero-tagline strong { color: var(--pink); }
+
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 36px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 2px solid var(--black);
+      transition: all 0.18s;
+    }
+
+    .btn-dark {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .btn-dark:hover {
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--black);
+    }
+
+    .btn-outline:hover {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    /* profile photo */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-photo {
+      width: 360px;
+      height: 360px;
+      object-fit: cover;
+      object-position: top center;
+      border-radius: 56px;
+      border: 4px solid var(--black);
+      box-shadow: 10px 10px 0 var(--black);
+      display: block;
+    }
+
+    .mascot {
+      position: absolute;
+      width: 110px;
+      bottom: -30px;
+      right: -10px;
+      animation: mascot-float 4s ease-in-out infinite;
+      filter: drop-shadow(3px 6px 8px rgba(0,0,0,0.18));
+    }
+
+    @keyframes mascot-float {
+      0%,100% { transform: translateY(0) rotate(-4deg); }
+      50%      { transform: translateY(-18px) rotate(6deg); }
+    }
+
+    /* ───────── SECTION COMMON ───────── */
+    section { padding: 88px 32px; }
+
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .sec-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: 10px;
+    }
+
+    .sec-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      margin-bottom: 48px;
+    }
+
+    /* ───────── ABOUT ───────── */
+    .about {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .about-intro {
+      font-size: 1.05rem;
+      line-height: 2.1;
+      margin-bottom: 64px;
+      max-width: 680px;
+      opacity: 0.9;
+    }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 44px; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--yellow), var(--blue), var(--pink));
+      border-radius: 2px;
+    }
+
+    .tl-item { position: relative; margin-bottom: 44px; }
+
+    .tl-item:last-child { margin-bottom: 0; }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -52px;
+      top: 4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--yellow);
+      border: 3px solid var(--navy);
+      box-shadow: 0 0 0 3px var(--yellow);
+    }
+
+    .tl-year {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--yellow);
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+    }
+
+    .tl-event {
+      font-size: 1.05rem;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+
+    .tl-desc {
+      font-size: 0.9rem;
+      line-height: 1.85;
+      opacity: 0.75;
+    }
+
+    /* ───────── STRENGTHS ───────── */
+    .strengths { background: var(--white); }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      border: 3px solid var(--black);
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 7px 7px 0 var(--black);
+      transition: transform 0.15s, box-shadow 0.15s;
+      background: var(--white);
+    }
+
+    .card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 10px 10px 0 var(--black);
+    }
+
+    .card-icon { font-size: 2.4rem; margin-bottom: 14px; }
+
+    .card-num {
+      display: block;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--pink);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .card-text { font-size: 0.88rem; line-height: 1.9; color: #444; }
+
+    /* ───────── MEDIA ───────── */
+    .media-sec { background: var(--yellow); }
+
+    .media-card {
+      background: var(--white);
+      border: 3px solid var(--black);
+      border-radius: 28px;
+      padding: 40px;
+      box-shadow: 8px 8px 0 var(--black);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 28px;
+      align-items: start;
+      max-width: 780px;
+    }
+
+    .media-badge {
+      background: var(--navy);
+      color: var(--yellow);
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .media-heading {
+      font-size: 1.1rem;
+      font-weight: 900;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .media-body {
+      font-size: 0.9rem;
+      line-height: 1.95;
+      color: #444;
+    }
+
+    .media-link {
+      display: inline-block;
+      margin-top: 16px;
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .media-link:hover { opacity: 0.7; }
+
+    /* ───────── STANCE ───────── */
+    .stance {
+      background: var(--navy);
+      color: var(--white);
+      text-align: center;
+    }
+
+    .stance-quote {
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 900;
+      line-height: 1.55;
+      color: var(--yellow);
+      margin: 36px auto;
+      max-width: 700px;
+    }
+
+    .stance-body {
+      font-size: 1rem;
+      line-height: 2.1;
+      opacity: 0.82;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* ───────── CONTACT ───────── */
+    .contact-sec {
+      background: var(--blue);
+      text-align: center;
+    }
+
+    .contact-sec .sec-title { color: var(--white); }
+
+    .contact-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 2;
+      margin-bottom: 44px;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .email-btn {
+      display: inline-block;
+      background: var(--white);
+      color: var(--navy);
+      padding: 20px 52px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 1.1rem;
+      border: 3px solid var(--black);
+      box-shadow: 6px 6px 0 var(--black);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .email-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0 var(--black);
+    }
+
+    /* ───────── FOOTER ───────── */
+    footer {
+      background: var(--black);
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      padding: 28px 32px;
+      font-size: 0.82rem;
+    }
+
+    /* ───────── RESPONSIVE ───────── */
+    @media (max-width: 768px) {
+      nav { padding: 12px 20px; }
+
+      .nav-links { display: none; }
+
+      .hamburger { display: flex; }
+
+      section { padding: 64px 20px; }
+
+      .hero { padding: 80px 20px 72px; }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero-visual { order: -1; }
+
+      .hero-photo {
+        width: 260px;
+        height: 260px;
+        margin: 0 auto;
+      }
+
+      .mascot { width: 90px; right: calc(50% - 170px); }
+
+      .media-card {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <div class="nav-logo">中野記世彦</div>
+    <ul class="nav-links">
+      <li><a href="#about">プロフィール</a></li>
+      <li><a href="#strengths">強み</a></li>
+      <li><a href="#media">実績</a></li>
+      <li><a href="#stance">スタンス</a></li>
+      <li><a href="#contact">お問い合わせ</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="メニュー">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#about" onclick="closeMenu()">プロフィール</a></li>
+      <li><a href="#strengths" onclick="closeMenu()">強み</a></li>
+      <li><a href="#media" onclick="closeMenu()">実績</a></li>
+      <li><a href="#stance" onclick="closeMenu()">スタンス</a></li>
+      <li><a href="#contact" onclick="closeMenu()">お問い合わせ</a></li>
+    </ul>
+  </div>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <div>
+        <span class="hero-badge">Frontend Engineer × Business Experience</span>
+        <h1 class="hero-name">中野<br>記世彦</h1>
+        <p class="hero-name-en">Nakano Kiyohiko / "Kiyo"</p>
+        <p class="hero-tagline">
+          「デザインを学び、これまでお世話になった方々へ<br>
+          どう恩返しができるか」。<br>
+          経営経験と技術を掛け合わせた、<strong>嘘のないWebサイト</strong>を。
+        </p>
+        <div class="hero-cta">
+          <a href="#contact" class="btn btn-dark">お問い合わせ</a>
+          <a href="#about" class="btn btn-outline">プロフィールを見る</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <img src="img_nakano.jpg" alt="中野記世彦" class="hero-photo">
+        <img src="ごまパンショートのアキごうかく背景２０２５.jpg" alt="ごまパンキャラクター" class="mascot">
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section class="about" id="about">
+    <div class="wrap">
+      <span class="sec-label">About Me</span>
+      <h2 class="sec-title">私のストーリー</h2>
+
+      <p class="about-intro">
+        こんにちは、フロントエンドエンジニアを目指して奮闘中の「きよ」こと中野記世彦です。
+        理美容商材のネット通販からスタートし、マレーシアでの不動産事業、
+        そして現在はデジタルのコードと大工仕事を並行して学ぶ、少し異色なキャリアを歩んでいます。
+      </p>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-year">2000年代前半</div>
+          <div class="tl-event">ネット通販事業を個人で立ち上げ</div>
+          <div class="tl-desc">理美容商材のネット通販を一から構築し、月商 2,000 万円超の規模まで成長させる。</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year">リーマン・ショック直前</div>
+          <div class="tl-event">法人売却（M&A）・マレーシアへ移住</div>
+          <div class="tl-desc">タイミングを見極め法人を売却。その後マレーシアへ移り、約10年の海外生活を開始。</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year">2012年</div>
+          <div class="tl-event">「中野プロパティ」設立（クアラルンプール）</div>
+          <div class="tl-desc">
+            KL 市内中心部近くに不動産会社を設立。日系駐在員家族 150 組以上の学校見学・住まい探しをサポートし、
+            東洋経済オンラインにも取り上げられる。
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year">現在</div>
+          <div class="tl-event">フロントエンドエンジニアへ転身 & 大工修行</div>
+          <div class="tl-desc">
+            帰国後、React・Bootstrap・Docker などのモダン技術を日々習得中。
+            デジタルのコードを組む感覚と、リアルの木材を組む大工仕事、両方の視点から「構造物」を捉えています。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STRENGTHS ── -->
+  <section class="strengths" id="strengths">
+    <div class="wrap">
+      <span class="sec-label">Strengths</span>
+      <h2 class="sec-title">私の強み</h2>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">💼</div>
+          <span class="card-num">月商 2,000 万</span>
+          <h3 class="card-title">実業で磨かれた視点</h3>
+          <p class="card-text">
+            理美容、通販、不動産など実業の現場を知っているからこそ、
+            痒い所に手が届く提案ができます。見た目だけでなく
+            ビジネスに直結するサイト制作を約束します。
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🌏</div>
+          <span class="card-num">TOEIC 920</span>
+          <h3 class="card-title">グローバルな対応力</h3>
+          <p class="card-text">
+            10 年のマレーシア生活と高い英語力で、最新の技術ドキュメント解読から
+            海外向けサイト構築まで対応可能。国際的な視野でデザイン・設計を行います。
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🔨</div>
+          <span class="card-num">デジタル × リアル</span>
+          <h3 class="card-title">構造物を作る感覚</h3>
+          <p class="card-text">
+            コードを組む感覚と大工仕事を両立。「構造物」として
+            捉えることで確かな設計思想を持ちます。一人親方だからこそ
+            価格にも仕事にも柔軟性を発揮します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MEDIA ── -->
+  <section class="media-sec" id="media">
+    <div class="wrap">
+      <span class="sec-label">Media</span>
+      <h2 class="sec-title">メディア掲載</h2>
+
+      <div class="media-card">
+        <div class="media-badge">東洋経済<br>オンライン</div>
+        <div>
+          <h3 class="media-heading">
+            マレーシアで日系家族の「住まい×学校選び」を一体サポート
+          </h3>
+          <p class="media-body">
+            2012 年にクアラルンプールで「中野プロパティ」を設立後、150 組以上の日系駐在員家族を
+            インターナショナルスクールの見学に案内。
+            「交通渋滞などを考慮すると、学校と自宅位置の関係は日本で想像する以上に大事」という
+            現地ならではの視点が注目を集め、東洋経済オンラインに掲載された。
+          </p>
+          <a href="https://toyokeizai.net/articles/-/72126" target="_blank" rel="noopener noreferrer" class="media-link">
+            記事を読む →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STANCE ── -->
+  <section class="stance" id="stance">
+    <div class="wrap">
+      <span class="sec-label" style="color:rgba(255,255,255,0.4)">Philosophy</span>
+      <h2 class="sec-title">私のスタンス</h2>
+
+      <blockquote class="stance-quote">
+        「誰かを不幸にする仕事は<br>絶対にしない」
+      </blockquote>
+
+      <p class="stance-body">
+        私は組織に媚びることは苦手です。社交性が高い方でもありません。しかし、
+        クライアント様に対しても自分に対しても「嘘をつけない」という信念があります。
+        ヘンコで頑固に見えるかもしれませんが、それは誠実さの裏返し。
+        一人親方だからこそ、価格にも働き方にも柔軟性を発揮します。
+      </p>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section class="contact-sec" id="contact">
+    <div class="wrap">
+      <span class="sec-label" style="color:rgba(255,255,255,0.5)">Contact</span>
+      <h2 class="sec-title">お気軽にどうぞ</h2>
+
+      <p class="contact-sub">
+        このサイトを見て「何か相談してみよう」と感じていただけたなら、<br>
+        ぜひお気軽にお声がけください。<br>
+        あなたのビジネスの良き伴走者となれる日を楽しみにしています。
+      </p>
+
+      <a href="mailto:kiyo4810japan@gmail.com" class="email-btn">
+        ✉ kiyo4810japan@gmail.com
+      </a>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>© 2025 中野記世彦 (Nakano Kiyohiko). All rights reserved.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+  </script>
+</body>
+</html>
