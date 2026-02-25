@@ -15,7 +15,8 @@ body {
     background-blend-mode: overlay; /* 画像と色を馴染ませる */
 }
 
-.accordion {
+.accordion,
+#refer {
     width: 100%;
     max-width: 600px; /* 少し広めに */
     margin: 0 auto 40px;
