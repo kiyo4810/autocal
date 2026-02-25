@@ -471,6 +471,9 @@ fieldset input[type="number"]:focus {
     border-radius: var(--radius);
     width: 100%;
     max-width: 460px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
     box-shadow: 0 8px 40px rgba(0,0,0,0.22);
 }
 
@@ -480,6 +483,7 @@ fieldset input[type="number"]:focus {
     align-items: center;
     padding: 15px 20px;
     border-bottom: 1px solid var(--gray-200);
+    flex-shrink: 0;
 }
 
 .modal-header h3 { font-size: 1.05rem; }
@@ -502,6 +506,9 @@ fieldset input[type="number"]:focus {
     display: flex;
     flex-direction: column;
     gap: 13px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
 }
 
 .modal-body label {
@@ -553,6 +560,7 @@ fieldset input[type="number"]:focus {
     gap: 10px;
     padding: 14px 20px;
     border-top: 1px solid var(--gray-200);
+    flex-shrink: 0;
 }
 
 .btn-primary, .btn-secondary {
