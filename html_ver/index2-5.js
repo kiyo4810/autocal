@@ -24,6 +24,66 @@ let settings = {
 let lifeEvents  = [];
 let nextEventId = 1;
 let chartInst   = null;
+let currentPreset = 'age40';  // 現在選択されているプリセット
+
+// ===================================================
+//  LIFE PATTERN PRESETS（人生パターンプリセット）
+//  データ出典：厚生労働省賃金構造基本統計調査、総務省家計調査、日本銀行資金循環統計（2024年）
+// ===================================================
+const LIFE_PRESETS = {
+    age30: {
+        label: '30歳時',
+        currentAge: 30,
+        salary: 350,           // 中央値：約454万 × 手取り率70% ≈ 350万
+        investmentAssets: 50,  // 資産中央値180万の約28%を投資資産
+        cashAssets: 130,       // 資産中央値180万の約72%を現金資産
+        livingCost: 250,       // 総務省家計調査より
+        housingCost: 150,      // 賃貸住宅の平均的家賃
+        workStartAge: 22,
+        retirementAge: 65,
+        pension: 150,
+        pensionStartAge: 65,
+    },
+    age40: {
+        label: '40歳時',
+        currentAge: 40,
+        salary: 400,           // 中央値：約517万 × 手取り率75% ≈ 400万
+        investmentAssets: 90,  // 資産中央値220万の約41%を投資資産
+        cashAssets: 130,       // 資産中央値220万の約59%を現金資産
+        livingCost: 260,       // 子育て世帯の生活費
+        housingCost: 130,      // 住宅ローンまたは賃貸
+        workStartAge: 22,
+        retirementAge: 65,
+        pension: 150,
+        pensionStartAge: 65,
+    },
+    age50: {
+        label: '50歳時',
+        currentAge: 50,
+        salary: 460,           // 中央値：約600万 × 手取り率75% ≈ 460万
+        investmentAssets: 300, // 資産中央値700万の約43%を投資資産
+        cashAssets: 400,       // 資産中央値700万の約57%を現金資産
+        livingCost: 270,       // 子どもが独立し始める時期
+        housingCost: 120,      // 住宅ローン返済終盤または持家
+        workStartAge: 22,
+        retirementAge: 65,
+        pension: 150,
+        pensionStartAge: 65,
+    },
+    age60: {
+        label: '60歳時',
+        currentAge: 60,
+        salary: 250,           // 退職金受給前、年金前の部分就業または年金受取準備時
+        investmentAssets: 300, // 資産中央値650万の約46%を投資資産
+        cashAssets: 350,       // 資産中央値650万の約54%を現金資産
+        livingCost: 280,       // リタイア後の生活費
+        housingCost: 100,      // 住宅ローン完済またはなし
+        workStartAge: 22,
+        retirementAge: 65,
+        pension: 150,
+        pensionStartAge: 65,
+    },
+};
 
 // ===================================================
 //  PRESETS（モーダルの初期値）
@@ -129,6 +189,7 @@ function simulate() {
 //  RENDER ORCHESTRATOR
 // ===================================================
 function renderAll() {
+    updateTotalAssets();
     const results = simulate();
     renderSummary(results);
     renderChart(results);
@@ -423,6 +484,17 @@ function closeModal() {
     document.getElementById('modal-overlay').classList.add('hidden');
 }
 
+// ===================================================
+//  STATISTICS MODAL
+// ===================================================
+function openStatisticsModal() {
+    document.getElementById('statistics-modal-overlay').classList.remove('hidden');
+}
+
+function closeStatisticsModal() {
+    document.getElementById('statistics-modal-overlay').classList.add('hidden');
+}
+
 function saveEvent() {
     const name = document.getElementById('m-name').value.trim();
     if (!name) { alert('イベント名を入力してください。'); return; }
@@ -457,6 +529,41 @@ function deleteEvent(id) {
     lifeEvents = lifeEvents.filter(e => e.id !== id);
     renderEventList();
     renderAll();
+}
+
+// ===================================================
+//  LIFE PATTERN PRESET
+// ===================================================
+function applyPreset(presetKey) {
+    const preset = LIFE_PRESETS[presetKey];
+    if (!preset) return;
+
+    currentPreset = presetKey;
+
+    // Apply preset settings
+    settings.currentAge        = preset.currentAge;
+    settings.salary            = preset.salary;
+    settings.investmentAssets  = preset.investmentAssets;
+    settings.cashAssets        = preset.cashAssets;
+    settings.livingCost        = preset.livingCost;
+    settings.housingCost       = preset.housingCost;
+    settings.workStartAge      = preset.workStartAge;
+    settings.retirementAge     = preset.retirementAge;
+    settings.pension           = preset.pension;
+    settings.pensionStartAge   = preset.pensionStartAge;
+
+    // Update UI
+    updatePresetButtons();
+    bindSettings();
+    renderAll();
+}
+
+function updatePresetButtons() {
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    const activeBtn = document.querySelector(`.preset-btn[onclick="applyPreset('${currentPreset}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
 }
 
 // ===================================================
@@ -530,6 +637,32 @@ function loadFromStorage() {
         if (data.lifeEvents)   lifeEvents   = data.lifeEvents;
         if (data.nextEventId)  nextEventId  = data.nextEventId;
     } catch (e) { /* ignore */ }
+
+    // 現在の設定がどのプリセットに該当するか検出
+    detectPreset();
+}
+
+function detectPreset() {
+    for (const [key, preset] of Object.entries(LIFE_PRESETS)) {
+        if (settings.currentAge === preset.currentAge &&
+            settings.salary === preset.salary &&
+            settings.investmentAssets === preset.investmentAssets &&
+            settings.cashAssets === preset.cashAssets) {
+            currentPreset = key;
+            return;
+        }
+    }
+    // 一致するプリセットがない場合は、currentAgeで最も近いものを選ぶ
+    let closestKey = 'age40';
+    let minDiff = Math.abs(settings.currentAge - 40);
+    for (const [key, preset] of Object.entries(LIFE_PRESETS)) {
+        const diff = Math.abs(settings.currentAge - preset.currentAge);
+        if (diff < minDiff) {
+            minDiff = diff;
+            closestKey = key;
+        }
+    }
+    currentPreset = closestKey;
 }
 
 function resetData() {
@@ -609,11 +742,18 @@ function uploadJSON(event) {
 //  KEYBOARD / OVERLAY CLOSE
 // ===================================================
 document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Escape') {
+        closeModal();
+        closeStatisticsModal();
+    }
 });
 
 document.getElementById('modal-overlay').addEventListener('click', e => {
     if (e.target === document.getElementById('modal-overlay')) closeModal();
+});
+
+document.getElementById('statistics-modal-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('statistics-modal-overlay')) closeStatisticsModal();
 });
 
 // ===================================================
@@ -631,6 +771,7 @@ document.getElementById('modal-overlay').addEventListener('click', e => {
 // ===================================================
 (function init() {
     loadFromStorage();
+    updatePresetButtons();
     updateTotalAssets();
     bindSettings();
     renderEventList();

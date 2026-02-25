@@ -95,6 +95,74 @@ main {
     padding: 0 16px;
 }
 
+/* ===== PRESET SELECTOR ===== */
+.preset-selector {
+    margin-bottom: 20px;
+    padding: 16px;
+    background: var(--blue-light);
+    border-radius: 8px;
+    border-left: 4px solid var(--blue);
+}
+
+.preset-label {
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.preset-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.preset-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--blue);
+    background: #fff;
+    color: var(--blue);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.preset-btn:hover {
+    background: var(--blue-light);
+}
+
+.preset-btn.active {
+    background: var(--blue);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(52,152,219,0.3);
+}
+
+.preset-note {
+    font-size: 0.78rem;
+    color: #666;
+    margin: 0;
+}
+
+.stat-info-btn {
+    padding: 5px 12px;
+    border: 1px solid var(--gray-200);
+    background: #fff;
+    color: var(--blue);
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.stat-info-btn:hover {
+    background: var(--blue-light);
+    border-color: var(--blue);
+}
+
 /* ===== DATA CONTROLS ===== */
 .data-controls {
     display: flex;
@@ -453,7 +521,8 @@ fieldset input[type="number"]:focus {
 .c-muted   { color: var(--gray-600); }
 
 /* ===== MODAL ===== */
-#modal-overlay {
+#modal-overlay,
+#statistics-modal-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.45);
@@ -464,7 +533,10 @@ fieldset input[type="number"]:focus {
     padding: 20px;
 }
 
-#modal-overlay.hidden { display: none; }
+#modal-overlay.hidden,
+#statistics-modal-overlay.hidden {
+    display: none !important;
+}
 
 .modal {
     background: var(--card);

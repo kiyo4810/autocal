@@ -52,6 +52,21 @@
             <span class="toggle-arrow">▾</span>
         </button>
         <div class="panel-content">
+
+            <!-- プリセット選択 -->
+            <div class="preset-selector">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;">
+                    <div class="preset-label">📋 人生パターン（日本の中央値を参考）</div>
+                    <button class="stat-info-btn" onclick="openStatisticsModal()" title="各数値の統計的根拠を確認">📊 数値の根拠は？</button>
+                </div>
+                <div class="preset-buttons">
+                    <button class="preset-btn" onclick="applyPreset('age30')">30歳時</button>
+                    <button class="preset-btn active" onclick="applyPreset('age40')">40歳時</button>
+                    <button class="preset-btn" onclick="applyPreset('age50')">50歳時</button>
+                    <button class="preset-btn" onclick="applyPreset('age60')">60歳時</button>
+                </div>
+                <p class="preset-note">※ 日本の中央値を参考にしています</p>
+            </div>
             <div class="settings-grid">
 
                 <fieldset>
@@ -221,6 +236,72 @@
     </section>
 
 </main>
+
+<!-- 統計情報モーダル -->
+<div id="statistics-modal-overlay" class="hidden">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>📊 統計データ出典</h3>
+            <button class="modal-close" onclick="closeStatisticsModal()">✕</button>
+        </div>
+        <div class="modal-body" style="font-size:0.9rem;line-height:1.8;">
+            <h4 style="margin:12px 0 8px;color:#28a745;">📌 データ出典</h4>
+            <ul style="margin-left:16px;color:#555;">
+                <li>厚生労働省：<strong>賃金構造基本統計調査</strong>（年収中央値）</li>
+                <li>総務省：<strong>家計調査</strong>（生活費・住居費）</li>
+                <li>日本銀行：<strong>資金循環統計</strong>（金融資産の中央値）</li>
+                <li>統計年：<strong>2024年</strong>最新データ</li>
+            </ul>
+
+            <h4 style="margin:16px 0 8px;color:#28a745;">📈 各年代の統計背景</h4>
+
+            <div style="background:#f8f9fa;padding:12px;border-radius:6px;margin-bottom:10px;">
+                <strong style="color:#2c3e50;">30歳時</strong>
+                <div style="font-size:0.85rem;color:#666;margin-top:4px;">
+                    統計年収中央値：454万円 → 手取り70%で<strong>350万円</strong><br>
+                    資産：形成初期、流動性重視<br>
+                    （現金：投資 = 72%:28%）
+                </div>
+            </div>
+
+            <div style="background:#f8f9fa;padding:12px;border-radius:6px;margin-bottom:10px;">
+                <strong style="color:#2c3e50;">40歳時 ⭐ 初期値</strong>
+                <div style="font-size:0.85rem;color:#666;margin-top:4px;">
+                    統計年収中央値：517万円 → 手取り75%で<strong>400万円</strong><br>
+                    資産：中級階層、家族形成期<br>
+                    （現金：投資 = 59%:41%）
+                </div>
+            </div>
+
+            <div style="background:#f8f9fa;padding:12px;border-radius:6px;margin-bottom:10px;">
+                <strong style="color:#2c3e50;">50歳時</strong>
+                <div style="font-size:0.85rem;color:#666;margin-top:4px;">
+                    統計年収中央値：600万円 → 手取り75%で<strong>460万円</strong><br>
+                    資産中央値：<strong>700万円</strong>（年代別で最も大きく資産が増える時期）<br>
+                    （現金：投資 = 57%:43%）
+                </div>
+            </div>
+
+            <div style="background:#f8f9fa;padding:12px;border-radius:6px;">
+                <strong style="color:#2c3e50;">60歳時</strong>
+                <div style="font-size:0.85rem;color:#666;margin-top:4px;">
+                    統計年収中央値：650万円<br>
+                    退職により → <strong>250万円</strong>に低下<br>
+                    資産中央値：<strong>650万円</strong>（二人以上世帯）<br>
+                    退職金はイベント欄で別途入力可能
+                </div>
+            </div>
+
+            <p style="font-size:0.8rem;color:#999;margin-top:14px;border-top:1px solid #ddd;padding-top:10px;">
+                ⓘ 平均値ではなく<strong>中央値</strong>を採用しています。<br>
+                資産形成できた人と全くできない人の差が大きいため、より実態に近い「中央値」を参考にしています。
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeStatisticsModal()">閉じる</button>
+        </div>
+    </div>
+</div>
 
 <!-- モーダル -->
 <div id="modal-overlay" class="hidden">
