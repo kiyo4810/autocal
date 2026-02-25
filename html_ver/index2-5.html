@@ -44,9 +44,16 @@
                     <label>現在の年齢
                         <input type="number" id="s_currentAge" value="30" min="0" max="99" title="シミュレーション開始年齢"> 歳
                     </label>
-                    <label>現在の資産
-                        <input type="number" id="s_initialAssets" value="500" title="今持っている資産の合計（万円）"> 万円
-                    </label>
+                    <div style="border-top:1px solid #ddd; margin:8px 0; padding-top:8px;">
+                        <label style="font-weight:bold;font-size:0.9em;color:#28a745;">📊 現在の資産（合計）</label>
+                        <label style="margin-top:6px;">投資資産
+                            <input type="number" id="s_investmentAssets" value="300" title="株式・投資信託など（万円）"> 万円
+                        </label>
+                        <label>現金・類似資産
+                            <input type="number" id="s_cashAssets" value="200" title="現金・預金・債権など（万円）"> 万円
+                        </label>
+                        <p class="hint" style="margin-top:6px;">合計: <strong id="total-assets">500</strong>万円</p>
+                    </div>
                 </fieldset>
 
                 <fieldset>
@@ -54,11 +61,17 @@
                     <label>インフレ率
                         <input type="number" id="s_inflationRate" value="2.0" step="0.1" min="0" title="年間の物価上昇率（日本の目標は2%）"> %/年
                     </label>
-                    <label>投資利回り
-                        <input type="number" id="s_investmentReturn" value="4.0" step="0.1" min="0" title="資産運用の年間期待リターン（インデックス投資は4〜7%が目安）"> %/年
-                    </label>
-                    <label>借入金利
-                        <input type="number" id="s_debtRate" value="1.5" step="0.1" min="0" title="残高がマイナスになった場合に発生する負債利息"> %/年
+                    <div style="border-top:1px solid #ddd; margin:8px 0; padding-top:8px;">
+                        <label style="font-weight:bold;font-size:0.9em;color:#3498db;">💰 資産ごとの利回り</label>
+                        <label style="margin-top:6px;">投資資産の利回り
+                            <input type="number" id="s_investmentAssetReturn" value="4.5" step="0.1" min="0" title="株式・投資信託などの年間期待リターン"> %/年
+                        </label>
+                        <label>現金資産の利回り
+                            <input type="number" id="s_cashAssetReturn" value="1.5" step="0.1" min="0" title="預金金利など"> %/年
+                        </label>
+                    </div>
+                    <label style="margin-top:8px;">借入金利（マイナス時）
+                        <input type="number" id="s_debtRate" value="1.5" step="0.1" min="0" title="残高がマイナスになった場合の利息"> %/年
                     </label>
                     <p class="hint">※ プラス残高→運用益、マイナス残高→負債利息</p>
                 </fieldset>
@@ -182,6 +195,8 @@
                         <th title="ホバーでイベント名を確認できます">イベント支出 ⓘ</th>
                         <th>年間支出計</th>
                         <th>年間収支</th>
+                        <th>投資資産</th>
+                        <th>現金資産</th>
                         <th>累計残高</th>
                     </tr>
                 </thead>

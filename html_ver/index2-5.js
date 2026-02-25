@@ -4,19 +4,21 @@
 //  STATE
 // ===================================================
 let settings = {
-    currentAge:       30,
-    initialAssets:   500,
-    inflationRate:     2.0,   // %
-    investmentReturn:  4.0,   // %
-    debtRate:          1.5,   // % (残高マイナス時の借入金利)
-    salary:           500,    // 万円 (現在の手取り年収)
-    salaryGrowth:      2.0,   // %
-    workStartAge:     22,
-    retirementAge:    65,
-    pension:          150,    // 万円/年
-    pensionStartAge:  65,
-    livingCost:       200,    // 万円/年
-    housingCost:      120,    // 万円/年
+    currentAge:            30,
+    investmentAssets:     300,   // 投資資産（万円）
+    cashAssets:           200,   // 現金と類似資産（万円）
+    inflationRate:          2.0,   // %
+    investmentAssetReturn:  4.5,   // % (投資資産の利回り)
+    cashAssetReturn:        1.5,   // % (現金資産の利回り)
+    debtRate:              1.5,   // % (負債時の利息)
+    salary:               500,    // 万円 (現在の手取り年収)
+    salaryGrowth:          2.0,   // %
+    workStartAge:         22,
+    retirementAge:        65,
+    pension:              150,    // 万円/年
+    pensionStartAge:      65,
+    livingCost:           200,    // 万円/年
+    housingCost:          120,    // 万円/年
 };
 
 let lifeEvents  = [];
@@ -38,12 +40,14 @@ const PRESETS = {
 //  SIMULATION ENGINE
 // ===================================================
 function simulate() {
-    const results    = [];
-    let   balance    = settings.initialAssets;
-    const inflRate   = settings.inflationRate    / 100;
-    const invRate    = settings.investmentReturn / 100;
-    const debtRate   = settings.debtRate         / 100;
-    const salGrowth  = settings.salaryGrowth     / 100;
+    const results      = [];
+    let   investBal    = settings.investmentAssets;   // 投資資産
+    let   cashBal      = settings.cashAssets;         // 現金資産
+    const inflRate     = settings.inflationRate       / 100;
+    const invAssetRate = settings.investmentAssetReturn / 100;
+    const cashAssetRate= settings.cashAssetReturn     / 100;
+    const debtRate     = settings.debtRate            / 100;
+    const salGrowth    = settings.salaryGrowth        / 100;
 
     for (let age = settings.currentAge; age <= 100; age++) {
         const elapsed    = age - settings.currentAge;
@@ -60,10 +64,10 @@ function simulate() {
         }
         const laborIncome = salary + pension;
 
-        // --- 運用益 / 負債利息 ---
-        const investReturn = balance >= 0
-            ? balance * invRate
-            : balance * debtRate;   // 負の数 → 利息が増える
+        // --- 運用益 / 負債利息（各資産ごと）---
+        const investReturn_inv  = investBal * (investBal >= 0 ? invAssetRate : debtRate);
+        const investReturn_cash = cashBal   * (cashBal   >= 0 ? cashAssetRate : debtRate);
+        const totalInvestReturn = investReturn_inv + investReturn_cash;
 
         // --- 基本支出（インフレ連動）---
         const livingExp  = settings.livingCost  * inflFactor;
@@ -88,25 +92,33 @@ function simulate() {
         }
 
         // --- 集計 ---
-        const totalIncome  = laborIncome + investReturn + eventIncTotal;
+        const totalIncome  = laborIncome + totalInvestReturn + eventIncTotal;
         const totalExpense = livingExp   + housingExp   + eventExpTotal;
         const net          = totalIncome - totalExpense;
-        balance            = balance + net;
+
+        // --- 資産更新（現金で収支を賄う、各資産に利回りを適用）---
+        cashBal   = cashBal   + net + investReturn_cash;
+        investBal = investBal + investReturn_inv;
+        const balance = investBal + cashBal;
 
         results.push({
             age,
-            salary:       Math.round(salary),
-            pension:      Math.round(pension),
-            laborIncome:  Math.round(laborIncome),
-            investReturn: Math.round(investReturn),
-            eventInc:     Math.round(eventIncTotal),
-            totalIncome:  Math.round(totalIncome),
-            living:       Math.round(livingExp),
-            housing:      Math.round(housingExp),
-            eventExp:     Math.round(eventExpTotal),
-            totalExpense: Math.round(totalExpense),
-            net:          Math.round(net),
-            balance:      Math.round(balance),
+            salary:           Math.round(salary),
+            pension:          Math.round(pension),
+            laborIncome:      Math.round(laborIncome),
+            investReturn:     Math.round(totalInvestReturn),
+            investReturn_inv: Math.round(investReturn_inv),
+            investReturn_cash:Math.round(investReturn_cash),
+            eventInc:         Math.round(eventIncTotal),
+            totalIncome:      Math.round(totalIncome),
+            living:           Math.round(livingExp),
+            housing:          Math.round(housingExp),
+            eventExp:         Math.round(eventExpTotal),
+            totalExpense:     Math.round(totalExpense),
+            net:              Math.round(net),
+            investBal:        Math.round(investBal),
+            cashBal:          Math.round(cashBal),
+            balance:          Math.round(balance),
             activeEvents,
         });
     }
@@ -131,13 +143,16 @@ function renderSummary(results) {
     const totalInc  = results.reduce((s, r) => s + r.totalIncome,  0);
     const totalExp  = results.reduce((s, r) => s + r.totalExpense, 0);
     const finalBal  = results.at(-1)?.balance ?? 0;
+    const finalInvBal = results.at(-1)?.investBal ?? 0;
+    const finalCashBal = results.at(-1)?.cashBal ?? 0;
     const bankruptR = results.find(r => r.balance < 0);
 
     document.getElementById('sum-income').textContent  = formatWan(Math.round(totalInc));
     document.getElementById('sum-expense').textContent = formatWan(Math.round(totalExp));
 
     const balEl   = document.getElementById('sum-balance');
-    balEl.textContent = formatWan(Math.round(finalBal));
+    const balContent = `${formatWan(Math.round(finalBal))}<br><small style="font-size:0.7em;color:#666;">${formatWan(Math.round(finalInvBal))} (投資) + ${formatWan(Math.round(finalCashBal))} (現金)</small>`;
+    balEl.innerHTML = balContent;
     balEl.className   = 'card-value ' + (finalBal >= 0 ? 'green' : 'red');
 
     const bkEl   = document.getElementById('sum-bankrupt');
@@ -295,6 +310,7 @@ function renderTable(results) {
 
         const f = (n) => n !== 0 ? formatWan(n) : '—';
         const fSign = (n) => n >= 0 ? `+${formatWan(n)}` : formatWan(n);
+        const balClass = (b) => b >= 0 ? 'c-bal-pos' : 'c-bal-neg';
 
         tr.innerHTML = `
             <td class="col-age">${r.age}歳</td>
@@ -306,7 +322,9 @@ function renderTable(results) {
             <td>${eventCell}</td>
             <td class="c-expense">${formatWan(r.totalExpense)}</td>
             <td class="${r.net >= 0 ? 'c-net-pos' : 'c-net-neg'}">${fSign(r.net)}</td>
-            <td class="${r.balance >= 0 ? 'c-bal-pos' : 'c-bal-neg'}">${formatWan(r.balance)}</td>
+            <td class="${balClass(r.investBal)}">${formatWan(r.investBal)}</td>
+            <td class="${balClass(r.cashBal)}">${formatWan(r.cashBal)}</td>
+            <td class="${balClass(r.balance)}">${formatWan(r.balance)}</td>
         `;
         tbody.appendChild(tr);
     }
@@ -454,19 +472,21 @@ function togglePanel(btn) {
 //  SETTINGS BINDING
 // ===================================================
 const SETTING_MAP = {
-    s_currentAge:       ['currentAge',       'int'],
-    s_initialAssets:    ['initialAssets',    'float'],
-    s_inflationRate:    ['inflationRate',    'float'],
-    s_investmentReturn: ['investmentReturn', 'float'],
-    s_debtRate:         ['debtRate',         'float'],
-    s_salary:           ['salary',           'float'],
-    s_salaryGrowth:     ['salaryGrowth',     'float'],
-    s_workStartAge:     ['workStartAge',     'int'],
-    s_retirementAge:    ['retirementAge',    'int'],
-    s_pension:          ['pension',          'float'],
-    s_pensionStartAge:  ['pensionStartAge',  'int'],
-    s_livingCost:       ['livingCost',       'float'],
-    s_housingCost:      ['housingCost',      'float'],
+    s_currentAge:            ['currentAge',            'int'],
+    s_investmentAssets:      ['investmentAssets',      'float'],
+    s_cashAssets:            ['cashAssets',            'float'],
+    s_inflationRate:         ['inflationRate',         'float'],
+    s_investmentAssetReturn: ['investmentAssetReturn', 'float'],
+    s_cashAssetReturn:       ['cashAssetReturn',       'float'],
+    s_debtRate:              ['debtRate',              'float'],
+    s_salary:                ['salary',                'float'],
+    s_salaryGrowth:          ['salaryGrowth',          'float'],
+    s_workStartAge:          ['workStartAge',          'int'],
+    s_retirementAge:         ['retirementAge',         'int'],
+    s_pension:               ['pension',               'float'],
+    s_pensionStartAge:       ['pensionStartAge',       'int'],
+    s_livingCost:            ['livingCost',            'float'],
+    s_housingCost:           ['housingCost',           'float'],
 };
 
 function bindSettings() {
@@ -478,9 +498,16 @@ function bindSettings() {
             settings[key] = type === 'int'
                 ? (parseInt(el.value)   || 0)
                 : (parseFloat(el.value) || 0);
+            updateTotalAssets();
             renderAll();
         });
     }
+}
+
+function updateTotalAssets() {
+    const total = (settings.investmentAssets || 0) + (settings.cashAssets || 0);
+    const el = document.getElementById('total-assets');
+    if (el) el.textContent = total.toLocaleString();
 }
 
 // ===================================================
@@ -604,6 +631,7 @@ document.getElementById('modal-overlay').addEventListener('click', e => {
 // ===================================================
 (function init() {
     loadFromStorage();
+    updateTotalAssets();
     bindSettings();
     renderEventList();
     renderAll();
