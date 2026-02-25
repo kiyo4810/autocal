@@ -1,0 +1,61 @@
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #333;
+    padding-top: 50px;
+
+    /* --- 背景画像の設定 --- */
+    background-image: url('../images/cat5-big.jpg'); /* 画像のパスを入れてください */
+    background-repeat: no-repeat; /* リピートさせない */
+    background-size: cover; /* 画面いっぱいに広げる */
+    background-position: center; /* 中央寄せ */
+    background-attachment: fixed; /* スクロールしても背景を動かさない（モダンに見える秘訣） */
+
+    /* 背景が明るすぎて文字が見えにくい場合の対策（オーバーレイ） */
+    background-color: rgba(248, 249, 250, 0.8); /* 背景色を透過させて重ねる */
+    background-blend-mode: overlay; /* 画像と色を馴染ませる */
+}
+
+.accordion {
+    width: 100%;
+    max-width: 600px; /* 少し広めに */
+    margin: 0 auto 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 軽い浮き上がり */
+}
+
+.accordion-trigger {
+    margin: 0;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between; /* テキストとアイコンを両端に */
+    align-items: center;
+    background: #2d3436;
+    color: #fff;
+    border-bottom: 1px solid #444;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.accordion-trigger:hover {
+    background: #0984e3; /* ホバーで青く光る */
+}
+
+/* アイコンを擬似要素で追加 */
+.accordion-trigger::after {
+    content: '\f078'; /* FontAwesomeの矢印アイコン */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.8em;
+    transition: transform 0.3s;
+}
+
+.accordion-contents {
+    margin: 0;
+    padding: 20px;
+    background: #fff;
+    border: none;
+    line-height: 1.6;
+    display: none;
+}
