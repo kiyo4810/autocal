@@ -23,6 +23,13 @@
 
 <main>
 
+    <!-- データ操作ボタン -->
+    <div class="data-controls">
+        <button class="btn-icon" onclick="downloadJSON()" title="現在の設定をJSONファイルで保存">💾 設定をダウンロード</button>
+        <button class="btn-icon" onclick="document.getElementById('file-upload').click()" title="保存したJSONファイルを読み込む">📂 設定をアップロード</button>
+        <input type="file" id="file-upload" accept=".json" onchange="uploadJSON(event)" style="display:none;">
+    </div>
+
     <!-- ① 基本設定 -->
     <section class="panel">
         <button class="panel-toggle" onclick="togglePanel(this)">

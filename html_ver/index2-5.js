@@ -133,11 +133,11 @@ function renderSummary(results) {
     const finalBal  = results.at(-1)?.balance ?? 0;
     const bankruptR = results.find(r => r.balance < 0);
 
-    document.getElementById('sum-income').textContent  = Math.round(totalInc).toLocaleString();
-    document.getElementById('sum-expense').textContent = Math.round(totalExp).toLocaleString();
+    document.getElementById('sum-income').textContent  = formatWan(Math.round(totalInc));
+    document.getElementById('sum-expense').textContent = formatWan(Math.round(totalExp));
 
     const balEl   = document.getElementById('sum-balance');
-    balEl.textContent = Math.round(finalBal).toLocaleString();
+    balEl.textContent = formatWan(Math.round(finalBal));
     balEl.className   = 'card-value ' + (finalBal >= 0 ? 'green' : 'red');
 
     const bkEl   = document.getElementById('sum-bankrupt');
@@ -293,20 +293,20 @@ function renderTable(results) {
             eventCell = `<span class="c-event-income">+${r.eventInc.toLocaleString()}</span>`;
         }
 
-        const f = (n) => n !== 0 ? n.toLocaleString() : '—';
-        const fSign = (n) => n > 0 ? `+${n.toLocaleString()}` : n.toLocaleString();
+        const f = (n) => n !== 0 ? formatWan(n) : '—';
+        const fSign = (n) => n >= 0 ? `+${formatWan(n)}` : formatWan(n);
 
         tr.innerHTML = `
             <td class="col-age">${r.age}歳</td>
             <td class="${r.laborIncome > 0 ? 'c-income' : 'c-muted'}">${f(r.laborIncome)}</td>
             <td class="${r.investReturn >= 0 ? 'c-invest' : 'c-expense'}">${f(r.investReturn)}</td>
-            <td class="c-income">${r.totalIncome.toLocaleString()}</td>
-            <td class="c-expense">${r.living.toLocaleString()}</td>
-            <td class="c-expense">${r.housing.toLocaleString()}</td>
+            <td class="c-income">${formatWan(r.totalIncome)}</td>
+            <td class="c-expense">${formatWan(r.living)}</td>
+            <td class="c-expense">${formatWan(r.housing)}</td>
             <td>${eventCell}</td>
-            <td class="c-expense">${r.totalExpense.toLocaleString()}</td>
+            <td class="c-expense">${formatWan(r.totalExpense)}</td>
             <td class="${r.net >= 0 ? 'c-net-pos' : 'c-net-neg'}">${fSign(r.net)}</td>
-            <td class="${r.balance >= 0 ? 'c-bal-pos' : 'c-bal-neg'}">${r.balance.toLocaleString()}</td>
+            <td class="${r.balance >= 0 ? 'c-bal-pos' : 'c-bal-neg'}">${formatWan(r.balance)}</td>
         `;
         tbody.appendChild(tr);
     }
@@ -346,6 +346,29 @@ function renderEventList() {
 }
 
 const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// ===================================================
+//  数字フォーマッター（万円 → 億万円表記）
+// ===================================================
+function formatWan(num) {
+    if (typeof num !== 'number') num = parseFloat(num) || 0;
+    if (num === 0) return '0万円';
+
+    const abs = Math.abs(num);
+    const sign = num < 0 ? '-' : '';
+
+    if (abs >= 10000) {
+        const oku = Math.floor(abs / 10000);
+        const man = abs % 10000;
+        if (man === 0) {
+            return `${sign}${oku.toLocaleString()}億円`;
+        } else {
+            return `${sign}${oku.toLocaleString()}億${man.toLocaleString()}万円`;
+        }
+    } else {
+        return `${sign}${abs.toLocaleString()}万円`;
+    }
+}
 
 // ===================================================
 //  MODAL
@@ -486,6 +509,73 @@ function resetData() {
     if (!confirm('全ての設定とイベントをリセットしますか？')) return;
     localStorage.removeItem(STORAGE_KEY);
     location.reload();
+}
+
+// ===================================================
+//  JSON EXPORT / IMPORT
+// ===================================================
+function downloadJSON() {
+    const now = new Date();
+    const year  = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day   = String(now.getDate()).padStart(2, '0');
+    const filename = `${year}_${month}_${day}_shisan_sim.json`;
+
+    const data = {
+        timestamp: now.toISOString(),
+        settings: settings,
+        lifeEvents: lifeEvents,
+    };
+
+    const jsonStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    alert(`✅ ${filename} をダウンロードしました。`);
+}
+
+function uploadJSON(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (!data.settings || !Array.isArray(data.lifeEvents)) {
+                alert('❌ ファイル形式が正しくありません。');
+                return;
+            }
+
+            settings = { ...settings, ...data.settings };
+            lifeEvents = data.lifeEvents;
+
+            // Update nextEventId
+            if (lifeEvents.length > 0) {
+                nextEventId = Math.max(...lifeEvents.map(e => e.id)) + 1;
+            }
+
+            // UI を更新
+            bindSettings();
+            renderEventList();
+            renderAll();
+
+            alert(`✅ ${file.name} を読み込みました。`);
+        } catch (err) {
+            alert(`❌ ファイル読み込みエラー: ${err.message}`);
+        }
+    };
+    reader.readAsText(file);
+
+    // ファイル入力をリセット（同じファイルを再度選択可能に）
+    event.target.value = '';
 }
 
 // ===================================================
