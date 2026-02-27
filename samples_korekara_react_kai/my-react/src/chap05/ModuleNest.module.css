@@ -1,0 +1,29 @@
+/* .panel {
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  background-color: royalblue;
+  color: white;
+  & .keyword {
+    font-weight: bold;
+    color: Red;
+  }
+} */
+
+.panel {
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  background-color: royalblue;
+  color: white;
+  & :global(.keyword) {
+    font-weight: bold;
+    color: Red;
+  }
+     /* & b {
+    font-weight: bold;
+    color: Red;
+  } */
+}

@@ -1,0 +1,22 @@
+{
+  "wordpress": {
+    "baseUrl": "https://catgomapan.com",
+    "username": "kiyo4810",
+    "appPassword": "9w6n 4ERT owq8 qc3o TtaK ImDm"
+  },
+  "github": {
+    "pagesBase": "https://kiyo4810.github.io/autocal",
+    "htmlDir": "html_ver"
+  },
+  "repo": {
+    "path": "/Users/user/100day_coding/autocal",
+    "htmlRoot": "html_ver"
+  },
+  "wordpress_categories": {
+    "programming": 81,
+    "javascript": 98,
+    "html": 106,
+    "css": 213,
+    "claudeCode": 225
+  }
+}

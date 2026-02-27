@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Blog Dashboard Launcher",
+  "version": "1.0.0",
+  "description": "ブログ自動更新ダッシュボードを1クリックで起動",
+  "permissions": ["nativeMessaging", "tabs"],
+  "host_permissions": ["http://localhost:3737/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Blog Dashboard"
+  }
+}

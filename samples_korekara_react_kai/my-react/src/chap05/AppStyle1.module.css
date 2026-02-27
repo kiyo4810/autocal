@@ -1,0 +1,9 @@
+.panel {
+  width: 300px;
+  padding: 10px;
+  font-size: 12px;
+  border: 1px solid #000;
+  background-color: rgb(242, 102, 245);
+  color: white;
+  box-shadow: 0 0 15px #000;
+}
