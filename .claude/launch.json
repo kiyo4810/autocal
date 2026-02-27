@@ -6,6 +6,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["dashboard/server.js"],
       "port": 3737
+    },
+    {
+      "name": "touch-typing",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "/Users/user/100day_coding/autocal/touch_typing", "-p", "5173", "--no-clipboard"],
+      "port": 5173
     }
   ]
 }
