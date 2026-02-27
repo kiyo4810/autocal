@@ -170,19 +170,23 @@ async function getOrCreateTag(name) {
   const exact = found.find(t => t.name === name);
   if (exact) return exact.id;
 
-  // 作成を試みる。既存タグがあれば term_exists (400) が返るので
-  // エラーレスポンスから term_id を拾ってそのまま使う
-  try {
-    const created = await wpApi('POST', 'tags', { name });
-    return created.id;
-  } catch (e) {
-    // "data":{"status":400,"term_id":194} 形式から ID を抽出
-    const match = e.message.match(/"term_id"\s*:\s*(\d+)/);
-    if (match) {
-      return parseInt(match[1], 10);
-    }
-    throw e; // term_exists 以外のエラーは再スロー
+  // wpApi は !res.ok で throw してしまうので、タグ作成は直接 fetch する。
+  // term_exists (400) の場合 WP は JSON で term_id を返すのでそれを使う。
+  const res  = await fetch(`${cfg.wordpress.baseUrl}/wp-json/wp/v2/tags`, {
+    method:  'POST',
+    headers: { Authorization: `Basic ${WP_CRED}`, 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ name }),
+  });
+  const json = await res.json();
+
+  if (res.ok) return json.id;
+
+  // term_exists → data.term_id をそのまま返す
+  if (json.code === 'term_exists' && json.data?.term_id) {
+    return json.data.term_id;
   }
+
+  throw new Error(`タグ作成失敗 ${res.status}: ${JSON.stringify(json)}`);
 }
 
 // ===================================================
