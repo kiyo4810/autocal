@@ -38,6 +38,10 @@ jobs:
                     cp -r ../images ./dist/
                   fi
 
+                  if [ -d "../touch_typing" ]; then
+                    cp -r ../touch_typing ./dist/
+                  fi
+
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
