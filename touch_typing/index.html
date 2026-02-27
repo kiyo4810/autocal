@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brooklyn Type — Programmer's Touch Typing Tutor</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Oswald:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-bracket">[</span>
+        <span class="logo-text">BROOKLYN TYPE</span>
+        <span class="logo-bracket">]</span>
+        <span class="logo-sub">Programmer's Touch Typing Tutor</span>
+      </div>
+      <div class="header-controls">
+        <div class="stat-pill" id="live-wpm">
+          <span class="stat-label">WPM</span>
+          <span class="stat-value" id="wpm-value">—</span>
+        </div>
+        <div class="stat-pill" id="live-timer">
+          <span class="stat-label">TIME</span>
+          <span class="stat-value" id="timer-value">00:00</span>
+        </div>
+        <div class="stat-pill" id="live-accuracy">
+          <span class="stat-label">ACC</span>
+          <span class="stat-value" id="acc-value">—</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- Mode / Language Controls -->
+    <section class="controls-bar">
+      <div class="control-group">
+        <label class="control-label">MODE</label>
+        <div class="btn-group" id="mode-group">
+          <button class="mode-btn active" data-mode="normal">Normal</button>
+          <button class="mode-btn" data-mode="symbols">Symbols</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">LANGUAGE</label>
+        <div class="btn-group" id="lang-group">
+          <button class="lang-btn active" data-lang="javascript">JS</button>
+          <button class="lang-btn" data-lang="typescript">TS</button>
+          <button class="lang-btn" data-lang="html">HTML</button>
+          <button class="lang-btn" data-lang="react">React</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <button class="restart-btn" id="restart-btn">↺ Restart</button>
+      </div>
+    </section>
+
+    <!-- Typing Area -->
+    <section class="typing-section">
+      <div class="typing-box" id="typing-box">
+        <div class="text-display" id="text-display"></div>
+        <input
+          type="text"
+          id="typing-input"
+          class="typing-input"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="Click here or press any key to start..."
+        />
+      </div>
+    </section>
+
+    <!-- Keyboard + Hands -->
+    <section class="keyboard-section">
+      <div class="keyboard-wrapper">
+        <!-- SVG Keyboard -->
+        <div class="keyboard-container" id="keyboard-container">
+          <!-- Rendered by JS -->
+        </div>
+        <!-- Hand Overlay -->
+        <div class="hands-overlay" id="hands-overlay">
+          <svg class="hands-svg" id="hands-svg" viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg">
+            <!-- Left Hand -->
+            <g id="left-hand" class="hand left-hand">
+              <!-- Palm -->
+              <ellipse cx="200" cy="240" rx="75" ry="45" class="palm" />
+              <!-- Fingers (left to right: pinky, ring, middle, index, thumb) -->
+              <!-- Pinky -->
+              <g id="lf-pinky" class="finger">
+                <rect x="100" y="150" width="22" height="80" rx="11" class="finger-shape" />
+              </g>
+              <!-- Ring -->
+              <g id="lf-ring" class="finger">
+                <rect x="128" y="135" width="22" height="95" rx="11" class="finger-shape" />
+              </g>
+              <!-- Middle -->
+              <g id="lf-middle" class="finger">
+                <rect x="156" y="125" width="22" height="105" rx="11" class="finger-shape" />
+              </g>
+              <!-- Index -->
+              <g id="lf-index" class="finger">
+                <rect x="184" y="135" width="22" height="95" rx="11" class="finger-shape" />
+              </g>
+              <!-- Thumb -->
+              <g id="lf-thumb" class="finger">
+                <ellipse cx="248" cy="242" rx="16" ry="30" transform="rotate(-30 248 242)" class="finger-shape" />
+              </g>
+            </g>
+
+            <!-- Right Hand -->
+            <g id="right-hand" class="hand right-hand">
+              <!-- Palm -->
+              <ellipse cx="700" cy="240" rx="75" ry="45" class="palm" />
+              <!-- Fingers (left to right: thumb, index, middle, ring, pinky) -->
+              <!-- Thumb -->
+              <g id="rf-thumb" class="finger">
+                <ellipse cx="652" cy="242" rx="16" ry="30" transform="rotate(30 652 242)" class="finger-shape" />
+              </g>
+              <!-- Index -->
+              <g id="rf-index" class="finger">
+                <rect x="694" y="135" width="22" height="95" rx="11" class="finger-shape" />
+              </g>
+              <!-- Middle -->
+              <g id="rf-middle" class="finger">
+                <rect x="722" y="125" width="22" height="105" rx="11" class="finger-shape" />
+              </g>
+              <!-- Ring -->
+              <g id="rf-ring" class="finger">
+                <rect x="750" y="135" width="22" height="95" rx="11" class="finger-shape" />
+              </g>
+              <!-- Pinky -->
+              <g id="rf-pinky" class="finger">
+                <rect x="778" y="150" width="22" height="80" rx="11" class="finger-shape" />
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Finger Legend -->
+      <div class="finger-legend">
+        <div class="legend-item"><span class="legend-dot lf-pinky"></span> L.Pinky</div>
+        <div class="legend-item"><span class="legend-dot lf-ring"></span> L.Ring</div>
+        <div class="legend-item"><span class="legend-dot lf-middle"></span> L.Middle</div>
+        <div class="legend-item"><span class="legend-dot lf-index"></span> L.Index</div>
+        <div class="legend-item"><span class="legend-dot thumb"></span> Thumb</div>
+        <div class="legend-item"><span class="legend-dot rf-index"></span> R.Index</div>
+        <div class="legend-item"><span class="legend-dot rf-middle"></span> R.Middle</div>
+        <div class="legend-item"><span class="legend-dot rf-ring"></span> R.Ring</div>
+        <div class="legend-item"><span class="legend-dot rf-pinky"></span> R.Pinky</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Results Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="results-modal">
+      <div class="modal-header">
+        <h2 class="modal-title">// RESULTS</h2>
+        <div class="rivet-decoration"></div>
+      </div>
+      <div class="modal-body">
+        <div class="result-grid">
+          <div class="result-item">
+            <span class="result-label">FINAL WPM</span>
+            <span class="result-value" id="result-wpm">—</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">ACCURACY</span>
+            <span class="result-value" id="result-acc">—</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">TIME</span>
+            <span class="result-value" id="result-time">—</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">ERRORS</span>
+            <span class="result-value" id="result-errors">—</span>
+          </div>
+        </div>
+        <div class="weak-keys-section">
+          <h3 class="weak-keys-title">// WEAK KEYS</h3>
+          <div class="weak-keys-list" id="weak-keys-list"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn" id="modal-restart">↺ Try Again</button>
+        <button class="modal-btn secondary" id="modal-close">✕ Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
