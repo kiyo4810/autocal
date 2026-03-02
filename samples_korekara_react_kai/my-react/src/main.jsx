@@ -1,9 +1,9 @@
-import { Fragment, StrictMode, Suspense, createElement } from 'react'
-import { createRoot } from 'react-dom/client'
+import { Fragment, StrictMode, Suspense, createElement } from 'react';
+import { createRoot } from 'react-dom/client';
 // ■■chap02■■
-// import './index.css'
-// import App from './App.jsx'
-// import AppClass from './AppClass';
+import './index.css';
+import App from './App.jsx';
+import AppClass from './AppClass';
 import './chap02/class.css';
 
 // ■■chap03■■
@@ -81,7 +81,7 @@ import PortalBasic from './chap05/PortalBasic';
 import ErrorRoot from './chap05/ErrorRoot';
 import ErrorRetryRoot from './chap05/ErrorRetryRoot';
 import ErrorEventRoot from './chap05/ErrorEventRoot';
-import MetaBasic from "./chap05/MetaBasic";
+import MetaBasic from './chap05/MetaBasic';
 import ScriptBasic from './chap05/ScriptBasic';
 import StyleBasic from './chap05/StyleBasic';
 import StyleInline from './chap05/StyleInline';
@@ -137,13 +137,14 @@ import HookCustom from './chap08/HookCustom';
 import MyStore from './column/MyStore';
 
 // #region ■■chap02■■
-// createRoot(document.getElementById('root')).render(
-//   <StrictMode>
-//     <App />
-//   </StrictMode>
-// )
+createRoot(document.getElementById('root')).render(
+    <StrictMode>
+        <p>aaa</p>
+        <App />
+    </StrictMode>,
+);
 
-const root = createRoot(document.getElementById('root'));
+// const root = createRoot(document.getElementById('root'));
 // const root = createRoot(document.getElementById('root'), {
 //   identifierPrefix: 'my-react-',
 //   onUncaughtError: (error, errorInfo) => {
@@ -153,16 +154,14 @@ const root = createRoot(document.getElementById('root'));
 // });
 
 // root.render(
-//   <StrictMode>
-//     <App />
-//   </StrictMode>,
-// )
+//     <StrictMode>
+//         <App />
+//     </StrictMode>,
+// );
 
-setInterval(() => {
-  root.render(
-    <p>現在時刻：{(new Date()).toLocaleString()}</p>
-  );
-}, 1000);
+// setInterval(() => {
+//     root.render(<p>現在時刻：{new Date().toLocaleString()}</p>);
+// }, 1000);
 
 // root.render(
 //   <StrictMode>
@@ -249,7 +248,6 @@ setInterval(() => {
 //     <li>{String(true)}</li>
 //   </ul>
 // );
-
 
 // const dest = 'https://ja.react.dev';
 
