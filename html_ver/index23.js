@@ -64,13 +64,15 @@ const div5 = document.getElementById('main5');
 const lowPrice = books.filter((n) => n.price < 3500);
 lowPrice.forEach((n) => {
     const elem = document.createElement('div');
-    elem.innerText = `安本 中身：${n.summary}`;
+    elem.innerText = `安本Desc：${n.summary}`;
     div5.appendChild(elem);
 });
 const div6 = document.getElementById('main6');
-const sortBooks = books.sort((m, n) => {
-    return m.price - n.price;
-});
+// const sortBooks = books.sort((m, n) => {
+//     return m.price - n.price;
+// });
+const sortBooks = books.sort((m, n) => m.price - n.price);
+
 const bookList2 = books.map((n) => {
     const elem = document.createElement('div');
     elem.innerText = `価格順：${n.price}`;
