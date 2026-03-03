@@ -52,8 +52,28 @@ const div4 = document.getElementById('main4');
 // 第一引数は絶対に関数！nだけじゃだめ！関数にする必要あり！
 const bookList = books.map((n) => {
     const elem = document.createElement('div');
-    elem.innerText = n.title;
+    elem.innerText = `全本：${n.title}`;
     div4.appendChild(elem);
+    return elem.innerText;
+});
+const div5 = document.getElementById('main5');
+// filter関数はtrueかfalseかを返し、trueだけを配列に詰め込む
+const cheapBooks = books.filter((n) => {
+    return n.price < 3500;
+});
+cheapBooks.forEach((n) => {
+    const elem = document.createElement('div');
+    elem.innerText = `安の本 中身：${n.summary}`;
+    div5.appendChild(elem);
+});
+const div6 = document.getElementById('main6');
+const sortBooks = books.sort((m, n) => {
+    return m.price - n.price;
+});
+const bookList2 = books.map((n) => {
+    const elem = document.createElement('div');
+    elem.innerText = `価格順：${n.price}`;
+    div6.appendChild(elem);
     return elem.innerText;
 });
 
@@ -78,9 +98,9 @@ const bookList = books.map((n) => {
 console.log('元の配列', numbers);
 console.log('２倍にした配列', doubled);
 console.log('円の面積', cirArea);
-console.log(bookList);
-// console.log(result5);
-// console.log(result6);
+console.log('mapですべて配列に', bookList);
+console.log('filter安の本', cheapBooks);
+console.log('Sort300円以下の本', sortBooks);
 // console.log(result7);
 // console.log(result8);
 // console.log(result9);
@@ -102,7 +122,7 @@ div3.innerText = `円の面積 ${cirArea}`;
 // const div4 = document.getElementById('main4');
 // div4.appendChild(elem);
 // const div5 = document.getElementById('main5');
-// div5.innerText = '5. ' + result5;
+// div5.innerText = cheapBooks;
 // const div6 = document.getElementById('main6');
 // div6.innerText = '6. ' + result6;
 // const div7 = document.getElementById('main7');
