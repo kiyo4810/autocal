@@ -58,12 +58,13 @@ const bookList = books.map((n) => {
 });
 const div5 = document.getElementById('main5');
 // filter関数はtrueかfalseかを返し、trueだけを配列に詰め込む
-const cheapBooks = books.filter((n) => {
-    return n.price < 3500;
-});
-cheapBooks.forEach((n) => {
+// const lowPrice = books.filter((n) => {
+//     return n.price < 3500;
+// });
+const lowPrice = books.filter((n) => n.price < 3500);
+lowPrice.forEach((n) => {
     const elem = document.createElement('div');
-    elem.innerText = `安の本 中身：${n.summary}`;
+    elem.innerText = `安本 中身：${n.summary}`;
     div5.appendChild(elem);
 });
 const div6 = document.getElementById('main6');
@@ -99,7 +100,7 @@ console.log('元の配列', numbers);
 console.log('２倍にした配列', doubled);
 console.log('円の面積', cirArea);
 console.log('mapですべて配列に', bookList);
-console.log('filter安の本', cheapBooks);
+console.log('filter安の本', lowPrice);
 console.log('Sort300円以下の本', sortBooks);
 // console.log(result7);
 // console.log(result8);
