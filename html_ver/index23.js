@@ -1,5 +1,6 @@
 // 1. サンプルとなる「元の配列」
 const numbers = [1, 2, 3, 4, 5];
+const prices = [3000, 1000, 5000, 2000];
 const books = [
     {
         isbn: '978-4-8156-1336-5',
@@ -77,9 +78,29 @@ const bookList2 = books.map((n) => {
     const elem = document.createElement('div');
     elem.innerText = `価格順：${n.price}`;
     div6.appendChild(elem);
-    return elem.innerText;
+    //return elem.innerText; //他で使わないなら不要
 });
 
+const div7 = document.getElementById('main7');
+
+// 安い順（昇順）
+const asc = [...prices].sort((m, n) => m - n);
+const ascList = asc.map((n) => {
+    const elem = document.createElement('div');
+    elem.innerText = `数字昇順：${n}`;
+    div7.appendChild(elem);
+    //return elem.innerText; //他で使わないなら不要
+});
+
+const div8 = document.getElementById('main8');
+// 高い順（昇順）
+const desc = [...prices].sort((m, n) => n - m); // nから引けば逆転する！
+const descList = desc.map((n) => {
+    const elem = document.createElement('div');
+    elem.innerText = `数字降順：${n}`;
+    div8.appendChild(elem);
+    //return elem.innerText; //他で使わないなら不要
+});
 // const result1 = nums.match(regex1); //matchなので配列で返ってきてる
 // const result2 = chars.match(regex2);
 // const result3 = regex3.test(nums);
@@ -104,6 +125,9 @@ console.log('円の面積', cirArea);
 console.log('mapですべて配列に', bookList);
 console.log('filter安の本', lowPrice);
 console.log('Sort300円以下の本', sortBooks);
+console.log(asc); // [1000, 2000, 3000, 5000]
+console.log(desc); // [5000, 3000, 2000, 1000]
+
 // console.log(result7);
 // console.log(result8);
 // console.log(result9);
