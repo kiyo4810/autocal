@@ -89,8 +89,54 @@ console.log(boolean);
 boolean = false;
 console.log(boolean);
 
+// 配列
 let array = ['apple', 'orange', 'grape', 'peach', 'pine'];
 array = ['nuts', 1, true, array];
 console.log(array);
 console.log(array[3][2]);
-console.log(array[3][4]);
+console.log(array[3][1]);
+array = [];
+array.push('apple');
+console.log(array);
+
+// オブジェクト
+const coffee = {
+    name: 'Chololate Mocha',
+    size: 350,
+    isHot: true,
+    toppings: ['Cinammon', 'Caramel'],
+    nutritions: {
+        calories: 430,
+        sugar: 53,
+    },
+};
+console.log(coffee);
+console.log(coffee.nutritions.sugar);
+coffee.isHot = false;
+console.log(coffee.isHot);
+coffee.barista = 'ちゃんやま';
+coffee.staff = 'ごま';
+console.log(coffee);
+
+// nullとundefinedについて
+let userInfo = null;
+console.log(typeof userInfo);
+console.log(userInfo); //nullは予定通りなにもない。明示的に何もないのを表すならnull
+userInfo = undefined;
+console.log(userInfo); //undefinedは予期せぬ何もない状態。エラーが多い
+console.log(typeof userInfo); //undefinedは「undefined」という型
+
+// 関数について
+function addEasy(num1, num2) {
+    //パラメーター。仮引数
+    console.log(num1 + num2);
+    return num1 + num2;
+    console.log('ほげほげ'); //リターンのあとはすべて無効
+}
+const value = addEasy(4, 7);
+console.log(value);
+
+addEasy(3, 4); //引数。argument議論。実態。根拠
+addEasy(5, 3);
+addEasy(555, 333);
+addEasy(673, 3);
