@@ -3,22 +3,84 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Udemy 続Sec. 2 20260305</title>
-        <!-- ソース属性をつけると中のjsはすべて無視だよ -->
-        <script src="index25.js"></script>
+        <title>GOMA+PAN Menu</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="index25.css" />
     </head>
     <body>
-        <h1>Udemy 続Sec. 2 20260305</h1>
-        <div>
-            <a
-                href="https://www.udemy.com/course/javascript-complete/learn/lecture/32337078#notes"
-                >https://www.udemy.com/course/javascript-complete/learn/lecture/32337078#notes</a
-            >
-        </div>
-        <div>何を学習したかはコンソールログを見てチョーよ</div>
-        <div>
-            addしてステージに上げたもの + はコミットする前なら取り消せる -
-        </div>
-        <!-- もう一行足したよ。-->
+        <section class="menu-section">
+            <div class="menu-header">
+                <div class="logo-area">
+                    <p class="vertical-text left">和と洋の融合</p>
+                    <img
+                        src="./images/hogoneko_cafe.png"
+                        alt="GOMA+PAN Logo"
+                        class="main-logo"
+                    />
+                    <h2 class="jp-title">お品書き</h2>
+                    <p class="eng-subtitle">OUR MENU</p>
+                    <p class="vertical-text right">猫たちと過ごす時間</p>
+                </div>
+            </div>
+
+            <div class="menu-grid">
+                <div class="menu-category">
+                    <h3 class="category-title">FOOD</h3>
+                    <div class="menu-item">
+                        <div class="item-main">
+                            <span class="name">マレーシア風カレーパン</span>
+                            <span class="price">$ 12.00</span>
+                        </div>
+                        <p class="description">
+                            GOMAとPANも大好きな、スパイス香る自家製フィリング。
+                        </p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-main">
+                            <span class="name">猫の肉球サンド</span>
+                            <span class="price">$ 15.00</span>
+                        </div>
+                        <p class="description">
+                            愛らしい肉球型のサンドイッチ、チキンマヨネーズ。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="menu-category">
+                    <h3 class="category-title">DRINK</h3>
+                    <div class="menu-item">
+                        <div class="item-main">
+                            <span class="name"
+                                >マレーシア産ホワイトコーヒー</span
+                            >
+                            <span class="price">$ 10.00</span>
+                        </div>
+                        <p class="description">
+                            濃厚でまろやかな、マレーシア伝統の味わい。
+                        </p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-main">
+                            <span class="name"
+                                >フルーツティー（保護猫支援）</span
+                            >
+                            <span class="price">$ 14.00</span>
+                        </div>
+                        <p class="description">
+                            季節の果物を使った爽やかなティー。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="corner-tr"></div>
+            <div class="corner-bl"></div>
+        </section>
+        <script src="index25.js" defer></script>
     </body>
 </html>
