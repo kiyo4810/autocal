@@ -3,7 +3,7 @@ const menuData = [
     {
         category: 'FOOD',
         name: 'マレーシア風カレーパン',
-        price: 12.0,
+        price: 12.99,
         desc: 'GOMA+PANも大好きな、スパイス香る自家製フィリング。',
     },
     {
@@ -15,13 +15,13 @@ const menuData = [
     {
         category: 'DRINK',
         name: 'マレーシア産ホワイトコーヒー',
-        price: 10.0,
+        price: 10.99,
         desc: '濃厚でまろやかな、マレーシア伝統の味わい。',
     },
     {
         category: 'DRINK',
         name: 'フルーツティー（保護猫支援）',
-        price: 14.5,
+        price: 14.0,
         desc: '季節の果物を使った爽やかなティー。',
     },
 ];
