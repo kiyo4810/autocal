@@ -1,64 +1,72 @@
+// DB登録画面↓
+// https://console.firebase.google.com/project/goma-pan-menu/firestore/databases/-default-/data/~2Fmenus~2FLGlWjXNukeA8kXQ32J4q
 // 1. メニューデータを数値型 (Number) に変更
-const menuData = [
-    {
-        category: 'FOOD',
-        name: 'マレーシア風カレーパン',
-        price: 12.99,
-        desc: 'GOMA+PANも大好きな、スパイス香る自家製フィリング。',
-    },
-    {
-        category: 'FOOD',
-        name: '猫の肉球サンド',
-        price: 15.39,
-        desc: '愛らしい肉球型のサンドイッチ、チキンマヨネーズ。',
-    }, // 小数点の例
-    {
-        category: 'DRINK',
-        name: 'マレーシア産ホワイトコーヒー',
-        price: 10.99,
-        desc: '濃厚でまろやかな、マレーシア伝統の味わい。',
-    },
-    {
-        category: 'DRINK',
-        name: 'フルーツティー（保護猫支援）',
-        price: 14.0,
-        desc: '季節の果物を使った爽やかなティー。',
-    },
-];
+// 1. Firebaseライブラリのインポート
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import {
+    getFirestore,
+    collection,
+    getDocs,
+} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
-function displayMenu() {
+// 2. あなたの専用設定（ここをスクショの内容に書き換えてください）
+const firebaseConfig = {
+    apiKey: 'AIzaSyB4m6JxIIBYq2DWtOyVRVw1smCgpAyLGnk',
+    authDomain: 'goma-pan-menu.firebaseapp.com',
+    projectId: 'goma-pan-menu',
+    storageBucket: 'goma-pan-menu.firebasestorage.app',
+    messagingSenderId: '437147967378',
+    appId: '1:437147967378:web:8a0739fbfc1e16e5886b4b',
+};
+
+// 3. 初期化
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 4. Firebaseからデータを取ってきて画面に表示する関数
+async function fetchMenu() {
+    try {
+        const querySnapshot = await getDocs(collection(db, 'menus'));
+        const menuData = [];
+        querySnapshot.forEach((doc) => {
+            menuData.push(doc.data());
+        });
+        renderMenu(menuData);
+    } catch (e) {
+        console.error('Error fetching documents: ', e);
+    }
+}
+
+// 5. 画面にHTMLを組み立てる関数
+function renderMenu(data) {
     const menuGrid = document.querySelector('.menu-grid');
     if (!menuGrid) return;
-
     menuGrid.innerHTML = '';
+
     const categories = ['FOOD', 'DRINK'];
-
     categories.forEach((cat) => {
-        const categoryDiv = document.createElement('div');
-        categoryDiv.className = 'menu-category';
-        categoryDiv.innerHTML = `<h3 class="category-title">${cat}</h3>`;
+        const catItems = data.filter((item) => item.category === cat);
+        if (catItems.length === 0) return;
 
-        const items = menuData.filter((item) => item.category === cat);
+        const div = document.createElement('div');
+        div.className = 'menu-category';
+        div.innerHTML = `<h3 class="category-title">${cat}</h3>`;
 
-        items.forEach((item) => {
-            // 【重要】数値型の item.price を小数点2桁の文字列に変換
-            // toFixed(2) を使うことで 12 -> 12.00 / 15.39 -> 15.39 になります
-            const formattedPrice = item.price.toFixed(2);
-
-            const itemHtml = `
-                <div class="menu-item">
-                    <div class="item-main">
-                        <span class="name">${item.name}</span>
-                        <span class="price">$ ${formattedPrice}</span>
-                    </div>
-                    <p class="description">${item.desc}</p>
+        catItems.forEach((item) => {
+            // 数値型の価格を小数点2桁にする
+            const price = Number(item.price).toFixed(2);
+            div.innerHTML += `
+              <div class="menu-item">
+                <div class="item-main">
+                  <span class="name">${item.name}</span>
+                  <span class="price">$ ${price}</span>
                 </div>
-            `;
-            categoryDiv.innerHTML += itemHtml;
+                <p class="description">${item.desc}</p>
+              </div>`;
         });
-
-        menuGrid.appendChild(categoryDiv);
+        menuGrid.appendChild(div);
     });
 }
 
-displayMenu();
+// 実行！
+fetchMenu();
