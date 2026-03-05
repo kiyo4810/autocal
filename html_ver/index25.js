@@ -4,15 +4,15 @@ const value = addEasy(4, 7);
 console.log(value);
 
 // 関数について。関数宣言は巻き上げられる。上に行くから実行が先でも大丈夫
-function addEasy(num4, num2) {
+function addEasy(num5, num2) {
     //パラメーター。仮引数
-    console.log(num4 + num2);
+    console.log(num5 + num2);
     const inFunc2 = 'りりり';
     const inFunc4 = 'れれれ';
     // console.log(inFunc2);
     console.log(inFunc4);
 
-    return num4 + num2;
+    return num5 + num2;
     const inFunc = 'ららら'; //リターンのあとはすべて無効
     console.log(inFunc); //リターンのあとはすべて無効
 }
