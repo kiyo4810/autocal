@@ -1,13 +1,19 @@
-/* 全体のリセットと背景設定 */
+/* =========================================
+   全体のリセットと背景設定
+   ========================================= */
 body {
     margin: 0;
     padding: 0;
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-image: url('./images/nerugomakiyo.png'); /* 背景画像 */
-    background-size: 200px; /* 小さく並べてパターン化 */
+    /* 背景画像：パスは提供されたものに合わせています */
+    background-image: url('./images/nerugomakiyo.png');
+    background-size: 200px; /* パターン化 */
     background-repeat: repeat;
     color: #fff;
+    /* 横スクロールを防ぐ重要設定 */
     overflow-x: hidden;
+    /* スマホでの文字サイズ自動調整を防ぐ */
+    -webkit-text-size-adjust: 100%;
 }
 
 /* サイケデリックな色変化レイヤー */
@@ -20,7 +26,7 @@ body {
     background: rgba(255, 0, 255, 0.2);
     mix-blend-mode: color-burn;
     animation: rainbow-bg 5s infinite alternate;
-    z-index: -1;
+    z-index: -1; /* コンテンツの後ろへ */
 }
 
 @keyframes rainbow-bg {
@@ -38,45 +44,109 @@ body {
     }
 }
 
-/* コンテナ */
+/* =========================================
+   レイアウトコンテナ
+   ========================================= */
 .container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 20px;
+    /* パディングを調整：スマホ時に左右の余白を確保 */
+    padding: 20px 15px;
     text-align: center;
+    /* はみ出し防止 */
+    box-sizing: border-box;
 }
 
-/* タイトル */
+/* =========================================
+   ヘッダーとタイトル (レスポンシブ化)
+   ========================================= */
 h1 {
-    font-size: 3rem;
+    /* 修正：ビューポート幅(vw)を使った相対サイズで、画面に合わせて伸縮 */
+    font-size: 7vw;
+    /* 修正：PCなど大きな画面での最大サイズを指定 */
+    max-font-size: 3rem;
+
     text-shadow:
         3px 3px 0px #ff00ff,
         -3px -3px 0px #00ffff;
     background: rgba(0, 0, 0, 0.7);
-    padding: 20px;
+    padding: 15px 20px;
     display: inline-block;
     border-radius: 50px;
     animation: shake 0.5s infinite;
+    /* はみ出し防止 */
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
-/* コードカード */
+/* フォームファクターが大きい場合のH1調整 */
+@media (min-width: 600px) {
+    h1 {
+        font-size: 3rem; /* PC幅では固定サイズ */
+    }
+}
+
+/* =========================================
+   コードカード (はみ出し修正)
+   ========================================= */
 .code-card {
     background: rgba(0, 0, 0, 0.85);
     border: 5px solid #00ff00;
-    padding: 20px;
+    /* スマホ用にパディングを縮小 */
+    padding: 15px;
     border-radius: 20px;
     box-shadow: 0 0 30px #00ff00;
     margin-top: 30px;
     text-align: left;
+    /* 重要：カード自体がはみ出さないように */
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
+.code-card h2 {
+    font-size: 1.5rem;
+    margin-top: 0;
+}
+
+/* 【重要】コードブロックのはみ出し修正 */
 .code-block {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 1.1rem;
-    line-height: 1.6;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 10px;
+    /* 重要：横方向にはみ出した場合、このブロック内でスクロールさせる */
+    overflow-x: auto;
+    /* スクロールバーのデザイン（Webkit系） */
+    -webkit-overflow-scrolling: touch; /* iOSでのスクロールを滑らかに */
 }
 
-/* コードのハイライト */
+/* スクロールバー自体のスタイリング（オプション） */
+.code-block::-webkit-scrollbar {
+    height: 8px;
+}
+.code-block::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 4px;
+}
+
+/* preタグのリセット */
+.code-block pre {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    /* 修正：スマホ用に少し文字を小さく */
+    font-size: 0.9rem;
+    line-height: 1.5;
+    /* 修正：preタグ内の自動改行を防ぎ、overflow-xを有効にする */
+    white-space: pre;
+}
+
+/* PC幅での文字サイズ調整 */
+@media (min-width: 600px) {
+    .code-block pre {
+        font-size: 1.1rem; /* PC幅では少し大きく */
+    }
+}
+
+/* コードのハイライト色 */
 .keyword {
     color: #ff79c6;
     font-weight: bold;
@@ -95,21 +165,36 @@ h1 {
     color: #bd93f9;
 }
 
-/* ゴマモナイトのアニメーション */
+/* =========================================
+   ゴマモナイト (形状修正とレスポンシブ)
+   ========================================= */
 .gomamonite-wrapper {
-    margin: 50px 0;
+    margin: 40px 0;
     position: relative;
+    /* はみ出し防止 */
+    max-width: 100%;
 }
 
 .gomamonite {
-    width: 300px;
-    border-radius: 50%;
-    filter: drop-shadow(0 0 20px #fff);
+    /* 修正：幅を相対指定(vw)にし、画面幅に合わせて伸縮 */
+    width: 60vw;
+    /* 修正：PCなど大きな画面での最大サイズを指定 */
+    max-width: 300px;
+    height: auto; /* アスペクト比維持 */
+
+    /* 【修正】円形切り取りを解除：画像を元の形のまま表示 */
+    border-radius: 0;
+
+    /* 外側の光沢エフェクト */
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+
+    /* アニメーション：回転と脈動 */
     animation:
-        rotate-goma 10s linear infinite,
-        pulse-goma 2s ease-in-out infinite alternate;
+        rotate-goma 15s linear infinite,
+        /* 回転速度を少し遅く */ pulse-goma 2s ease-in-out infinite alternate;
 }
 
+/* 回転アニメーション */
 @keyframes rotate-goma {
     from {
         transform: rotate(0deg);
@@ -119,43 +204,87 @@ h1 {
     }
 }
 
+/* 脈動アニメーション（scale） */
 @keyframes pulse-goma {
     from {
-        transform: scale(0.8) rotate(0deg);
-    }
+        transform: scale(0.9);
+    } /* 修正：回転はrotate-gomaに任せる */
     to {
-        transform: scale(1.2) rotate(360deg);
+        transform: scale(1.1);
     }
 }
 
+/* ゴマテキスト */
 .goma-text {
     font-weight: bold;
-    font-size: 2rem;
+    /* 修正：レスポンシブな文字サイズ */
+    font-size: 5vw;
     color: #ffff00;
     text-shadow: 2px 2px #ff0000;
-    animation: blink 0.2s infinite;
+    animation: blink 0.3s infinite;
+    margin-top: 10px;
+    max-width: 100%;
 }
 
-/* 補足セクション */
+@media (min-width: 600px) {
+    .goma-text {
+        font-size: 2rem;
+    }
+}
+
+/* =========================================
+   補足セクション (レスポンシブ化)
+   ========================================= */
 .explanation {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     color: #333;
-    padding: 20px;
+    padding: 15px 20px;
     border-radius: 15px;
-    margin-top: 20px;
+    margin-top: 30px;
     border-left: 10px solid #ff00ff;
+    text-align: left;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.explanation h3 {
+    margin-top: 0;
+    font-size: 1.3rem;
 }
 
 ul {
     list-style: none;
     padding: 0;
-}
-li {
-    margin-bottom: 10px;
-    font-size: 1.2rem;
+    margin: 0;
 }
 
-/* その他アニメーション */
+li {
+    margin-bottom: 12px;
+    /* 修正：スマホ用に少し文字を小さく */
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+@media (min-width: 600px) {
+    li {
+        font-size: 1.1rem;
+    }
+}
+
+/* =========================================
+   フッター
+   ========================================= */
+footer {
+    margin-top: 40px;
+    padding-bottom: 20px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* =========================================
+   その他アニメーション効果
+   ========================================= */
+/* タイトルの揺れ */
 @keyframes shake {
     0% {
         transform: translate(1px, 1px) rotate(0deg);
@@ -163,11 +292,24 @@ li {
     10% {
         transform: translate(-1px, -2px) rotate(-1deg);
     }
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
     100% {
-        transform: translate(1px, -2px) rotate(-1deg);
+        transform: translate(1px, 1px) rotate(0deg);
     }
 }
 
+/* テキストの点滅 */
 @keyframes blink {
     0% {
         opacity: 1;
