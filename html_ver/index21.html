@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>JavaScriptのClassを学ぶ</title>
+        <link rel="stylesheet" href="index21.css" />
+    </head>
+    <body>
+        <div class="bg-overlay"></div>
+
+        <div class="container">
+            <header>
+                <h1>JavaScriptのClassを学ぶ</h1>
+            </header>
+
+            <main>
+                <section class="code-card">
+                    <h2>📁 Classの基本構造</h2>
+                    <div class="code-block">
+                        <pre>
+<span class="keyword">class</span> <span class="class-name">Test</span> {
+    <span class="comment">// インスタンス化の時に動く特別な関数</span>
+    <span class="keyword">constructor</span>(value) {
+        console.log(value);
+        
+        <span class="comment">// 💡 let num = 10; の代わりに...</span>
+        <span class="keyword">this</span>.num = <span class="number">10</span>;
+
+        <span class="comment">// 💡 let author = "ちゃんやま"; の代わりに...</span>
+        <span class="keyword">this</span>.author = <span class="string">'ちゃんやま'</span>; 
+        <span class="comment">// ↑ this は「作成されるオブジェクト自身」を指すよ！</span>
+    }
+}
+
+<span class="comment">// クラスを実際に使う（インスタンス化）</span>
+<span class="keyword">let</span> test = <span class="keyword">new</span> <span class="class-name">Test</span>(<span class="number">10</span>);
+console.log(test.author); <span class="comment">// 出力: ちゃんやま</span>
+                    </pre>
+                    </div>
+                </section>
+
+                <div class="gomamonite-wrapper">
+                    <img
+                        src="./images/gomamonaito.png"
+                        alt="ゴマモナイト"
+                        class="gomamonite"
+                    />
+                    <p class="goma-text">THIS IS TEST.AUTHOR</p>
+                </div>
+
+                <section class="explanation">
+                    <h3>💡 ポイント</h3>
+                    <ul>
+                        <li>
+                            <strong>constructor:</strong>
+                            newした瞬間に実行される初期化装置！
+                        </li>
+                        <li>
+                            <strong>this:</strong>
+                            クラスから生まれた「自分自身」を入れる箱。
+                        </li>
+                        <li>
+                            <strong>new:</strong>
+                            金型（Class）から実体（Object）を作る魔法の言葉。
+                        </li>
+                    </ul>
+                </section>
+            </main>
+
+            <footer>
+                <p>&copy; 2024 Created by ちゃんやま</p>
+            </footer>
+        </div>
+    </body>
+</html>

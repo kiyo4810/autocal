@@ -1,0 +1,181 @@
+/* 全体のリセットと背景設定 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-image: url('./images/nerugomakiyo.png'); /* 背景画像 */
+    background-size: 200px; /* 小さく並べてパターン化 */
+    background-repeat: repeat;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* サイケデリックな色変化レイヤー */
+.bg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 0, 255, 0.2);
+    mix-blend-mode: color-burn;
+    animation: rainbow-bg 5s infinite alternate;
+    z-index: -1;
+}
+
+@keyframes rainbow-bg {
+    0% {
+        background-color: rgba(255, 0, 0, 0.3);
+    }
+    33% {
+        background-color: rgba(0, 255, 0, 0.3);
+    }
+    66% {
+        background-color: rgba(0, 0, 255, 0.3);
+    }
+    100% {
+        background-color: rgba(255, 255, 0, 0.3);
+    }
+}
+
+/* コンテナ */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* タイトル */
+h1 {
+    font-size: 3rem;
+    text-shadow:
+        3px 3px 0px #ff00ff,
+        -3px -3px 0px #00ffff;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    display: inline-block;
+    border-radius: 50px;
+    animation: shake 0.5s infinite;
+}
+
+/* コードカード */
+.code-card {
+    background: rgba(0, 0, 0, 0.85);
+    border: 5px solid #00ff00;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px #00ff00;
+    margin-top: 30px;
+    text-align: left;
+}
+
+.code-block {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* コードのハイライト */
+.keyword {
+    color: #ff79c6;
+    font-weight: bold;
+}
+.class-name {
+    color: #8be9fd;
+}
+.comment {
+    color: #6272a4;
+    font-style: italic;
+}
+.string {
+    color: #f1fa8c;
+}
+.number {
+    color: #bd93f9;
+}
+
+/* ゴマモナイトのアニメーション */
+.gomamonite-wrapper {
+    margin: 50px 0;
+    position: relative;
+}
+
+.gomamonite {
+    width: 300px;
+    border-radius: 50%;
+    filter: drop-shadow(0 0 20px #fff);
+    animation:
+        rotate-goma 10s linear infinite,
+        pulse-goma 2s ease-in-out infinite alternate;
+}
+
+@keyframes rotate-goma {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse-goma {
+    from {
+        transform: scale(0.8) rotate(0deg);
+    }
+    to {
+        transform: scale(1.2) rotate(360deg);
+    }
+}
+
+.goma-text {
+    font-weight: bold;
+    font-size: 2rem;
+    color: #ffff00;
+    text-shadow: 2px 2px #ff0000;
+    animation: blink 0.2s infinite;
+}
+
+/* 補足セクション */
+.explanation {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+    border-left: 10px solid #ff00ff;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+li {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+/* その他アニメーション */
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
