@@ -1,0 +1,227 @@
+/* 基本設定 */
+:root {
+    --main-color: #1a2a2a; /* ロゴの深いネイビー */
+    --bg-color: #f2eadd; /* ヴィンテージ感のある背景色 */
+    --font-jp: 'Shippori Mincho', serif;
+    --font-en: 'Cinzel', serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--main-color);
+    font-family: var(--font-jp);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ロゴエリアを基準点にする */
+.logo-area {
+    position: relative;
+    display: inline-block; /* 中身のサイズに合わせる */
+    padding: 0 40px; /* 左右のテキストが入るスペースを確保 */
+}
+
+/* --- 追加：四隅の装飾（コーナーフレーム） --- */
+/* 1. メニュー全体の枠線を少し調整 */
+.menu-section {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 80px 50px; /* 装飾のために少し余白を広げます */
+    border: 1px solid var(--main-color); /* これが一番外側の細い線 */
+    position: relative;
+    overflow: hidden;
+    background-color: var(--bg-color);
+}
+
+/* --- 共通設定（.menu-sectionに疑似要素を4つ使うための準備） --- */
+/* before/afterだけでは足りないので、menu-headerの疑似要素も使います */
+
+/* 1. 左上 (Top-Left): 上辺1本 + 左辺1本 */
+.menu-section::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 60px;
+    height: 60px;
+    border: none;
+    background:
+        /* 左の縦線 */
+        linear-gradient(var(--main-color), var(--main-color)) no-repeat top 0px
+            left 0px / 2px 100%,
+        /* 上の横線 */ linear-gradient(var(--main-color), var(--main-color))
+            no-repeat top 0px left 0px / 100% 2px;
+}
+
+/* 2. 右下 (Bottom-Right): 右辺1本 + 下辺2本（調整済み） */
+.menu-section::after {
+    content: '';
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 80px;
+    height: 60px;
+    border: none;
+    background:
+        /* 右の縦線 */
+        linear-gradient(var(--main-color), var(--main-color)) no-repeat top 0px
+            right 0px / 2px 100%,
+        /* 下の横線1本目 */
+        linear-gradient(var(--main-color), var(--main-color)) no-repeat bottom
+            0px right 0px / 100% 2px,
+        /* 下の横線2本目（短い） */
+        linear-gradient(var(--main-color), var(--main-color)) no-repeat bottom
+            6px right 0px / 60% 2px;
+}
+/* --- 以前の .menu-header::before と .menu-header::after は削除してください --- */
+
+/* 3. 右上 (Top-Right): 上辺2本 + 右辺1本 */
+.corner-tr {
+    position: absolute;
+    top: 15px; /* menu-sectionの上端からの距離 */
+    right: 15px; /* menu-sectionの右端からの距離 */
+    width: 80px;
+    height: 60px;
+    background:
+        linear-gradient(var(--main-color), var(--main-color)) no-repeat top 0px
+            right 0px / 2px 100%,
+        linear-gradient(var(--main-color), var(--main-color)) no-repeat top 0px
+            right 0px / 100% 2px,
+        linear-gradient(var(--main-color), var(--main-color)) no-repeat top 6px
+            right 0px / 60% 2px;
+}
+
+/* 4. 左下 (Bottom-Left): 下辺2本 + 左辺1本 */
+.corner-bl {
+    position: absolute;
+    bottom: 15px; /* menu-sectionの下端からの距離（ここが重要！） */
+    left: 15px; /* menu-sectionの左端からの距離 */
+    width: 80px;
+    height: 60px;
+    background:
+        linear-gradient(var(--main-color), var(--main-color)) no-repeat top 0px
+            left 0px / 2px 100%,
+        linear-gradient(var(--main-color), var(--main-color)) no-repeat bottom
+            0px left 0px / 100% 2px;
+    /* linear-gradient(var(--main-color), var(--main-color)) no-repeat bottom 6px left 0px / 60% 2px; */
+}
+/* ヘッダーデザイン */
+.menu-header {
+    text-align: center;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.main-logo {
+    max-width: 200px;
+    height: auto;
+}
+
+.jp-title {
+    font-size: 2.5rem;
+    margin: 10px 0 0;
+}
+
+.eng-subtitle {
+    font-family: var(--font-en);
+    letter-spacing: 0.3em;
+    font-size: 1rem;
+    margin-top: -5px;
+}
+
+/* 縦書きテキストの共通設定 */
+.vertical-text {
+    writing-mode: vertical-rl;
+    position: absolute;
+    top: 50%; /* 上下中央に配置 */
+    transform: translateY(-50%);
+    font-size: 0.8rem; /* スマホで見やすいよう少し小さめに調整 */
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+}
+
+/* 左右の個別位置（ロゴエリアの端に固定） */
+.vertical-text.left {
+    left: 0;
+}
+
+.vertical-text.right {
+    right: 0;
+}
+
+/* レスポンシブ：グリッド設定 */
+.menu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* PCは2列 */
+    gap: 60px;
+    position: relative; /* 背景の基準点 */
+    z-index: 1;
+}
+.menu-grid::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    /* 1. ファイル名を確認（.png か .jpg か） */
+    background-image: url('./images/hogoneko_bg.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+
+    /* 2. 透明度を少し上げる（0.1で見えない場合は0.2〜0.3でテスト） */
+    opacity: 0.15;
+
+    /* 3. 重要：黒背景を消して、線をロゴの色に合わせる魔法 */
+    /* mix-blend-mode: multiply; は「白い部分」を透過させます */
+    /* 画像が「黒背景・白線」の場合は、一度反転させてから乗算します */
+    /* filter: invert(1); 白黒を反転させて「白背景・黒線」にする */
+    mix-blend-mode: multiply; /* 白い背景部分を透明化して下の色と合成する */
+
+    z-index: -1;
+}
+/* --- メディアクエリの修正 --- */
+@media (max-width: 768px) {
+    /* 以前の display: none; を削除または上書き */
+    .vertical-text {
+        display: block; /* 強制的に表示 */
+        font-size: 0.9rem; /* スマホではさらに少し小さくするとバランスが良いです */
+    }
+
+    .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+/* メニューアイテムのデザイン */
+.category-title {
+    font-family: var(--font-en);
+    border-bottom: 2px solid var(--main-color);
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+.menu-item {
+    margin-bottom: 25px;
+}
+
+.item-main {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-bottom: 1px dotted var(--main-color);
+}
+
+.price {
+    font-family: var(--font-en);
+}
+
+.description {
+    font-size: 0.85rem;
+    margin-top: 5px;
+    opacity: 0.8;
+}

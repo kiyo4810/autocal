@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GOMA+PAN Menu JS+DB Ver.</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="index27.css" />
+    </head>
+    <body>
+        <section class="menu-section">
+            <div class="menu-header">
+                <div class="logo-area">
+                    <p class="vertical-text left">和と洋の融合</p>
+                    <img
+                        src="./images/hogoneko_cafe.png"
+                        alt="GOMA+PAN Logo"
+                        class="main-logo"
+                    />
+                    <h2 class="jp-title">お品書き</h2>
+                    <p class="eng-subtitle">OUR MENU JS+DB Ver.</p>
+                    <p class="vertical-text right">猫たちと過ごす時間</p>
+                </div>
+            </div>
+
+            <div class="menu-grid"></div>
+            <div class="corner-tr"></div>
+            <div class="corner-bl"></div>
+        </section>
+        <script type="module">
+            // 1. Firebaseライブラリのインポート
+            import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+            import {
+                getFirestore,
+                collection,
+                getDocs,
+            } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+            // 2. あなたの専用設定（ここをスクショの内容に書き換えてください）
+            const firebaseConfig = {
+                apiKey: 'AIzaSyB4m6JxIIBYq2DWtOyVRVw1smCgpAyLGnk',
+                authDomain: 'goma-pan-menu.firebaseapp.com',
+                projectId: 'goma-pan-menu',
+                storageBucket: 'goma-pan-menu.firebasestorage.app',
+                messagingSenderId: '437147967378',
+                appId: '1:437147967378:web:8a0739fbfc1e16e5886b4b',
+            };
+
+            // 3. 初期化
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+
+            // 4. Firebaseからデータを取ってきて画面に表示する関数
+            async function fetchMenu() {
+                try {
+                    const querySnapshot = await getDocs(
+                        collection(db, 'menus'),
+                    );
+                    const menuData = [];
+                    querySnapshot.forEach((doc) => {
+                        menuData.push(doc.data());
+                    });
+                    renderMenu(menuData);
+                } catch (e) {
+                    console.error('Error fetching documents: ', e);
+                }
+            }
+
+            // 5. 画面にHTMLを組み立てる関数
+            function renderMenu(data) {
+                const menuGrid = document.querySelector('.menu-grid');
+                if (!menuGrid) return;
+                menuGrid.innerHTML = '';
+
+                const categories = ['FOOD', 'DRINK'];
+                categories.forEach((cat) => {
+                    const catItems = data.filter(
+                        (item) => item.category === cat,
+                    );
+                    if (catItems.length === 0) return;
+
+                    const div = document.createElement('div');
+                    div.className = 'menu-category';
+                    div.innerHTML = `<h3 class="category-title">${cat}</h3>`;
+
+                    catItems.forEach((item) => {
+                        // 数値型の価格を小数点2桁にする
+                        const price = Number(item.price).toFixed(2);
+                        div.innerHTML += `
+              <div class="menu-item">
+                <div class="item-main">
+                  <span class="name">${item.name}</span>
+                  <span class="price">$ ${price}</span>
+                </div>
+                <p class="description">${item.desc}</p>
+              </div>`;
+                    });
+                    menuGrid.appendChild(div);
+                });
+            }
+
+            // 実行！
+            fetchMenu();
+        </script>
+        <script src="index27.js" defer></script>
+    </body>
+</html>
