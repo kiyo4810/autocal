@@ -108,7 +108,9 @@ while (count < 10) {
 let e = 4 < 10;
 console.log(e);
 
-async function callApi() {
+const btn = document.getElementById('liBtn');
+const ol = document.getElementById('names');
+btn.addEventListener('click', async function () {
     // awaitがないと、fetchは「約束(Promise)」だけ投げて次に進む
     const res = await window.fetch(
         'https://jsonplaceholder.typicode.com/users',
@@ -119,6 +121,8 @@ async function callApi() {
     console.log(users);
     users.forEach((user) => {
         console.log(user.name);
+        const li = document.createElement('li');
+        li.innerText = user.name;
+        ol.appendChild(li);
     });
-}
-callApi();
+});
