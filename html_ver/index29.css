@@ -36,8 +36,7 @@ html {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: url('./images/960px-Harvard_square_harvard_yard.jpeg') no-repeat
-        center center;
+    background: url('./images/cat3-small.jpg') no-repeat center center;
     background-size: cover;
     z-index: -2;
 }
