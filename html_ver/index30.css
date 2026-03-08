@@ -1,0 +1,131 @@
+:root {
+    --bg-speed: 3s;
+    /* 初期値（カフェカラー） */
+    --c1: rgba(44, 26, 18, 0.4);
+    --c2: rgba(141, 64, 36, 0.1);
+    --c3: rgba(224, 122, 95, 0.3);
+    --c4: rgba(61, 44, 37, 0.9);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    min-height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background: transparent;
+    padding-top: 50px;
+    padding-bottom: 120px; /* コントロールと被らないよう少し広めに */
+}
+
+/* 1. 写真レイヤー */
+.background-photo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('./images/cat7-small.jpg') no-repeat center center;
+    background-size: cover;
+    z-index: -2;
+}
+
+/* 2. 動くグラデーションレイヤー */
+.dynamic-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(
+        -80deg,
+        var(--c1),
+        var(--c2),
+        var(--c3),
+        var(--c4)
+    );
+    background-size: 400% 400%;
+    animation: gradientBG var(--bg-speed) ease infinite;
+    z-index: -1;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.content {
+    text-align: center;
+    color: white;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    width: 100%;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* PC・スマホ共通：コード表示エリアのスタイル */
+#code-display {
+    background: #1e1e1e !important; /* ダーク背景 */
+    color: #d4d4d4 !important; /* 文字色 */
+    padding: 20px;
+    margin: 30px auto;
+    width: 90%;
+    max-width: 900px;
+    height: auto;
+    max-height: 500px;
+    overflow-y: auto;
+    text-align: left !important; /* 左寄せ */
+    white-space: pre-wrap; /* 折り返し */
+    word-wrap: break-word; /* 単語の途中で折る */
+    border-radius: 12px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    border: 1px solid #444;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+    z-index: 20;
+    position: relative;
+}
+
+/* コントロール全体の枠 */
+.controls {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 100;
+    width: 90%;
+    max-width: 500px;
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+}
