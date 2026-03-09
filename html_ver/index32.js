@@ -9,7 +9,7 @@ stroke = new Vivus(
     {
         start: 'manual', //自動再生をせずスタートをマニュアルに
         type: 'scenario-sync', // アニメーションのタイプを設定
-        duration: 10, // 描画速度（約1秒程度に調整）
+        duration: 5, // 描画速度（約1秒程度に調整）
         forceRender: false,
         animTimingFunction: Vivus.EASE,
     },
