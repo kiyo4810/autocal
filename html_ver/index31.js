@@ -168,3 +168,16 @@ console.log(yamada.incrementAge());
 //再帰関数 Factorial 三項演算子型
 let factorial = (n) => (n === 0 ? 1 : n * factorial(n - 1));
 console.log(factorial(6));
+
+const c = () => {
+    console.log('うほ');
+    return 'hello';
+};
+const b = () => {
+    return c();
+};
+
+const a = () => {
+    return b();
+};
+a();
