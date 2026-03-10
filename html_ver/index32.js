@@ -1,3 +1,4 @@
+'use strict';
 //========================================================
 //機能編   4-1-6 手書き風ロゴアニメーション
 //========================================================
@@ -73,6 +74,11 @@ $(window).on('load', function () {
     // ページ読み込み完了後にSVGアニメーションを開始
     stroke.play();
 });
+
+//========================================================
+// day6ここから オブジェクトを扱う。
+//========================================================
+
 const hobby = 'dream';
 const person = {
     name: '小西',
@@ -100,7 +106,7 @@ console.log(person['3']);
 console.log(person[hobby][1]);
 console.log(person['greeting']());
 
-console.log('---A');
+console.log('---A.');
 for (const key in person) {
     if (!Object.hasOwn(person, key)) continue;
 
@@ -108,7 +114,7 @@ for (const key in person) {
     console.log(person);
     const element = person[key];
 }
-console.log('---B');
+console.log('---B.');
 // 「Object」というobjectがある。グローバルオブジェクトに登録されている
 // keysというメソッド。配列で返す
 console.log(Object.keys(person));
@@ -121,7 +127,7 @@ console.log(Object.values(person));
 //ラベルが正の整数の順にならび、それ以外は書いた順にならぶ
 console.log(Object.entries(person));
 
-console.log('---C');
+console.log('---C.');
 const goma = {
     realName: 'Goma',
     nickName: 'Cha-',
@@ -141,7 +147,7 @@ console.log(Object.entries(goma));
 console.log(goma.action());
 goma.bd = '10/17'; //追加
 goma.age = 12; //上書き変更
-console.log('---D');
+console.log('---D.');
 console.log(Object.entries(goma));
 // console.logで表示される順番はブラウザに寄ってぜんぜん違う
 console.log(goma);
@@ -150,7 +156,7 @@ delete goma.action;
 console.log(goma);
 console.log(Object.entries(goma));
 
-console.log('---E');
+console.log('---E.');
 const realName = 'Pan';
 const nickName = 'Takkun';
 const pan = {
@@ -171,7 +177,9 @@ const pan = {
 };
 
 console.log(pan);
-console.log('---F');
+console.log(pan.action?.()); //actionがなければエラーじゃなくundefinedを返す。あるからエラーにならない
+
+console.log('---F.');
 
 // const panCloneBadguy = pan; //そのままコピーすると全く一緒のものになる
 const panCloneSimple = { ...pan };
@@ -189,7 +197,7 @@ console.log(pan === panCloneBadguy);
 console.log(pan);
 
 //Object.assign o1に結合されていく。要素を足していく。
-console.log('---G Object.assignは');
+console.log('---G. Object.assignは');
 const o1 = { a: 1 };
 const o2 = { b: 2 };
 Object.assign(o1, o2);
@@ -208,12 +216,12 @@ console.log(ingredientB);
 console.log(ingredientC);
 console.log(ingredientD);
 
-console.log('---G Object.assignで上書きせず別物を作る');
+console.log('---G. Object.assignで上書きせず別物を作る');
 const newIngredientA = Object.assign({}, ingredientA);
 console.log(newIngredientA);
 console.log(ingredientA === newIngredientA);
 
-console.log('---H 分割代入');
+console.log('---H. 分割代入');
 
 const objBook = {
     title: '猫の不思議',
@@ -230,16 +238,21 @@ const arrayBook = [
     {
         title: '猫の不思議',
         price: 15000,
+        say: () => 'やっぱこれっしょ',
     },
     {
         title: 'ネコネコランド',
         price: 3000,
+        say: () => 'いいですねぇ！',
     },
     {
         title: '吾輩は猫である',
         price: 5000,
+        say: () => 'すばらしお！',
     },
 ];
+console.log(arrayBook[2].sayhah?.()); //sayはあるけどsayhahはあったっけな?だから?をつけておこう
+
 // const bookTitle = objBook.title; //普通の代入
 // ↓分割代入 title: bookTitleは変数名の書き換え。
 // publisher = "CHANYAMA出版"で、まだないものの追加。
@@ -252,8 +265,9 @@ const {
 } = objBook;
 console.log(bookTitle, price, penName, sex, publisher, etc);
 console.log(objBook);
+console.log(objBook.price);
 
-console.log('---H 分割代入。関数の引数に入れれるよ');
+console.log('---H. 分割代入。関数の引数に入れれるよ');
 const sayBook = ({
     title: bookTitle,
     price,
@@ -269,3 +283,47 @@ sayBook(objBook);
 const [firstBook, secondBook] = arrayBook;
 console.log(firstBook);
 console.log(secondBook);
+
+console.log('---I. in演算子。true falseを返す');
+
+console.log('author' in objBook);
+// console.log(objBook.title !== undefined);
+
+// if (objBook.title !== undefined) {
+if ('title' in objBook) {
+    console.log('オブジェクトはあるよ');
+} else {
+    console.log('オブジェクトはないよ');
+}
+
+console.log('---J. オプショナルチェイニング');
+let user = undefined;
+user = null;
+console.log(user?.address); //userがnullかundefinedならundefinedを返す
+
+let [firstBook2, secondBook2] = arrayBook;
+console.log(firstBook2);
+console.log(secondBook2);
+firstBook2 = null;
+console.log(firstBook2?.title); //firstBook2がnullかundefinedならundefinedを返す
+
+console.log('---K. this');
+
+console.log(Object);
+console.log(this);
+console.log('---L. this');
+
+let sayThis = function () {
+    console.log(this);
+};
+const car = {
+    color: 'red',
+    sayThis,
+    changeColor: function (color) {
+        this.color = color; //car.color = color;だとこのオブジェクトのクローンを作ったときに以下の結果が変化しバグとなる
+    },
+};
+const car2 = { ...car };
+car2.changeColor('white');
+console.log(car2);
+console.log(car);
