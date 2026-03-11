@@ -327,3 +327,120 @@ const car2 = { ...car };
 car2.changeColor('white');
 console.log(car2);
 console.log(car);
+
+const sayThisArrow = () => console.log(this);
+sayThisArrow(); //アロー関数はthisを一切持たない。global objectになる
+
+const myThis = function (a, b) {
+    console.log(this, a, b);
+};
+myThis.call({ kind: 'man' }, 1, 3); //第一引数をthisにする。第二第三は個別にここではthisはwindowになる
+// myThis.call({hi: 'hello'});
+myThis.apply({ temp: 30 }, [5, 3]); //第一引数をthisにする。第二第三は配列で
+
+const pastaCal = {
+    servingSize: 60,
+    member: 4,
+    total() {
+        // ⇐ total: function() の省略形
+        return pastaCal.servingSize * pastaCal.member;
+    },
+};
+console.log(pastaCal.total());
+console.log(pastaCal.prototype);
+
+const obj = {
+    a: 1,
+    b: 2,
+};
+console.log(obj);
+
+// const user1={
+//   name: 'きよ',
+//   age: 52,
+//   greeting(){},
+// }
+// const user2={
+//   name: 'あき',
+//   age: 42,
+//   greeting(){},
+// }
+// const user3={
+//   name: 'ゆきこ',
+//   age: 65,
+//   greeting(){},
+// }
+
+// const UserFactory =(name,age)=>{
+//   return{
+//     name,
+//     age,
+//     greeting(){return "hi,guys"},
+//   };
+// };
+
+// const user1 = UserFactory("Kiyo",52);
+// const user2 = UserFactory("Aki",42);
+// const user3 = UserFactory("Yukiko",60);
+// console.log(user1.greeting());
+// console.log(user2);
+// console.log(user3);
+
+const UserFactory = (name, age, greeting) => {
+    return {
+        name,
+        age,
+        greeting,
+    };
+};
+
+// // 1. Kiyoさん：標準的な挨拶（普通の関数を渡す）
+// const user1 = UserFactory('Kiyo', 52, function () {
+//   return `こんにちは、${this.name}です！`;
+// });
+
+// // 2. Akiさん：英語でクールに（アロー関数を渡す）
+// // ※アロー関数の場合は this.name が使えないので直接名前を入れるか工夫が必要
+// const user2 = UserFactory('Aki', 42, function () {
+//   return `Hey, ${this.name}! what's up?`;
+// });
+
+// // 3. Yukikoさん：芦屋スタイル
+// const user3 = UserFactory('Yukiko', 60, function(){
+//   return `私、${this.name}でございます。ごきげんよう。`;
+// });
+
+// console.log(user1.name + ': ' + user1.greeting()); // Kiyo: こんにちは、Kiyoです！
+// console.log(user2.name + ': ' + user2.greeting()); // Aki: Hey, what's up?
+// console.log(user3.name + ': ' + user3.greeting()); // Yukiko: ごきげんよう。
+
+//ここからはクラスを使って
+
+const UserConstructor = function (name, age) {
+    // new を入れると this ={} 暗黙的に空っぽのオブジェクトthisが生成される
+    this.name = name;
+    this.age = age;
+    this.greeting = function () {};
+    // new を入れると 暗黙的にreturn this;をする
+};
+
+const user1 = new UserConstructor('Kiyo', 52);
+const user3 = new UserConstructor('Yukiko', 60);
+const user2 = new UserConstructor('Aki', 42);
+
+console.log(user1);
+console.log(user2);
+console.log(user3);
+//========================================================
+//ここからクラス！
+//========================================================
+class User {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    greeting() {}
+    post() {}
+} //function User{}とほとんど一緒。classスタートするとnewが必須
+const User11 = new User('ぶるきよ', 500);
+console.dir(User11);
